@@ -1,6 +1,8 @@
 import os
 from secrets import token_hex
 
+
+
 class Config:
 
     SECRET_KEY= os.environ.get("SECRET_KEY") or token_hex(32)
@@ -10,7 +12,6 @@ class Config:
 class DeveopmentConfig(Config):
 
     SQLALCHEMY_DATABASE_URI= os.getenv("DATABASE_URL_DEVELOPMENT")
-
 
     
     
