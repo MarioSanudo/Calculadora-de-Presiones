@@ -22,7 +22,7 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 @limiter.limit("3 per minute")
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("auth.login"))
+        return redirect("/")
 
     form = RegistrationForm()
 
@@ -63,7 +63,7 @@ def register():
 @limiter.limit("5 per minute")
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("auth.login"))
+        return redirect("/")
 
     form = LoginForm()
 
@@ -76,7 +76,7 @@ def login():
             login_user(user)
             next_page = request.args.get("next")
             flash("Sesion iniciada.", "success")
-            return redirect(next_page or url_for("auth.login"))
+            return redirect(next_page or "/")
 
         flash("Email o contraseña incorrectos.", "error")
 

@@ -8,9 +8,9 @@ from .utils.extensions import (
 from config import DevelopmentConfig
 
 
-def app_creation():
+def app_creation(config_class=None):
     app = Flask(__name__, template_folder="templates")
-    app.config.from_object(DevelopmentConfig)
+    app.config.from_object(config_class or DevelopmentConfig)
 
     # Extensiones
     db.init_app(app)
