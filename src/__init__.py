@@ -2,9 +2,7 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 from flask import Flask
-from .utils.extensions import (
-    db, migrate, login_manager, bcrypt, csrf, limiter
-)
+from .utils.extensions import (db, migrate, login_manager, bcrypt, csrf, limiter)
 from config import DevelopmentConfig
 
 
@@ -22,15 +20,15 @@ def app_creation(config_class=None):
 
     # Login config
     login_manager.login_view = "auth.login"
-    login_manager.login_message = "Inicia sesion primero."
+    login_manager.login_message = "Inicia sesion primero."  #En rutas protegidas por login_requiered
     login_manager.login_message_category = "info"
 
     # User loader
     from src.models.user import User
 
     @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
+    def load_user(user_id):  # user_id es el UUID del alternative_id
+        return User.query.filter_by(alternative_id=user_id).first()
 
     # Blueprints
     from src.routes.auth import auth_bp

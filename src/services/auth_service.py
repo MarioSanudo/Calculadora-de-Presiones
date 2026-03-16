@@ -13,19 +13,22 @@ def check_password(hashed, plain):
     return bcrypt.check_password_hash(hashed, plain)
 
 
-def create_user(username, email, password):
-    user = User(
-        username=username,
-        email=email,
-        password_hash=hash_password(password)
-    )
+def create_user(username, surname, email, password):
+    user = User(username=username, surname=surname, email=email, password_hash=hash_password(password))
     db.session.add(user)
     db.session.commit()
     return user
 
 
 def authenticate_user(email, password):
-    user = User.query.filter_by(email=email).first()
+
+    if not email:
+            return None
+        
+    email_obtained=getattr(email,"data", email)  #Si viene de WTF-forms coge el data, si es string ya es data y no rompe
+    clean_email=email_obtained.strip().lower()
+
+    user = User.query.filter_by(email=clean_email).first()
     if user and check_password(user.password_hash, password):
         return user
     return None

@@ -1,18 +1,8 @@
-from flask import (
-    Blueprint, render_template,
-    redirect, url_for, flash, request
-)
-from flask_login import (
-    login_user, logout_user,
-    login_required, current_user
-)
+from flask import (Blueprint, render_template, redirect, url_for, flash, request)
+from flask_login import (login_user, logout_user, login_required, current_user)
 from src.utils.extensions import limiter
-from src.routes.forms.auth_forms import (
-    RegistrationForm, LoginForm
-)
-from src.services.auth_service import (
-    create_user, authenticate_user
-)
+from src.routes.forms.auth_forms import (RegistrationForm, LoginForm)
+from src.services.auth_service import (create_user, authenticate_user)
 from src.models.user import User
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -27,32 +17,20 @@ def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        existing_email = User.query.filter_by(
-            email=form.email.data
-        ).first()
+        existing_email = User.query.filter_by(email=form.email.data).first()
         if existing_email:
             flash("Ese email ya esta registrado.", "error")
-            return render_template(
-                "auth/register.html", form=form
-            )
+            return render_template("auth/register.html", form=form)
 
-        existing_username = User.query.filter_by(
-            username=form.username.data
-        ).first()
-        if existing_username:
-            flash(
-                "Ese nombre de usuario no esta disponible.",
-                "error"
-            )
-            return render_template(
-                "auth/register.html", form=form
-            )
-
-        create_user(
+        existing_name = User.query.filter_by(
             username=form.username.data,
-            email=form.email.data,
-            password=form.password.data
-        )
+            surname=form.surname.data
+        ).first()
+        if existing_name:
+            flash("Ese nombre y apellido ya estan registrados.", "error")
+            return render_template("auth/register.html", form=form)
+
+        create_user(username=form.username.data, surname=form.surname.data, email=form.email.data, password=form.password.data)
         flash("Cuenta creada. Inicia sesion.", "success")
         return redirect(url_for("auth.login"))
 
@@ -68,10 +46,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = authenticate_user(
-            email=form.email.data,
-            password=form.password.data
-        )
+        user = authenticate_user(email=form.email.data,password=form.password.data)
         if user:
             login_user(user)
             next_page = request.args.get("next")

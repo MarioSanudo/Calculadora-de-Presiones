@@ -6,15 +6,21 @@ from wtforms.validators import (
     DataRequired, Email, Length, EqualTo, Regexp
 )
 
+# Acepta letras (incluye tildes y ñ), espacios y guiones
+_NAME_REGEX = r"^[a-zA-ZÀ-ÿ]+([\s\-'][a-zA-ZÀ-ÿ]+)*$"
+_NAME_MSG = "Solo letras, puede incluir espacios o guiones."
+
 
 class RegistrationForm(FlaskForm):
-    username = StringField("Username", validators=[
+    username = StringField("Nombre", validators=[
         DataRequired(),
-        Length(min=3, max=80),
-        Regexp(
-            r"^[a-zA-Z0-9_]+$",
-            message="Solo letras, numeros y guion bajo."
-        )
+        Length(min=2, max=80),
+        Regexp(_NAME_REGEX, message=_NAME_MSG)
+    ])
+    surname = StringField("Apellido", validators=[
+        DataRequired(),
+        Length(min=2, max=80),
+        Regexp(_NAME_REGEX, message=_NAME_MSG)
     ])
     email = StringField("Email", validators=[
         DataRequired(),

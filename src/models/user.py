@@ -2,6 +2,7 @@ from src.utils.extensions import db
 from flask_login import UserMixin
 from datetime import datetime, timezone
 from sqlalchemy import UniqueConstraint
+from uuid import uuid4
 
 
 class User(UserMixin, db.Model):
@@ -14,6 +15,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     is_active_user = db.Column(db.Boolean, default=True)
+    alternative_id=db.Column(db.String(128), nullable=False, unique=True, default=lambda:str(uuid4()))  #Id más seguro para las cookies
+
 
     __table_args__=(
         UniqueConstraint("username", "surname", name="UsernameSurname_uix"),
@@ -21,3 +24,7 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return f"<User {self.username}>"
+    
+    
+    def get_id(self):
+        return str(self.alternative_id)  # Cookie de sesión usa el UUID, no el PK
