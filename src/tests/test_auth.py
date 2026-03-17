@@ -116,6 +116,46 @@ def test_login_wrong_password(client):
     assert b"incorrectos" in resp.data
 
 
+def _register_and_login(client, next_url=None):
+    """Helper: registra un usuario y hace login con next opcional."""
+    client.post("/auth/register", data={
+        "username": "Test",
+        "surname": "Next",
+        "email": "next@example.com",
+        "password": "securepass123",
+        "confirm_password": "securepass123"
+    })
+    url = f"/auth/login?next={next_url}" if next_url else "/auth/login"
+    return client.post(url, data={
+        "email": "next@example.com",
+        "password": "securepass123"
+    })
+
+
+def test_login_next_valido_redirige_a_ruta_interna(client):
+    resp = _register_and_login(client, next_url="/historial")
+    assert resp.status_code == 302
+    assert resp.location == "/historial"
+
+
+def test_login_next_externo_redirige_a_home(client):
+    resp = _register_and_login(client, next_url="https://evil.com")
+    assert resp.status_code == 302
+    assert resp.location == "/"
+
+
+def test_login_next_javascript_redirige_a_home(client):
+    resp = _register_and_login(client, next_url="javascript:alert(1)")
+    assert resp.status_code == 302
+    assert resp.location == "/"
+
+
+def test_login_next_protocol_relative_redirige_a_home(client):
+    resp = _register_and_login(client, next_url="//evil.com")
+    assert resp.status_code == 302
+    assert resp.location == "/"
+
+
 def test_logout(client):
     client.post("/auth/register", data={
         "username": "Julia",

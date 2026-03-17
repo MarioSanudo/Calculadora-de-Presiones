@@ -23,7 +23,7 @@ def create_user(username, surname, email, password):
 def authenticate_user(email, password):
 
     if not email:
-            return None
+        return None
         
     email_obtained=getattr(email,"data", email)  #Si viene de WTF-forms coge el data, si es string ya es data y no rompe
     clean_email=email_obtained.strip().lower()

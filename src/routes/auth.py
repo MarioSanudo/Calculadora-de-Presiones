@@ -1,6 +1,7 @@
 from flask import (Blueprint, render_template, redirect, url_for, flash, request)
 from flask_login import (login_user, logout_user, login_required, current_user)
 from src.utils.extensions import limiter
+from src.utils.validators import validar_next
 from src.routes.forms.auth_forms import (RegistrationForm, LoginForm)
 from src.services.auth_service import (create_user, authenticate_user)
 from src.models.user import User
@@ -24,15 +25,15 @@ def register():
 
         existing_name = User.query.filter_by(
             username=form.username.data,
-            surname=form.surname.data
-        ).first()
+            surname=form.surname.data).first()
         if existing_name:
             flash("Ese nombre y apellido ya estan registrados.", "error")
             return render_template("auth/register.html", form=form)
 
         create_user(username=form.username.data, surname=form.surname.data, email=form.email.data, password=form.password.data)
+        #Meter control de errores en el commit
         flash("Cuenta creada. Inicia sesion.", "success")
-        return redirect(url_for("auth.login"))
+        return redirect(url_for("auth.login"))  #Url de la func(login)
 
     return render_template("auth/register.html", form=form)
 
@@ -43,13 +44,13 @@ def login():
     if current_user.is_authenticated:
         return redirect("/")
 
-    form = LoginForm()
+    form = LoginForm() #Añadir parte de lógica del procesado del tamaño de los request y datos del formulario
 
     if form.validate_on_submit():
         user = authenticate_user(email=form.email.data,password=form.password.data)
         if user:
             login_user(user)
-            next_page = request.args.get("next")
+            next_page = validar_next(request.args.get("next"))
             flash("Sesion iniciada.", "success")
             return redirect(next_page or "/")
 

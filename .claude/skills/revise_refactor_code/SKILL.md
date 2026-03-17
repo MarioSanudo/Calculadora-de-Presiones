@@ -1,6 +1,6 @@
 --- 
 name: revise_refactor_code
-description:   Ejecutar cuando el usuario indique explícitamente que ha modificado, código manualmente. Activación: usuario escribe "revisa mis cambios", "review", o similar. Cambios tambien en cualquier fichero como Models, routes, utils, de lógica creada con el lenguaje Python, PostgreSQL, SQL, Flask, SQLalchemy. NO ejecutar de forma autónoma sin confirmación.
+description:   Ejecutar cuando el usuario indique que ha modificado, código manualmente. Activación: usuario escribe "revisa mis cambios", "review", cambios hechos, o similar. Cambios tambien en cualquier fichero como Models, routes, utils, de lógica creada con el lenguaje Python, PostgreSQL, SQL, Flask, SQLalchemy. NO ejecutar de forma autónoma sin confirmación.
 --- 
 
 # Revisión y refactor post-modificación manual
