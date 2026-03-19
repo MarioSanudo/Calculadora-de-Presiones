@@ -50,9 +50,10 @@ def login():
         user = authenticate_user(email=form.email.data,password=form.password.data)
         if user:
             login_user(user)
-            next_page = validar_next(request.args.get("next"))
+            next_raw = request.args.get("next")
+            next_page = validar_next(next_raw) if next_raw else None
             flash("Sesion iniciada.", "success")
-            return redirect(next_page or "/")
+            return redirect(next_page if next_page else "/")
 
         flash("Email o contraseña incorrectos.", "error")
 
