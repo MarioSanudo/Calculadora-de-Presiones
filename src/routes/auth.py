@@ -1,5 +1,6 @@
 from flask import (Blueprint, render_template, redirect, url_for, flash, request)
 from flask_login import (login_user, logout_user, login_required, current_user)
+from sqlalchemy.exc import SQLAlchemyError
 from src.utils.extensions import limiter
 from src.utils.validators import validar_next
 from src.routes.forms.auth_forms import (RegistrationForm, LoginForm)
@@ -30,10 +31,18 @@ def register():
             flash("Ese nombre y apellido ya estan registrados.", "error")
             return render_template("auth/register.html", form=form)
 
-        create_user(username=form.username.data, surname=form.surname.data, email=form.email.data, password=form.password.data)
-        #Meter control de errores en el commit
-        flash("Cuenta creada. Inicia sesion.", "success")
-        return redirect(url_for("auth.login"))  #Url de la func(login)
+        try:
+            create_user(
+                username=form.username.data,
+                surname=form.surname.data,
+                email=form.email.data,
+                password=form.password.data
+            )
+            flash("Cuenta creada. Inicia sesion.", "success")
+            return redirect(url_for("auth.login"))
+        except SQLAlchemyError:
+            flash("Error al crear la cuenta. Inténtalo de nuevo.", "error")
+            return render_template("auth/register.html", form=form)
 
     return render_template("auth/register.html", form=form)
 

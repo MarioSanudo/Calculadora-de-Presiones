@@ -6,9 +6,18 @@ from wtforms.validators import (
     DataRequired, Email, Length, EqualTo, Regexp
 )
 
-# Acepta letras (incluye tildes y ñ), espacios y guiones
-_NAME_REGEX = r"^[a-zA-ZÀ-ÿ]+([\s\-'][a-zA-ZÀ-ÿ]+)*$"
-_NAME_MSG = "Solo letras, puede incluir espacios o guiones."
+# Solo letras (incluye tildes y ñ), sin espacios ni guiones
+_NAME_REGEX = r"^[a-zA-ZÀ-ÿ]+$"
+_NAME_MSG = "Solo letras, sin espacios ni guiones."
+
+# Al menos una mayúscula y un carácter especial
+_PASSWORD_REGEX = (
+    r"^(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+\[\]{};':\"\\|,.<>/?¡¿]).*$"
+)
+_PASSWORD_MSG = (
+    "Debe contener al menos una mayúscula y un carácter especial "
+    "(!@#$%^&* ¡¿ etc.)."
+)
 
 
 class RegistrationForm(FlaskForm):
@@ -29,13 +38,14 @@ class RegistrationForm(FlaskForm):
     ])
     password = PasswordField("Password", validators=[
         DataRequired(),
-        Length(min=8, max=128)
+        Length(min=8, max=128),
+        Regexp(_PASSWORD_REGEX, message=_PASSWORD_MSG)
     ])
     confirm_password = PasswordField(
         "Confirm Password",
         validators=[
             DataRequired(),
-            EqualTo("password", message="No coinciden.")
+            EqualTo("password", message="No coinciden las contraseñas.")
         ]
     )
     submit = SubmitField("Registrarse")

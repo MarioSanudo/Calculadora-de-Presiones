@@ -1,6 +1,7 @@
 import jwt
 from datetime import datetime, timezone, timedelta
 from flask import current_app
+from sqlalchemy.exc import SQLAlchemyError
 from src.utils.extensions import db, bcrypt
 from src.models.user import User
 
@@ -14,10 +15,19 @@ def check_password(hashed, plain):
 
 
 def create_user(username, surname, email, password):
-    user = User(username=username, surname=surname, email=email, password_hash=hash_password(password))
-    db.session.add(user)
-    db.session.commit()
-    return user
+    try:
+        user = User(
+            username=username,
+            surname=surname,
+            email=email,
+            password_hash=hash_password(password)
+        )
+        db.session.add(user)
+        db.session.commit()
+        return user
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        raise e
 
 
 def authenticate_user(email, password):

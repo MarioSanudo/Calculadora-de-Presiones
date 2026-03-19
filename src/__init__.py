@@ -41,7 +41,9 @@ def app_creation(config_class=None):
     # Blueprints
     from src.routes.auth import auth_bp
     from src.routes.main import main_bp
+    from src.routes.errors import errors_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
+    app.register_blueprint(errors_bp)
 
     return app

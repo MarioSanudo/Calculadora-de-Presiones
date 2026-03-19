@@ -1,5 +1,8 @@
 from src.models.user import User
 
+# Contraseña válida: mayúscula + carácter especial + longitud mínima
+_VALID_PASS = "Securepass1!"
+
 
 def test_register_page_loads(client):
     resp = client.get("/auth/register")
@@ -18,8 +21,8 @@ def test_register_success(client, app):
         "username": "Carlos",
         "surname": "García",
         "email": "test@example.com",
-        "password": "securepass123",
-        "confirm_password": "securepass123"
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
     }, follow_redirects=True)
     assert resp.status_code == 200
 
@@ -35,8 +38,8 @@ def test_register_duplicate_email(client, app):
         "username": "Ana",
         "surname": "López",
         "email": "dup@example.com",
-        "password": "securepass123",
-        "confirm_password": "securepass123"
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
     }
     client.post("/auth/register", data=data)
 
@@ -44,8 +47,8 @@ def test_register_duplicate_email(client, app):
         "username": "Ana",
         "surname": "Martínez",
         "email": "dup@example.com",
-        "password": "securepass123",
-        "confirm_password": "securepass123"
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
     })
     assert b"ya esta registrado" in resp.data
 
@@ -55,8 +58,8 @@ def test_register_duplicate_name(client, app):
         "username": "Pedro",
         "surname": "Sánchez",
         "email": "pedro1@example.com",
-        "password": "securepass123",
-        "confirm_password": "securepass123"
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
     }
     client.post("/auth/register", data=data)
 
@@ -64,8 +67,8 @@ def test_register_duplicate_name(client, app):
         "username": "Pedro",
         "surname": "Sánchez",
         "email": "pedro2@example.com",
-        "password": "securepass123",
-        "confirm_password": "securepass123"
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
     })
     assert b"ya estan registrados" in resp.data
 
@@ -75,12 +78,76 @@ def test_register_name_rejects_numbers(client):
         "username": "Carlos123",
         "surname": "García",
         "email": "num@example.com",
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
+    })
+    assert resp.status_code == 200
+    assert b"num@example.com" not in resp.data or b"Solo letras" in resp.data
+
+
+def test_register_name_rejects_spaces(client):
+    resp = client.post("/auth/register", data={
+        "username": "Carlos Luis",
+        "surname": "García",
+        "email": "spaces@example.com",
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
+    })
+    assert resp.status_code == 200
+    assert b"Solo letras" in resp.data
+
+
+def test_register_name_rejects_hyphens(client):
+    resp = client.post("/auth/register", data={
+        "username": "Carlos-Luis",
+        "surname": "García",
+        "email": "hyphens@example.com",
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
+    })
+    assert resp.status_code == 200
+    assert b"Solo letras" in resp.data
+
+
+def test_register_password_rejects_no_uppercase(client):
+    resp = client.post("/auth/register", data={
+        "username": "Carlos",
+        "surname": "García",
+        "email": "noUpper@example.com",
+        "password": "securepass1!",
+        "confirm_password": "securepass1!"
+    })
+    assert resp.status_code == 200
+    html = resp.data.decode("utf-8")
+    assert "Debe contener al menos una mayúscula" in html
+
+
+def test_register_password_rejects_no_special_char(client):
+    resp = client.post("/auth/register", data={
+        "username": "Carlos",
+        "surname": "García",
+        "email": "noSpecial@example.com",
+        "password": "Securepass123",
+        "confirm_password": "Securepass123"
+    })
+    assert resp.status_code == 200
+    html = resp.data.decode("utf-8")
+    assert "Debe contener al menos una mayúscula" in html
+
+
+def test_register_password_rejects_no_uppercase_no_special(client):
+    # Sin mayúscula ni carácter especial: valida que el mensaje completo aparece
+    resp = client.post("/auth/register", data={
+        "username": "Carlos",
+        "surname": "García",
+        "email": "noBoth@example.com",
         "password": "securepass123",
         "confirm_password": "securepass123"
     })
-    # El form debe rechazarlo (no redirige, vuelve a mostrar el formulario)
     assert resp.status_code == 200
-    assert b"num@example.com" not in resp.data or b"Solo letras" in resp.data
+    html = resp.data.decode("utf-8")
+    assert "Debe contener al menos una mayúscula" in html
+    assert "carácter especial" in html
 
 
 def test_login_success(client):
@@ -88,13 +155,13 @@ def test_login_success(client):
         "username": "Laura",
         "surname": "Fernández",
         "email": "login@example.com",
-        "password": "securepass123",
-        "confirm_password": "securepass123"
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
     })
 
     resp = client.post("/auth/login", data={
         "email": "login@example.com",
-        "password": "securepass123"
+        "password": _VALID_PASS
     })
     assert resp.status_code == 302
     assert resp.location == "/"
@@ -105,8 +172,8 @@ def test_login_wrong_password(client):
         "username": "Miguel",
         "surname": "Torres",
         "email": "wrong@example.com",
-        "password": "securepass123",
-        "confirm_password": "securepass123"
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
     })
 
     resp = client.post("/auth/login", data={
@@ -122,13 +189,13 @@ def _register_and_login(client, next_url=None):
         "username": "Test",
         "surname": "Next",
         "email": "next@example.com",
-        "password": "securepass123",
-        "confirm_password": "securepass123"
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
     })
     url = f"/auth/login?next={next_url}" if next_url else "/auth/login"
     return client.post(url, data={
         "email": "next@example.com",
-        "password": "securepass123"
+        "password": _VALID_PASS
     })
 
 
@@ -161,12 +228,12 @@ def test_logout(client):
         "username": "Julia",
         "surname": "Romero",
         "email": "logout@example.com",
-        "password": "securepass123",
-        "confirm_password": "securepass123"
+        "password": _VALID_PASS,
+        "confirm_password": _VALID_PASS
     })
     client.post("/auth/login", data={
         "email": "logout@example.com",
-        "password": "securepass123"
+        "password": _VALID_PASS
     })
 
     resp = client.post("/auth/logout", follow_redirects=True)
