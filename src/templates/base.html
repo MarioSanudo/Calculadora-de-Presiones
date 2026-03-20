@@ -57,7 +57,7 @@
 
     <!-- Flash messages -->
     <div class="max-w-5xl mx-auto px-4 mt-4">
-        {% with messages = get_flashed_messages(
+        {% with messages = get_flashed_messages(       <!--El with para poder instanciar los mensajes flash, en una variable legible-->
             with_categories=true
         ) %}
             {% if messages %}
