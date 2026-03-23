@@ -41,6 +41,25 @@ def test_register_success(client, app):
         assert user.is_verified is False
 
 
+def test_register_email_stored_lowercase(client, app):
+    """El email se persiste en minúsculas independientemente del input."""
+    with patch("src.routes.auth.send_verification_email"):
+        client.post("/auth/register", data={
+            "username": "LowerTest",
+            "surname": "Mail",
+            "email": "UPPER@Example.COM",
+            "password": _VALID_PASS,
+            "confirm_password": _VALID_PASS,
+        })
+
+    with app.app_context():
+        user = User.query.filter_by(
+            email="upper@example.com"
+        ).first()
+        assert user is not None
+        assert user.email == "upper@example.com"
+
+
 def test_register_duplicate_email(client, app):
     data = {
         "username": "Ana",

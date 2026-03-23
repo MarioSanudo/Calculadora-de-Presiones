@@ -42,7 +42,7 @@ def register():
 
     if form.validate_on_submit():
         existing_email = User.query.filter_by(
-            email=form.email.data
+            email=form.email.data.strip().lower()
         ).first()
         if existing_email:
             flash("Ese email ya esta registrado.", "error")
@@ -357,7 +357,7 @@ def google_callback():
         return redirect(url_for("auth.login"))
 
     google_id = userinfo["sub"]
-    email = userinfo["email"]
+    email = userinfo["email"].strip().lower()
     name = userinfo.get("given_name", "Usuario")
     surname = userinfo.get("family_name", "Google")
 

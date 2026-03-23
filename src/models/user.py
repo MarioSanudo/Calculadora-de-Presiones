@@ -2,6 +2,7 @@ from src.utils.extensions import db
 from flask_login import UserMixin
 from datetime import datetime, timezone
 from sqlalchemy import UniqueConstraint
+from sqlalchemy.orm import validates
 from uuid import uuid4
 
 
@@ -27,6 +28,10 @@ class User(UserMixin, db.Model):
     __table_args__=(
         UniqueConstraint("username", "surname", name="UsernameSurname_uix"),
     )
+
+    @validates("email")
+    def normalize_email(self, key, value):
+        return value.strip().lower() if value else value
 
     def __repr__(self):
         return f"<User {self.username}>"
