@@ -82,15 +82,15 @@ def test_register_db_error_muestra_mensaje(client):
             "username": "Ana",
             "surname": "Ruiz",
             "email": "ana@example.com",
-            "password": "securepass123",
-            "confirm_password": "securepass123"
+            "password": "Securepass1!",
+            "confirm_password": "Securepass1!"
         })
     assert resp.status_code == 200
     assert b"Error al crear la cuenta" in resp.data
 
 
 def test_register_db_error_no_redirige(client):
-    """Si falla el commit, permanecemos en el formulario (no 302)."""
+    """Si falla el commit, permanecemos en el form."""
     with patch(
         "src.routes.auth.create_user",
         side_effect=SQLAlchemyError("fallo simulado")
@@ -99,8 +99,8 @@ def test_register_db_error_no_redirige(client):
             "username": "Bob",
             "surname": "Smith",
             "email": "bob@example.com",
-            "password": "securepass123",
-            "confirm_password": "securepass123"
+            "password": "Securepass1!",
+            "confirm_password": "Securepass1!"
         })
     assert resp.status_code == 200
-    assert b"Registrarse" in resp.data  # Sigue mostrando el form
+    assert b"Registrarse" in resp.data

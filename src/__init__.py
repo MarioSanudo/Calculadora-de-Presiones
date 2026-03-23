@@ -1,11 +1,20 @@
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
+import logging
 from flask import Flask
-from .utils.extensions import (db, migrate, login_manager, bcrypt, csrf, limiter)
+from .utils.extensions import (
+    db, migrate, login_manager,
+    bcrypt, csrf, limiter, mail, oauth,
+)
 from config import DevelopmentConfig
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s %(name)s: %(message)s"
+)
 
 
 def app_creation(config_class=None):
@@ -25,6 +34,18 @@ def app_creation(config_class=None):
     bcrypt.init_app(app)
     csrf.init_app(app)
     limiter.init_app(app)
+    mail.init_app(app)
+    oauth.init_app(app)
+
+    # Google OAuth provider
+    oauth.register(
+        name="google",
+        server_metadata_url=(
+            "https://accounts.google.com"
+            "/.well-known/openid-configuration"
+        ),
+        client_kwargs={"scope": "openid email profile"},
+    )
 
     # Login config
     login_manager.login_view = "auth.login"

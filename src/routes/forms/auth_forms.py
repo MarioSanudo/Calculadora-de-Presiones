@@ -16,7 +16,7 @@ _PASSWORD_REGEX = (
 )
 _PASSWORD_MSG = (
     "Debe contener al menos una mayúscula y un carácter especial "
-    "(!@#$%^&* ¡¿ etc.)."
+    "(!@#$%^&*¡¿, etc.)."
 )
 
 
@@ -59,4 +59,45 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[
         DataRequired()
     ])
-    submit = SubmitField("Iniciar sesion")
+    submit = SubmitField("Iniciar sesión")
+
+
+class ResendVerificationForm(FlaskForm):
+    email = StringField("Email", validators=[
+        DataRequired(),
+        Email(),
+    ])
+    submit = SubmitField("Reenviar verificación")
+
+
+class ForgotPasswordForm(FlaskForm):
+    email = StringField("Email", validators=[
+        DataRequired(),
+        Email(),
+    ])
+    submit = SubmitField("Enviar enlace")
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField(
+        "Nueva contraseña",
+        validators=[
+            DataRequired(),
+            Length(min=8, max=128),
+            Regexp(
+                _PASSWORD_REGEX,
+                message=_PASSWORD_MSG,
+            ),
+        ],
+    )
+    confirm_password = PasswordField(
+        "Confirmar",
+        validators=[
+            DataRequired(),
+            EqualTo(
+                "password",
+                message="No coinciden.",
+            ),
+        ],
+    )
+    submit = SubmitField("Cambiar contraseña")

@@ -1,7 +1,9 @@
+import logging
 from flask import Blueprint, render_template, redirect
 from flask_wtf.csrf import CSRFError
 
 errors_bp = Blueprint("errors", __name__)
+logger = logging.getLogger(__name__)
 
 
 @errors_bp.app_errorhandler(404)
@@ -16,6 +18,7 @@ def too_many_requests(e):
 
 @errors_bp.app_errorhandler(500)
 def server_error(e):
+    logger.error("Error 500: %s", e)
     return render_template("errors/500.html"), 500
 
 

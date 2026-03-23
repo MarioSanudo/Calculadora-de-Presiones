@@ -34,36 +34,45 @@ def authenticate_user(email, password):
 
     if not email:
         return None
-        
-    email_obtained=getattr(email,"data", email)  #Si viene de WTF-forms coge el data, si es string ya es data y no rompe
-    clean_email=email_obtained.strip().lower()
+
+    email_obtained = getattr(email, "data", email)
+    clean_email = email_obtained.strip().lower()
 
     user = User.query.filter_by(email=clean_email).first()
-    if user and check_password(user.password_hash, password):
+    if user and user.password_hash and check_password(
+        user.password_hash, password
+    ):
         return user
     return None
 
 
-def generate_jwt(user_id, expires_hours=1):
+def generate_jwt(user_id, purpose="general", expires_minutes=60):
+    
     payload = {
         "user_id": user_id,
+        "purpose": purpose,
         "exp": datetime.now(timezone.utc)
-        + timedelta(hours=expires_hours),
-        "iat": datetime.now(timezone.utc)
+        + timedelta(minutes=expires_minutes),
+        "iat": datetime.now(timezone.utc),
     }
     return jwt.encode(
         payload,
         current_app.config["SECRET_KEY"],
-        algorithm="HS256"
+        algorithm="HS256",
     )
 
 
-def decode_jwt(token):
+def decode_jwt(token, expected_purpose=None):
     try:
-        return jwt.decode(
+        payload = jwt.decode(
             token,
             current_app.config["SECRET_KEY"],
-            algorithms=["HS256"]
+            algorithms=["HS256"],
         )
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None
+
+    if expected_purpose and payload.get("purpose") != expected_purpose:
+        return None
+
+    return payload
