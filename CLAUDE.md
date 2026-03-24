@@ -1,6 +1,7 @@
 # SKILL PRINCIPAL Y PERSISTENTE DEL PROYECTO
 
 ## Explicación del proyecto
+
 - Web gratuita y profesional de ciclismo más concretamente sobre el calculo de presiones en las ruedas del ciclista, según la entrada de valores que ingresa el usuario en un formulario.
 
 - Se considerán los siguientes aspectos, disciplina de ciclismo, peso del ciclista + peso de la bici, ancho del neumático, tipo del terreno, sistema de cubierta, y objetivos del ciclista.
@@ -10,6 +11,7 @@
 
 
 ## Stack
+
 - Vamos a utilizar el siguiente stack tecnológico el cual no deberá cambiarse NUNCA, por ninguna razón.
 
 - Lenguaje backend Python con el framework Flask para toda la parte del servidor.
@@ -28,6 +30,7 @@
 
 
 ## Detalles a seguir en el proyecto MUY IMPORTANTE
+
 - El proyecto tiene intención de ser el primero a producción por lo tanto se deberá distinguir el entorno de desarrollo con el de producción, todas las credenciales y configuraciones no deberán hardcodearse y serán protegidas mediante el uso de entornos virtuales, y emplear gitignore necesario.
 
 - Se emplearan JWT para proteguer las Apis y y las rutas validandolo y con duración limitada para no evitar intrusos maliciosos.
@@ -43,6 +46,7 @@ Implementar Rate limit en las rutas que lo requieran vulnerables a constantes co
 
 
 ## Arquitectura del MVP
+
 - Vamos a emplear una arquitectura por capas cliente-servidor no muy compleja para el MVP y proyecto pequeño creo que resultará suficiente. Con la siguiente estructura:
 flask_app/
 ├── src/                    ← Código fuente (Source)
@@ -67,11 +71,13 @@ flask_app/
 - En partes complicadas un mínimo de documentación
 
 ## Manejo de errores
+
 - Respuestas de error con formato JSON consistente: {error: "", code: ""}
 - Errores de validación
 
 
 ## Convenciones de código
+
 - PEP8 estricto en Python
 - snake_case para variables y funciones
 - PascalCase para clases
@@ -80,8 +86,11 @@ flask_app/
 
 
 ## Decisiones cerradas (no reabrir)
+
 - Sin React, Vue ni frameworks JS pesados
 - Sin FastAPI ni Django, solo Flask
 - Sin Docker en MVP (añadir en fase post-lanzamiento)
 - Sin Redis en MVP salvo que sea estrictamente necesario
 - ORM siempre SQLAlchemy, queries crudas si es necesario para optimización justificada
+- Nunca me tiene que borrar comentarios propios, como mucho corregirmelos
+-Siempre antes de elaborar un plan tiene que dejarme cambiar el modelo y no ejecutar directamente

@@ -70,6 +70,11 @@ def register():
                 email=form.email.data,
                 password=form.password.data,
             )
+        except ValueError as e:
+            flash(str(e), "error")
+            return render_template(
+                "auth/register.html", form=form
+            )
         except SQLAlchemyError:
             logger.exception(
                 f"Error al crear usuario email={form.email.data}"
@@ -387,7 +392,7 @@ def google_callback():
         email=email,
         google_id=google_id,
         is_verified=True,
-        password_hash=None,
+        password_hash="OAUTH_USER_NO_PASSWORD",
     )
     try:
         db.session.add(user)
@@ -404,10 +409,22 @@ def google_callback():
             email=email,
             google_id=google_id,
             is_verified=True,
-            password_hash=None,
+            password_hash="OAUTH_USER_NO_PASSWORD",
         )
-        db.session.add(user)
-        db.session.commit()
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except SQLAlchemyError:
+            db.session.rollback()
+            logger.exception(
+                "Error creando usuario OAuth google_id=%s",
+                google_id,
+            )
+            flash(
+                "Error al crear la cuenta. Intentalo de nuevo.",
+                "error",
+            )
+            return redirect(url_for("auth.login"))
 
     login_user(user)
     flash("Cuenta creada con Google.", "success")
