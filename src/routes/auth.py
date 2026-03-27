@@ -50,22 +50,17 @@ def register():
                 "auth/register.html", form=form
             )
 
-        existing_name = User.query.filter_by(
-            username=form.username.data,
+        username = form.username.data
+        if User.query.filter_by(
+            username=username,
             surname=form.surname.data
-        ).first()
-        if existing_name:
-            flash(
-                "Ese nombre y apellido ya estan registrados.",
-                "error"
-            )
-            return render_template(
-                "auth/register.html", form=form
-            )
+        ).first():
+            count = User.query.filter_by(username=username).count()
+            username = f"{username}{count + 1}"
 
         try:
             user = create_user(
-                username=form.username.data,
+                username=username,
                 surname=form.surname.data,
                 email=form.email.data,
                 password=form.password.data
@@ -370,7 +365,7 @@ def google_callback():
     if not userinfo:
         flash(
             "No se pudo obtener información de Google.",
-            "error",
+            "error"
         )
         return redirect(url_for("auth.login"))
 
@@ -393,7 +388,19 @@ def google_callback():
     if user:
         user.google_id = google_id
         user.is_verified = True
-        db.session.commit()
+        try:
+            db.session.commit()
+        except SQLAlchemyError:
+            db.session.rollback()
+            logger.exception(
+                "Error vinculando google_id a user email=%s",
+                email
+            )
+            flash(
+                "Error al vincular la cuenta. Intentalo de nuevo.",
+                "error"
+            )
+            return redirect(url_for("auth.login"))
         login_user(user)
         flash("Cuenta vinculada con Google.", "success")
         return redirect("/")
@@ -405,7 +412,7 @@ def google_callback():
         email=email,
         google_id=google_id,
         is_verified=True,
-        password_hash="OAUTH_USER_NO_PASSWORD"
+        password_hash="OAUTH_USER_NO_PASSWORD"  #Contraseña genérica no me hace falta encriptarla
     )
     try:
         db.session.add(user)

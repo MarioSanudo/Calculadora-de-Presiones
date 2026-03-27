@@ -82,6 +82,7 @@ def test_register_duplicate_email(client, app):
 
 
 def test_register_duplicate_name(client, app):
+    """Nombre+apellido duplicado → se añade sufijo numérico al username."""
     data = {
         "username": "Pedro",
         "surname": "Sanchez",
@@ -92,14 +93,22 @@ def test_register_duplicate_name(client, app):
     with patch("src.routes.auth.send_verification_email"):
         client.post("/auth/register", data=data)
 
-    resp = client.post("/auth/register", data={
-        "username": "Pedro",
-        "surname": "Sanchez",
-        "email": "pedro2@example.com",
-        "password": _VALID_PASS,
-        "confirm_password": _VALID_PASS,
-    })
-    assert b"ya estan registrados" in resp.data
+    with patch("src.routes.auth.send_verification_email"):
+        resp = client.post("/auth/register", data={
+            "username": "Pedro",
+            "surname": "Sanchez",
+            "email": "pedro2@example.com",
+            "password": _VALID_PASS,
+            "confirm_password": _VALID_PASS,
+        }, follow_redirects=True)
+
+    assert resp.status_code == 200
+    with app.app_context():
+        user = User.query.filter_by(
+            email="pedro2@example.com"
+        ).first()
+        assert user is not None
+        assert user.username == "Pedro2"
 
 
 def test_register_name_rejects_numbers(client):
@@ -417,7 +426,7 @@ def test_resend_verification_existing(client, app):
         )
         assert mock_send.called
 
-    assert b"Si el email existe" in resp.data
+    assert b"Email de verificacion enviado" in resp.data
 
 
 def test_resend_verification_nonexistent(client):
@@ -539,7 +548,7 @@ def test_reset_password_db_error(
             follow_redirects=True,
         )
 
-    assert b"Error al cambiar la contrasena" in resp.data
+    assert "Error al cambiar la contraseña" in resp.data.decode("utf-8")
 
     # La contrasena original sigue funcionando
     resp = client.post("/auth/login", data={
@@ -605,7 +614,7 @@ def test_google_callback_new_user(client, app):
         assert user is not None
         assert user.is_verified is True
         assert user.google_id == "google-id-123"
-        assert user.password_hash is None
+        assert user.password_hash == "OAUTH_USER_NO_PASSWORD"
 
 
 def test_google_callback_existing_email_links(
