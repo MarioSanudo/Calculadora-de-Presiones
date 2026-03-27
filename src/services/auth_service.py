@@ -17,6 +17,7 @@ def check_password(hashed, plain):
 def create_user(username, surname, email, password):
     if not password or not password.strip():
         raise ValueError("La contraseña no puede estar vacía.")
+    email = email.strip().lower()
     try:
         user = User(
             username=username,
@@ -40,14 +41,10 @@ def authenticate_user(email, password):
     email_obtained = getattr(email, "data", email)
     clean_email = email_obtained.strip().lower()
 
-    _OAUTH_SENTINEL = "OAUTH_USER_NO_PASSWORD"
+    _OAUTH_SENTINEL = "OAUTH_USER_NO_PASSWORD"  #Para los inicios de sesión con google el la password por defecto para no crearlo como nullable la columna password
 
     user = User.query.filter_by(email=clean_email).first()
-    if (
-        user
-        and user.password_hash != _OAUTH_SENTINEL
-        and check_password(user.password_hash, password)
-    ):
+    if (user and user.password_hash != _OAUTH_SENTINEL and check_password(user.password_hash, password) ):
         return user
     return None
 

@@ -8,8 +8,6 @@
 
 - Que destaque por la simplicidad y utilidad donde el usuario puede ver el historial de analisis registrarse y hacer peticiones de cálculo con varias bicicletas.
 
-
-
 ## Stack
 
 - Vamos a utilizar el siguiente stack tecnológico el cual no deberá cambiarse NUNCA, por ninguna razón.
@@ -28,7 +26,6 @@
 
 - Seguimiento de errores con Sentry que se implementa bien con Flask por lo visto y testing con pytest.
 
-
 ## Detalles a seguir en el proyecto MUY IMPORTANTE
 
 - El proyecto tiene intención de ser el primero a producción por lo tanto se deberá distinguir el entorno de desarrollo con el de producción, todas las credenciales y configuraciones no deberán hardcodearse y serán protegidas mediante el uso de entornos virtuales, y emplear gitignore necesario.
@@ -43,7 +40,6 @@ Implementar Rate limit en las rutas que lo requieran vulnerables a constantes co
 - Validación de formularios, tanto desde la parte del servidor como de la parte del cliente, no queremos usuarios que no cumplan formatos estandar.
 
 - Tratar de implementar medidas de seguridad vitales para el MVP, pero sin complicar en exceso
-
 
 ## Arquitectura del MVP
 
@@ -75,7 +71,6 @@ flask_app/
 - Respuestas de error con formato JSON consistente: {error: "", code: ""}
 - Errores de validación
 
-
 ## Convenciones de código
 
 - PEP8 estricto en Python
@@ -83,7 +78,6 @@ flask_app/
 - PascalCase para clases
 - Nombres en inglés en el código, español solo en comentarios si es necesario
 - ¡SUPER IMPORTANTE! no pasarse de código, ir haciendo en pequeños pasos para que no me pierda y deje de entender el proyecto 80-100 caracteres por línea
-
 
 ## Decisiones cerradas (no reabrir)
 
@@ -93,4 +87,6 @@ flask_app/
 - Sin Redis en MVP salvo que sea estrictamente necesario
 - ORM siempre SQLAlchemy, queries crudas si es necesario para optimización justificada
 - Nunca me tiene que borrar comentarios propios, como mucho corregirmelos
--Siempre antes de elaborar un plan tiene que dejarme cambiar el modelo y no ejecutar directamente
+- Siempre antes de elaborar un plan tiene que dejarme cambiar el modelo y no ejecutar directamente
+- No quitarme comentarios personales, ni añadir comas inútiles
+- Finalmente no cambiarme nada del formato que modifique, si he tocado formato o ñ en cualquier palabra NO MODIFICAR

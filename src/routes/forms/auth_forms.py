@@ -42,7 +42,7 @@ class RegistrationForm(FlaskForm):
         Regexp(_PASSWORD_REGEX, message=_PASSWORD_MSG)
     ])
     confirm_password = PasswordField(
-        "Confirm Password",
+        "Confirmar Contraseña",
         validators=[
             DataRequired(),
             EqualTo("password", message="No coinciden las contraseñas.")
@@ -66,6 +66,7 @@ class ResendVerificationForm(FlaskForm):
     email = StringField("Email", validators=[
         DataRequired(),
         Email(),
+        Length(max=120)
     ])
     submit = SubmitField("Reenviar verificación")
 
@@ -74,6 +75,7 @@ class ForgotPasswordForm(FlaskForm):
     email = StringField("Email", validators=[
         DataRequired(),
         Email(),
+        Length(max=120)
     ])
     submit = SubmitField("Enviar enlace")
 
@@ -84,20 +86,14 @@ class ResetPasswordForm(FlaskForm):
         validators=[
             DataRequired(),
             Length(min=8, max=128),
-            Regexp(
-                _PASSWORD_REGEX,
-                message=_PASSWORD_MSG,
-            ),
+            Regexp(_PASSWORD_REGEX,message=_PASSWORD_MSG,)
         ],
     )
     confirm_password = PasswordField(
         "Confirmar",
         validators=[
             DataRequired(),
-            EqualTo(
-                "password",
-                message="No coinciden.",
-            ),
-        ],
+            EqualTo("password", message="No coinciden.",)
+        ]
     )
     submit = SubmitField("Cambiar contraseña")

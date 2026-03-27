@@ -33,7 +33,7 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 # ── Register ────────────────────────────────────────
 
 @auth_bp.route("/register", methods=["GET", "POST"])
-@limiter.limit("3 per minute")
+@limiter.limit("5 per minute")
 def register():
     if current_user.is_authenticated:
         return redirect("/")
@@ -52,12 +52,12 @@ def register():
 
         existing_name = User.query.filter_by(
             username=form.username.data,
-            surname=form.surname.data,
+            surname=form.surname.data
         ).first()
         if existing_name:
             flash(
                 "Ese nombre y apellido ya estan registrados.",
-                "error",
+                "error"
             )
             return render_template(
                 "auth/register.html", form=form
@@ -68,7 +68,7 @@ def register():
                 username=form.username.data,
                 surname=form.surname.data,
                 email=form.email.data,
-                password=form.password.data,
+                password=form.password.data
             )
         except ValueError as e:
             flash(str(e), "error")
@@ -98,7 +98,7 @@ def register():
         flash(
             "Cuenta creada. Revisa tu email "
             "para verificar tienes 24h.",
-            "success",
+            "success"
         )
         return redirect(url_for("auth.login"))
 
@@ -127,7 +127,7 @@ def login():
                 flash(
                     "Verifica tu email antes de "
                     "iniciar sesion.",
-                    "error",
+                    "error"
                 )
                 return render_template(
                     "auth/login.html", form=form
@@ -144,7 +144,7 @@ def login():
                 next_page if next_page else "/"
             )
 
-        flash("Email o contrasena incorrectos.", "error")
+        flash("Email o contraseña incorrectos.", "error")
 
     return render_template(
         "auth/login.html", form=form
@@ -191,11 +191,11 @@ def verify_email(token):
         db.session.rollback()
         logger.exception(
             "Error verificando email user_id=%s",
-            payload["user_id"],
+            payload["user_id"]
         )
         flash(
             "Error al verificar el email. Intentalo de nuevo.",
-            "error",
+            "error"
         )
         return redirect(url_for("auth.login"))
 
@@ -207,7 +207,7 @@ def verify_email(token):
 @auth_bp.route(
     "/resend-verification", methods=["GET", "POST"]
 )
-@limiter.limit("2 per minute")
+@limiter.limit("5 per minute")
 def resend_verification():
     form = ResendVerificationForm()
 
@@ -216,20 +216,33 @@ def resend_verification():
             email=form.email.data.strip().lower()
         ).first()
 
-        if user and not user.is_verified:
-            try:
-                send_verification_email(user)
-            except Exception:
-                logger.exception(
-                    "Error reenviando verificacion a %s",
-                    user.email,
+        if user:
+            if user.is_verified:
+                flash(
+                    "Tu cuenta ya esta verificada. "
+                    "Por favor inicia sesion.",
+                    "info"
                 )
-
-        flash(
-            "Si el email existe, se ha enviado "
-            "un enlace.",
-            "info",
-        )
+            else:
+                try:
+                    send_verification_email(user)
+                except Exception:
+                    logger.exception(
+                        "Error reenviando verificacion a %s",
+                        user.email
+                    )
+                flash(
+                    "Email de verificacion enviado. "
+                    "Revisa tu bandeja de entrada.",
+                    "info"
+                )
+        else:
+            # No revelamos si el email existe o no
+            flash(
+                "Si el email existe, se ha enviado "
+                "un enlace.",
+                "info"
+            )
         return redirect(url_for("auth.login"))
 
     return render_template(
@@ -242,7 +255,7 @@ def resend_verification():
 @auth_bp.route(
     "/forgot-password", methods=["GET", "POST"]
 )
-@limiter.limit("3 per minute")
+@limiter.limit("4 per minute")
 def forgot_password():
     form = ForgotPasswordForm()
 
@@ -257,13 +270,13 @@ def forgot_password():
             except Exception:
                 logger.exception(
                     "Error enviando reset a %s",
-                    user.email,
+                    user.email
                 )
 
         flash(
             "Si el email existe, recibiras "
             "un enlace.",
-            "info",
+            "info"
         )
         return redirect(url_for("auth.login"))
 
@@ -275,7 +288,7 @@ def forgot_password():
 @auth_bp.route(
     "/reset-password/<token>", methods=["GET", "POST"]
 )
-@limiter.limit("5 per minute")
+@limiter.limit("4 per minute")
 def reset_password(token):
     payload = decode_jwt(
         token, expected_purpose="password_reset"
@@ -283,7 +296,7 @@ def reset_password(token):
     if not payload:
         flash(
             "Enlace invalido o expirado.",
-            "error",
+            "error"
         )
         return redirect(url_for("auth.forgot_password"))
 
@@ -303,29 +316,29 @@ def reset_password(token):
         except SQLAlchemyError:
             db.session.rollback()
             logger.exception(
-                "Error reseteando contrasena user_id=%s",
-                payload["user_id"],
+                "Error reseteando contraseña user_id=%s",
+                payload["user_id"]
             )
             flash(
-                "Error al cambiar la contrasena. "
+                "Error al cambiar la contraseña. "
                 "Intentalo de nuevo.",
-                "error",
+                "error"
             )
             return render_template(
                 "auth/reset_password.html",
                 form=form,
-                token=token,
+                token=token
             )
         flash(
             "Contrasena cambiada. Inicia sesion.",
-            "success",
+            "success"
         )
         return redirect(url_for("auth.login"))
 
     return render_template(
         "auth/reset_password.html",
         form=form,
-        token=token,
+        token=token
     )
 
 
@@ -349,14 +362,14 @@ def google_callback():
         logger.exception("Error en Google OAuth callback")
         flash(
             "Error al iniciar sesion con Google.",
-            "error",
+            "error"
         )
         return redirect(url_for("auth.login"))
 
     userinfo = token.get("userinfo")
     if not userinfo:
         flash(
-            "No se pudo obtener informacion de Google.",
+            "No se pudo obtener información de Google.",
             "error",
         )
         return redirect(url_for("auth.login"))
@@ -392,7 +405,7 @@ def google_callback():
         email=email,
         google_id=google_id,
         is_verified=True,
-        password_hash="OAUTH_USER_NO_PASSWORD",
+        password_hash="OAUTH_USER_NO_PASSWORD"
     )
     try:
         db.session.add(user)
@@ -409,7 +422,7 @@ def google_callback():
             email=email,
             google_id=google_id,
             is_verified=True,
-            password_hash="OAUTH_USER_NO_PASSWORD",
+            password_hash="OAUTH_USER_NO_PASSWORD"
         )
         try:
             db.session.add(user)
@@ -418,11 +431,11 @@ def google_callback():
             db.session.rollback()
             logger.exception(
                 "Error creando usuario OAuth google_id=%s",
-                google_id,
+                google_id
             )
             flash(
                 "Error al crear la cuenta. Intentalo de nuevo.",
-                "error",
+                "error"
             )
             return redirect(url_for("auth.login"))
 
