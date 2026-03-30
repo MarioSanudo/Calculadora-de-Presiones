@@ -1,5 +1,5 @@
 ---
-name: python_retry_decorator_skill
+name: python-retry-decorator-skill
 description: Manejo de errores Flask y Python, usar siempre que se implementen llamadas a APIs externas, operaciones de base de datos,
   procesamiento de lógica interna de la app o cualquier operación que pueda fallar por CAUSAS TRANSITORIAS (red, servidor sobrecargado, timeout, commit ...). Incluye el decorador @retry, logging estructurado y respuestas de error consistentes. Activar ante cualquier mención de
   "manejo de errores", "retry", "reintentos", "error handling", "excepción", o cuando se implementen servicios externos (Auth con google, apis de IA, apis, o modulos externos).

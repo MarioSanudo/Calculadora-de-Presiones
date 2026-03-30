@@ -5,7 +5,7 @@ import logging
 from flask import Flask
 from .utils.extensions import (
     db, migrate, login_manager,
-    bcrypt, csrf, limiter, mail, oauth,
+    bcrypt, csrf, limiter, mail, oauth
 )
 from config import DevelopmentConfig
 import sentry_sdk
@@ -41,7 +41,7 @@ def app_creation(config_class=None):
     oauth.register(
         name="google",
         server_metadata_url=(
-            "https://accounts.google.com"
+            "https://accounts.google.com"       #Creo que es para desarrollo tengo que mirar mejor la separación de config entre producción y desarrollo
             "/.well-known/openid-configuration"
         ),
         client_kwargs={"scope": "openid email profile"},
@@ -49,7 +49,7 @@ def app_creation(config_class=None):
 
     # Login config
     login_manager.login_view = "auth.login"
-    login_manager.login_message = "Inicia sesion primero."  #En rutas protegidas por login_requiered
+    login_manager.login_message = "Inicia sesión primero."  #En rutas protegidas por login_requiered
     login_manager.login_message_category = "info"
 
     # User loader

@@ -1,5 +1,5 @@
 ---
-name: url_security_skill
+name: url-security-skill
 description: Apply this skill whenever the user works with external inputs in Flask: URL parameters, form fields, file uploads, query strings, or any data entering the system from outside. The goal is to validate and sanitize before use, never after.
 ---
 
@@ -224,5 +224,5 @@ Apply these consistently across all routes:
 - These patterns are designed for a **Flask + Python + PostgreSQL** stack
 - Prioritizes explicitness and control over magic — consistent with the project's architectural philosophy
 - Allowlists > blocklists wherever possible (safer by default)
-- It is very important follow the previous skills that were defined in [revise_refactor_code](../revise_refactor_code/SKILL.md) and USE ONLY the stack that I mentioned in CLAUDE.md if changes are important you should bear in mind testing changes, to prove the code works properly.
+- It is very important follow the previous skills that were defined in [revise_refactor_code](../revise-refactor-code/SKILL.md) and USE ONLY the stack that I mentioned in CLAUDE.md if changes are important you should bear in mind testing changes, to prove the code works properly.
 - Try always to IMPROVE the code WITHOUT LOSING LEGIBILITY in the code.

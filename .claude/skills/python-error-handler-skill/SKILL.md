@@ -1,10 +1,10 @@
 ---
-name: python_error_handler_skill
+name: python-error-handler-skill
 description: Skill creada para el manejo de errores, siempre que haya lógica backend por detrás que pueda fallar, tanto de forma transitoria (servidor, muchas peticiones de golpe en una parte de código, commits), como otro tipo de fallos (json vacío, formatos incorrectos, otro tipo de error).
 ---
 
 # Cual es el objetivo de la skill
-El objetivo es en todo momento controlar los errores, para no romper la aplicación y conseguir un correcto flujo de trabajo y de seguimiento, es muy importante que esta skill se apoyo en las ya creadas skills [python_retry_decorator_skill](../python_retry_decorator_skill/SKILL.md) para que sepa cuando tiene que implementar el decorador, y además de [revise_refactor_code](../revise_refactor_code/SKILL.md) para que sepa que tenemos que implementar siempre en este caso los test para saber el correcto flujo de trabajo.
+El objetivo es en todo momento controlar los errores, para no romper la aplicación y conseguir un correcto flujo de trabajo y de seguimiento, es muy importante que esta skill se apoyo en las ya creadas skills [python_retry_decorator_skill](../python-retry-decorator-skill/SKILL.md) para que sepa cuando tiene que implementar el decorador, y además de [revise_refactor_code](../revise-refactor-code/SKILL.md) para que sepa que tenemos que implementar siempre en este caso los test para saber el correcto flujo de trabajo.
 
 ## Formato de la skill
 La lógica siempre tendrá que tener manejo de errores (try, except, else y finally), para poder controlar las partes con posibilidad de error en el código, su formato tendrá la siguiente forma:

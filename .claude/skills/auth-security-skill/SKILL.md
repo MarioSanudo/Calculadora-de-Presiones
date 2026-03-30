@@ -1,5 +1,5 @@
 ---
-name: auth_security_skill
+name: auth-security-skill
 description: El disparador será provocado por conversaciones relacionadas con el auth, rate limit en el auth, test de usuarios, mejoras en las funciones o nivel de seguridad a nivel de registro/sesión usuario, todo lo que tenga que ver con la mejora y desarrollo del auth.
 ---
 
@@ -13,7 +13,7 @@ Proyecto de tamaño mediano/pequeño — aplicar criterio de ingeniería sin sob
 - Cubrir los fallos más evidentes primero
 - No añadir complejidad innecesaria
 - Priorizar protección contra usuarios maliciosos sobre casos de uso extremos teóricos
-- Seguir las directrices de [revise_refactor_code](../revise_refactor_code/SKILL.md)
+- Seguir las directrices de [revise_refactor_code](../revise-refactor-code/SKILL.md)
 
 
 
