@@ -325,7 +325,7 @@ def reset_password(token):
                 token=token
             )
         flash(
-            "Contrasena cambiada. Inicia sesion.",
+            "Contraseña cambiada. Inicia sesión.",
             "success"
         )
         return redirect(url_for("auth.login"))

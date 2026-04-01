@@ -1,10 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import (
-    StringField, PasswordField, SubmitField
-)
+    StringField, PasswordField, SubmitField)
 from wtforms.validators import (
-    DataRequired, Email, Length, EqualTo, Regexp
-)
+    DataRequired, Email, Length, EqualTo, Regexp)
 
 # Solo letras (incluye tildes y ñ), sin espacios ni guiones
 _NAME_REGEX = r"^[a-zA-ZÀ-ÿ]+$"
@@ -46,8 +44,7 @@ class RegistrationForm(FlaskForm):
         validators=[
             DataRequired(),
             EqualTo("password", message="No coinciden las contraseñas.")
-        ]
-    )
+    ])
     submit = SubmitField("Registrarse")
 
 
@@ -86,14 +83,13 @@ class ResetPasswordForm(FlaskForm):
         validators=[
             DataRequired(),
             Length(min=8, max=128),
-            Regexp(_PASSWORD_REGEX,message=_PASSWORD_MSG,)
-        ],
-    )
+            Regexp(_PASSWORD_REGEX,message=_PASSWORD_MSG)
+        ])
+
     confirm_password = PasswordField(
         "Confirmar",
         validators=[
             DataRequired(),
-            EqualTo("password", message="No coinciden.",)
-        ]
-    )
+            EqualTo("password", message="No coinciden.")
+        ])
     submit = SubmitField("Cambiar contraseña")

@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
     <title>
-        {% block title %}Presion Ruedas{% endblock %}
+        {% block title %}Presión Ruedas{% endblock %}
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script
@@ -20,7 +20,7 @@
                     flex items-center justify-between">
             <a href="/"
                class="text-xl font-bold text-blue-600">
-                Presion Ruedas
+                Presión Ruedas
             </a>
             <div class="flex items-center gap-4">
                 {% if current_user.is_authenticated %}
@@ -35,14 +35,14 @@
                         <button type="submit"
                                 class="text-sm text-red-500
                                        hover:text-red-700">
-                            Cerrar sesion
+                            Cerrar sesión
                         </button>
                     </form>
                 {% else %}
                     <a href="{{ url_for('auth.login') }}"
                        class="text-sm text-blue-600
                               hover:text-blue-800">
-                        Iniciar sesion
+                        Iniciar sesión
                     </a>
                     <a href="{{ url_for('auth.register') }}"
                        class="text-sm bg-blue-600 text-white
@@ -59,8 +59,8 @@
     <div class="max-w-5xl mx-auto px-4 mt-4">
         {# El with para instanciar los mensajes flash #}
         {% with messages = get_flashed_messages(
-            with_categories=true
-        ) %}
+            with_categories=true)
+        %}
             {% if messages %}
                 {% for category, message in messages %}
                     <div class="p-3 mb-2 rounded text-sm

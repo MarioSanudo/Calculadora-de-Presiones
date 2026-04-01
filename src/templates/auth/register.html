@@ -17,18 +17,14 @@
         <div class="mb-4">
             {{ form.username.label(
                 class="block text-sm font-medium
-                       text-gray-700 mb-1"
-            ) }}
+                       text-gray-700 mb-1") }}
             {{ form.username(
                 class="w-full px-3 py-2 border
                        border-gray-300 rounded
                        focus:outline-none
                        focus:ring-2 focus:ring-blue-500",
-                placeholder="Tu nombre de usuario",
-                minlength="3",
-                maxlength="80",
-                required=true
-            ) }}
+                placeholder="Tu nombre de usuario") }}
+
             {% for error in form.username.errors %}
                 <p class="text-red-500 text-xs mt-1">
                     {{ error }}
@@ -47,11 +43,8 @@
                        border-gray-300 rounded
                        focus:outline-none
                        focus:ring-2 focus:ring-blue-500",
-                placeholder="Tu apellido",
-                minlength="2",
-                maxlength="80",
-                required=true
-            ) }}
+                placeholder="Tu apellido") }}
+
             {% for error in form.surname.errors %}
                 <p class="text-red-500 text-xs mt-1">
                     {{ error }}
@@ -70,10 +63,8 @@
                        border-gray-300 rounded
                        focus:outline-none
                        focus:ring-2 focus:ring-blue-500",
-                placeholder="tu@email.com",
-                type="email",
-                required=true
-            ) }}
+                placeholder="tu@email.com") }}
+
             {% for error in form.email.errors %}
                 <p class="text-red-500 text-xs mt-1">
                     {{ error }}
@@ -92,10 +83,7 @@
                        border-gray-300 rounded
                        focus:outline-none
                        focus:ring-2 focus:ring-blue-500",
-                placeholder="Minimo 8 caracteres",
-                minlength="8",
-                required=true
-            ) }}
+                placeholder="•••••••••••••••••••") }}
             {% for error in form.password.errors %}
                 <p class="text-red-500 text-xs mt-1">
                     {{ error }}
@@ -107,16 +95,13 @@
         <div class="mb-6">
             {{ form.confirm_password.label(
                 class="block text-sm font-medium
-                       text-gray-700 mb-1"
-            ) }}
+                       text-gray-700 mb-1") }}
             {{ form.confirm_password(
                 class="w-full px-3 py-2 border
                        border-gray-300 rounded
                        focus:outline-none
                        focus:ring-2 focus:ring-blue-500",
-                placeholder="Repite la contraseña",
-                minlength="8",
-                required=true
+                placeholder="Repite la contraseña"
             ) }}
             {% for error in form.confirm_password.errors %}
                 <p class="text-red-500 text-xs mt-1">
@@ -128,8 +113,7 @@
         {{ form.submit(
             class="w-full bg-blue-600 text-white py-2
                    rounded hover:bg-blue-700
-                   font-medium cursor-pointer"
-        ) }}
+                   font-medium cursor-pointer") }}
     </form>
 
     <!-- Separador -->
@@ -140,15 +124,6 @@
         <div class="flex-grow border-t
                     border-gray-300"></div>
     </div>
-
-    <!-- Google OAuth -->
-    <a href="{{ url_for('auth.google_login') }}"
-       class="w-full block text-center bg-white
-              border border-gray-300 text-gray-700
-              py-2 rounded hover:bg-gray-50
-              font-medium">
-        Continuar con Google
-    </a>
 
     <p class="text-center text-sm text-gray-500 mt-4">
         Ya tienes cuenta?
