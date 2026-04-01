@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}Calculadora de presion{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">
+        Calculadora de presion
+    </h1>
+
+    <form hx-post="{{ url_for('main.calcular_presion') }}"
+          hx-target="#resultado"
+          hx-swap="innerHTML"
+          class="bg-white rounded-lg shadow-sm border
+                 border-gray-200 p-6 space-y-4">
+
+        <!-- CSRF -->
+        <input type="hidden"
+               name="csrf_token"
+               value="{{ csrf_token() }}">
+
+        <!-- Modalidad -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Modalidad
+            </label>
+            <select name="ride_style"
+                    id="ride_style"
+                    onchange="aplicarDefectos(this.value)"
+                    class="w-full border border-gray-300 rounded
+                           px-3 py-2 text-sm focus:outline-none
+                           focus:ring-2 focus:ring-blue-400">
+                <option value="RIDE_STYLE_ROAD">Carretera</option>
+                <option value="RIDE_STYLE_GRAVEL">Gravel</option>
+            </select>
+        </div>
+
+        <!-- Peso ciclista / bici -->
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium
+                              text-gray-700 mb-1">
+                    Peso ciclista (kg)
+                </label>
+                <input type="number"
+                       name="rider_weight"
+                       id="rider_weight"
+                       step="0.1" min="20" max="200"
+                       placeholder="70"
+                       class="w-full border border-gray-300 rounded
+                              px-3 py-2 text-sm focus:outline-none
+                              focus:ring-2 focus:ring-blue-400">
+            </div>
+            <div>
+                <label class="block text-sm font-medium
+                              text-gray-700 mb-1">
+                    Peso bici (kg)
+                </label>
+                <input type="number"
+                       name="bike_weight"
+                       id="bike_weight"
+                       step="0.1" min="1" max="25"
+                       value="{{ defaults.bike_weight }}"
+                       class="w-full border border-gray-300 rounded
+                              px-3 py-2 text-sm focus:outline-none
+                              focus:ring-2 focus:ring-blue-400">
+            </div>
+        </div>
+
+        <!-- Ancho cubierta / anchura aro -->
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium
+                              text-gray-700 mb-1">
+                    Ancho cubierta (mm)
+                </label>
+                <input type="number"
+                       name="tire_width"
+                       id="tire_width"
+                       step="1" min="18" max="65"
+                       value="{{ defaults.tire_width }}"
+                       class="w-full border border-gray-300 rounded
+                              px-3 py-2 text-sm focus:outline-none
+                              focus:ring-2 focus:ring-blue-400">
+            </div>
+            <div>
+                <label class="block text-sm font-medium
+                              text-gray-700 mb-1">
+                    Anchura interior aro (mm)
+                </label>
+                <input type="number"
+                       name="inner_rim_width"
+                       id="inner_rim_width"
+                       step="1" min="15" max="50"
+                       value="{{ defaults.inner_rim_width }}"
+                       class="w-full border border-gray-300 rounded
+                              px-3 py-2 text-sm focus:outline-none
+                              focus:ring-2 focus:ring-blue-400">
+            </div>
+        </div>
+
+        <!-- Diámetro rueda -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Diametro de rueda
+            </label>
+            <select name="wheel_diameter"
+                    id="wheel_diameter"
+                    class="w-full border border-gray-300 rounded
+                           px-3 py-2 text-sm focus:outline-none
+                           focus:ring-2 focus:ring-blue-400">
+                <option value="622"
+                    {% if defaults.wheel_diameter == 622 %}selected{% endif %}>
+                    700c / 29" (622 mm)
+                </option>
+                <option value="584"
+                    {% if defaults.wheel_diameter == 584 %}selected{% endif %}>
+                    650b / 27.5" (584 mm)
+                </option>
+                <option value="571">
+                    27.5" alternativo (571 mm)
+                </option>
+                <option value="559">
+                    26" (559 mm)
+                </option>
+            </select>
+        </div>
+
+        <!-- Tipo de aro -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Sistema de cubierta
+            </label>
+            <select name="rim_type"
+                    id="rim_type"
+                    class="w-full border border-gray-300 rounded
+                           px-3 py-2 text-sm focus:outline-none
+                           focus:ring-2 focus:ring-blue-400">
+                <option value="RIM_TYPE_TUBELESS_CROCHET"
+                    {% if defaults.rim_type == 'RIM_TYPE_TUBELESS_CROCHET' %}
+                        selected
+                    {% endif %}>
+                    Tubeless gancho
+                </option>
+                <option value="RIM_TYPE_TUBES">
+                    Con camara
+                </option>
+                <option value="RIM_TYPE_TUBELESS_STRAIGHT">
+                    Tubeless hookless
+                </option>
+                <option value="RIM_TYPE_303_XPLR">
+                    Zipp 303 XPLR
+                </option>
+                <option value="RIM_TYPE_TUBULAR">
+                    Tubular
+                </option>
+            </select>
+        </div>
+
+        <!-- Carcasa -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Tipo de carcasa
+            </label>
+            <select name="tire_casing"
+                    id="tire_casing"
+                    class="w-full border border-gray-300 rounded
+                           px-3 py-2 text-sm focus:outline-none
+                           focus:ring-2 focus:ring-blue-400">
+                <option value="TIRE_CASING_STANDARD"
+                    {% if defaults.tire_casing == 'TIRE_CASING_STANDARD' %}
+                        selected
+                    {% endif %}>
+                    Estandar
+                </option>
+                <option value="TIRE_CASING_THIN">Ligera</option>
+                <option value="TIRE_CASING_REINFORCED">Reforzada</option>
+                <option value="TIRE_CASING_DOUBLE">Doble ply / DH</option>
+            </select>
+        </div>
+
+        <!-- Superficie -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Superficie
+            </label>
+            <select name="surface"
+                    class="w-full border border-gray-300 rounded
+                           px-3 py-2 text-sm focus:outline-none
+                           focus:ring-2 focus:ring-blue-400">
+                <option value="SURFACE_DRY">Seco</option>
+                <option value="SURFACE_WET">Mojado</option>
+                <option value="SURFACE_SNOW">Nieve</option>
+            </select>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-blue-600 text-white py-2
+                       rounded hover:bg-blue-700
+                       font-medium cursor-pointer">
+            Calcular presion
+        </button>
+
+    </form>
+
+    <!-- Zona de resultado (HTMX swap target) -->
+    <div id="resultado" class="mt-6"></div>
+
+</div>
+
+<script>
+    // Valores por defecto por modalidad (sincronizados con RIDE_STYLE_DEFAULTS)
+    const DEFECTOS = {
+        RIDE_STYLE_ROAD: {
+            bike_weight:     6.5,
+            tire_width:      28,
+            inner_rim_width: 23,
+            wheel_diameter:  "622",
+            rim_type:        "RIM_TYPE_TUBELESS_CROCHET",
+            tire_casing:     "TIRE_CASING_STANDARD",
+        },
+        RIDE_STYLE_GRAVEL: {
+            bike_weight:     9.0,
+            tire_width:      40,
+            inner_rim_width: 25,
+            wheel_diameter:  "622",
+            rim_type:        "RIM_TYPE_TUBELESS_CROCHET",
+            tire_casing:     "TIRE_CASING_STANDARD",
+        },
+    };
+
+    function aplicarDefectos(modalidad) {
+        const d = DEFECTOS[modalidad];
+        if (!d) return;
+        document.getElementById("bike_weight").value      = d.bike_weight;
+        document.getElementById("tire_width").value       = d.tire_width;
+        document.getElementById("inner_rim_width").value  = d.inner_rim_width;
+        document.getElementById("wheel_diameter").value   = d.wheel_diameter;
+        document.getElementById("rim_type").value         = d.rim_type;
+        document.getElementById("tire_casing").value      = d.tire_casing;
+    }
+</script>
+
+{% endblock %}

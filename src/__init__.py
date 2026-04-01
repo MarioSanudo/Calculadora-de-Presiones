@@ -13,16 +13,14 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(levelname)s %(name)s: %(message)s"
-)
+    format="%(levelname)s %(name)s: %(message)s")
 
 
 def app_creation(config_class=None):
     
     sentry_sdk.init(
         dsn="https://b480bef0fbff32420ffeaaf8563a3757@o4510783416762368.ingest.de.sentry.io/4511066566361168",
-        integrations=[FlaskIntegration()],  traces_sample_rate=0.2
-    )
+        integrations=[FlaskIntegration()],  traces_sample_rate=0.2)
 
     app = Flask(__name__, template_folder="templates")
     app.config.from_object(config_class or DevelopmentConfig)
@@ -44,8 +42,7 @@ def app_creation(config_class=None):
             "https://accounts.google.com"       #Creo que es para desarrollo tengo que mirar mejor la separación de config entre producción y desarrollo
             "/.well-known/openid-configuration"
         ),
-        client_kwargs={"scope": "openid email profile"},
-    )
+        client_kwargs={"scope": "openid email profile"})
 
     # Login config
     login_manager.login_view = "auth.login"
@@ -54,6 +51,7 @@ def app_creation(config_class=None):
 
     # User loader
     from src.models.user import User
+    from src.models.analysis import Analysis  # para que Flask-Migrate detecte la tabla
 
     @login_manager.user_loader
     def load_user(user_id):  # user_id es el UUID del alternative_id
