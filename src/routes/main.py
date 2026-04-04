@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 from flask_login import current_user
 from src.services.pressure_service import (
     validate_inputs,
@@ -21,8 +21,8 @@ def index():
 @main_bp.route("/calcular", methods=["GET", "POST"])
 @limiter.limit("20 per minute")
 def calcular_presion():
-    defaults = RIDE_STYLE_DEFAULTS.get("RIDE_STYLE_ROAD")
-
+    all_defaults = RIDE_STYLE_DEFAULTS
+    print(all_defaults)
     if request.method=="POST":
         data = {
             "rider_weight":    to_float(request.form.get("rider_weight")),
@@ -49,4 +49,6 @@ def calcular_presion():
             errors=[],  #Se muestra la lista vacía en el html, es decir nada
             result=result)
 
-    return render_template("calculator/index.html", defaults=defaults)
+    return render_template(
+        "calculator/index.html",
+        all_defaults=all_defaults)
