@@ -24,6 +24,11 @@
             </a>
             <div class="flex items-center gap-4">
                 {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('main.historial') }}"
+                       class="text-sm text-blue-600
+                              hover:text-blue-800">
+                        Historial
+                    </a>
                     <span class="text-gray-600 text-sm">
                         {{ current_user.username }}
                     </span>

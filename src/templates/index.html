@@ -14,7 +14,7 @@
     </p>
 
     {% if current_user.is_authenticated %}
-        <a href="#"
+        <a href="{{ url_for('main.calcular_presion')}}"
            class="inline-block bg-blue-600 text-white
                   px-6 py-3 rounded-lg text-lg
                   hover:bg-blue-700 font-medium">

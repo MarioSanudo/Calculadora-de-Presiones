@@ -35,7 +35,6 @@ RIM_TYPE_FACTORS_ROAD = {
     "RIM_TYPE_TUBULAR":           1.10,    # Pegado — históricamente más presión
     "RIM_TYPE_TUBES":             1.05,    # Con cámara
     "RIM_TYPE_TUBELESS_CROCHET":  1.03,    # Tubeless gancho
-    "RIM_TYPE_303_XPLR":          0.9675,  # Llanta Zipp 303 XPLR específica
     "RIM_TYPE_TUBELESS_STRAIGHT": 0.955,   # Tubeless straight side (hookless)
 }
 
