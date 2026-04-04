@@ -70,7 +70,7 @@ RIDE_STYLE_DEFAULTS = {
         "wheel_diameter":  622,
         "tire_width":      28,
         "tire_casing":     "TIRE_CASING_STANDARD",
-        "bike_weight":     6.5,
+        "bike_weight":     8,
     },
     "RIDE_STYLE_GRAVEL": {
         "inner_rim_width": 25,
@@ -78,7 +78,7 @@ RIDE_STYLE_DEFAULTS = {
         "wheel_diameter":  622,
         "tire_width":      40,
         "tire_casing":     "TIRE_CASING_STANDARD",
-        "bike_weight":     9.0,
+        "bike_weight":     11,
     }
 }
 

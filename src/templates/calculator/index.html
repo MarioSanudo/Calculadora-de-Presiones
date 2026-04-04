@@ -26,7 +26,7 @@
             </label>
             <select name="ride_style"
                     id="ride_style"
-                    onchange="aplicarDefectos(this.value)"
+
                     class="w-full border border-gray-300 rounded
                            px-3 py-2 text-sm focus:outline-none
                            focus:ring-2 focus:ring-blue-400">
@@ -128,6 +128,9 @@
                 <option value="RIM_TYPE_TUBES">
                     Con camara
                 </option>
+                <option value="RIM_TYPE_TUBELESS_CROCHET">
+                    Tubeless gancho
+                </option>
                 <option value="RIM_TYPE_TUBELESS_STRAIGHT">
                     Tubeless hookless
                 </option>
@@ -148,6 +151,7 @@
                            px-3 py-2 text-sm focus:outline-none
                            focus:ring-2 focus:ring-blue-400">
                 <option value="TIRE_CASING_THIN">Ligera</option>
+                <option value="TIRE_CASING_STANDARD">Estándar</option>
                 <option value="TIRE_CASING_REINFORCED">Reforzada</option>
                 <option value="TIRE_CASING_DOUBLE">Doble ply / DH</option>
             </select>
@@ -172,7 +176,7 @@
                 class="w-full bg-blue-600 text-white py-2
                        rounded hover:bg-blue-700
                        font-medium cursor-pointer">
-            Calcular presion
+            Calcular presión
         </button>
 
     </form>
@@ -186,7 +190,7 @@
     // Valores por defecto por modalidad — viene del servidor (RIDE_STYLE_DEFAULTS)
 
     const DEFECTOS = {{ all_defaults | tojson }};
-    
+
     function aplicarDefectos(modalidad) {
         const defaultParam = DEFECTOS[modalidad];
         if (!defaultParam) return;  // No delvuelve nada None si la modalidad no existe o es None
@@ -198,6 +202,12 @@
         document.getElementById("rim_type").value         = String(defaultParam.rim_type);
         document.getElementById("tire_casing").value      = String(defaultParam.tire_casing);
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const selectModalidad = document.getElementById("ride_style");
+        aplicarDefectos(selectModalidad.value);
+        selectModalidad.addEventListener("change", (e) => aplicarDefectos(e.target.value));
+    });
 </script>
 
 {% endblock %}
