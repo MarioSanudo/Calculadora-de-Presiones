@@ -1,0 +1,57 @@
+{% if errors %}
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+        <p class="text-red-700 font-medium mb-2">
+            Corrige los siguientes errores:
+        </p>
+        <ul class="list-disc list-inside space-y-1">
+            {% for error in errors %}
+                <li class="text-red-600 text-sm">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% elif result %}
+    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">
+            Presión recomendada
+        </h2>
+        <div class="grid grid-cols-2 gap-4">
+
+            <!-- Rueda delantera -->
+            <div class="bg-blue-50 rounded-lg p-4 text-center">
+                <p class="text-sm text-gray-500 mb-1">Delantera</p>
+                <p class="text-3xl font-bold text-blue-600">
+                    {{ result.front.bar }} bar
+                </p>
+                <p class="text-sm text-gray-400 mt-1">
+                    {{ result.front.psi }} psi
+                </p>
+            </div>
+
+            <!-- Rueda trasera -->
+            <div class="bg-indigo-50 rounded-lg p-4 text-center">
+                <p class="text-sm text-gray-500 mb-1">Trasera</p>
+                <p class="text-3xl font-bold text-indigo-600">
+                    {{ result.rear.bar }} bar
+                </p>
+                <p class="text-sm text-gray-400 mt-1">
+                    {{ result.rear.psi }} psi
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Feedback de guardado -->
+        {% if saved is true %}
+            <p class="mt-3 text-green-600 text-sm font-medium">
+                Análisis guardado correctamente.
+            </p>
+        {% elif saved is false %}
+            <p class="mt-3 text-red-600 text-sm font-medium">
+                Error al guardar el análisis.
+            </p>
+        {% endif %}
+
+
+    </div>
+{% endif %}
