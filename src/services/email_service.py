@@ -35,16 +35,16 @@ def send_password_reset_email(user):
     token = generate_jwt(
         user.id,
         purpose="password_reset",
-        expires_minutes=30,
+        expires_minutes=30
     )
     link = url_for(
         "auth.reset_password",
         token=token,
-        _external=True,
+        _external=True
     )
     msg = Message(
-        subject="Recuperar contraseña - Presion Ruedas",
-        recipients=[user.email],
+        subject="Recuperar contraseña - Verneris",
+        recipients=[user.email]
     )
     msg.body = (
         f"Hola {user.username},\n\n"

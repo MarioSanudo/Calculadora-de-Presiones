@@ -164,6 +164,7 @@ def logout():
 # ── Email verification ──────────────────────────────
 
 @auth_bp.route("/verify/<token>")
+@limiter.limit("10 per minute")
 def verify_email(token):
     payload = decode_jwt(
         token, expected_purpose="email_verification"    #Con purpose limito de donde venga el el token, para evitar robos y que lo peguen en la url
@@ -224,8 +225,7 @@ def resend_verification():
         if user:
             if user.is_verified:
                 flash(
-                    "Tu cuenta ya esta verificada. "
-                    "Por favor inicia sesion.",
+                    "Tu cuenta ya esta verificada. Por favor inicia sesión.",
                     "info"
                 )
             else:
@@ -233,19 +233,17 @@ def resend_verification():
                     send_verification_email(user)
                 except Exception:
                     logger.exception(
-                        "Error reenviando verificacion a %s",
+                        "Error reenviando verificación a %s",
                         user.email
                     )
                 flash(
-                    "Email de verificacion enviado. "
-                    "Revisa tu bandeja de entrada.",
+                    "Email de verificación enviado. Revisa tu bandeja de entrada.",
                     "info"
                 )
         else:
             # No revelamos si el email existe o no
             flash(
-                "Si el email existe, se ha enviado "
-                "un enlace.",
+                "Si el email existe, se ha enviado un enlace.",
                 "info"
             )
         return redirect(url_for("auth.login"))
@@ -260,7 +258,7 @@ def resend_verification():
 @auth_bp.route(
     "/forgot-password", methods=["GET", "POST"]
 )
-@limiter.limit("4 per minute")
+@limiter.limit("5 per minute")
 def forgot_password():
     form = ForgotPasswordForm()
 
@@ -279,8 +277,7 @@ def forgot_password():
                 )
 
         flash(
-            "Si el email existe, recibiras "
-            "un enlace.",
+            "Si el email existe, recibirás un enlace para cambiar tu contraseña.",
             "info"
         )
         return redirect(url_for("auth.login"))
@@ -293,14 +290,14 @@ def forgot_password():
 @auth_bp.route(
     "/reset-password/<token>", methods=["GET", "POST"]
 )
-@limiter.limit("4 per minute")
+@limiter.limit("5 per minute")
 def reset_password(token):
     payload = decode_jwt(
         token, expected_purpose="password_reset"
     )
     if not payload:
         flash(
-            "Enlace invalido o expirado.",
+            "Enlace inválido o expirado.",
             "error"
         )
         return redirect(url_for("auth.forgot_password"))
@@ -325,8 +322,7 @@ def reset_password(token):
                 payload["user_id"]
             )
             flash(
-                "Error al cambiar la contraseña. "
-                "Intentalo de nuevo.",
+                "Error al cambiar la contraseña, intentalo de nuevo.",
                 "error"
             )
             return render_template(
@@ -379,9 +375,9 @@ def google_callback():
         )
         return redirect(url_for("auth.login"))
 
-    google_id = userinfo["sub"]
+    google_id = userinfo["sub"] #Id único del usuario
     email = userinfo["email"].strip().lower()
-    name = userinfo.get("given_name", "Usuario")
+    name = userinfo.get("given_name", "Usuario")    #Con fallback (Usuario)
     surname = userinfo.get("family_name", "Google")
 
     # Caso 1: usuario ya vinculado con Google
@@ -390,7 +386,7 @@ def google_callback():
     ).first()
     if user:
         login_user(user)
-        flash("Sesion iniciada con Google.", "success")
+        flash("Sesión iniciada con Google.", "success")
         return redirect("/")
 
     # Caso 2: email existe sin google_id → vincular

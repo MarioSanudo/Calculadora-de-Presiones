@@ -34,7 +34,7 @@ class RegistrationForm(FlaskForm):
         Email(),
         Length(max=120)
     ])
-    password = PasswordField("Password", validators=[
+    password = PasswordField("Contraseña", validators=[
         DataRequired(),
         Length(min=8, max=128),
         Regexp(_PASSWORD_REGEX, message=_PASSWORD_MSG)
@@ -53,7 +53,7 @@ class LoginForm(FlaskForm):
         DataRequired(),
         Email()
     ])
-    password = PasswordField("Password", validators=[
+    password = PasswordField("Contraseña", validators=[
         DataRequired()
     ])
     submit = SubmitField("Iniciar sesión")
