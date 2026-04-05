@@ -11,7 +11,8 @@
     {% if analyses %}
         <div class="space-y-4">
             {% for a in analyses %}
-            <div class="bg-white border border-gray-200
+            <div id="analisis-{{ a.id }}"
+                 class="bg-white border border-gray-200
                         rounded-lg p-4 shadow-sm">
 
                 <div class="flex items-center justify-between
@@ -19,21 +20,37 @@
                     <span class="text-xs text-gray-400">
                         {{ a.created_at.strftime("%d/%m/%Y %H:%M") }}
                     </span>
-                    <span class="text-xs font-medium px-2 py-0.5
-                                 rounded
-                        {% if a.ride_style == 'RIDE_STYLE_ROAD' %}
-                            bg-blue-100 text-blue-700
-                        {% else %}
-                            bg-green-100 text-green-700
-                        {% endif %}">
-                        {% if a.ride_style == 'RIDE_STYLE_ROAD' %}
-                            Carretera
-                        {% elif a.ride_style == 'RIDE_STYLE_GRAVEL' %}
-                            Gravel
-                        {% else %}
-                            {{ a.ride_style }}
-                        {% endif %}
-                    </span>
+
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-medium px-2 py-0.5
+                                     rounded
+                            {% if a.ride_style == 'RIDE_STYLE_ROAD' %}
+                                bg-blue-100 text-blue-700
+                            {% else %}
+                                bg-green-100 text-green-700
+                            {% endif %}">
+                            {% if a.ride_style == 'RIDE_STYLE_ROAD' %}
+                                Carretera
+                            {% elif a.ride_style == 'RIDE_STYLE_GRAVEL' %}
+                                Gravel
+                            {% else %}
+                                {{ a.ride_style }}
+                            {% endif %}
+                        </span>
+
+                        <!-- Borrar análisis — HTMX DELETE -->
+                        <button
+                            hx-delete="{{ url_for('main.borrar_analisis', analysis_id=a.id) }}"
+                            hx-target="#analisis-{{ a.id }}"
+                            hx-swap="outerHTML"
+                            hx-confirm="¿Borrar este análisis?"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
+                            class="text-gray-400 hover:text-red-500
+                                   transition-colors cursor-pointer"
+                            title="Borrar análisis">
+                            &#x1F5D1;
+                        </button>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-3 gap-2 text-sm

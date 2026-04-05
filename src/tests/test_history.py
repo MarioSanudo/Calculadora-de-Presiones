@@ -42,13 +42,6 @@ def test_historial_requiere_login(client):
     assert "/auth/login" in resp.headers["Location"]
 
 
-def test_guardar_requiere_login(client):
-    """POST /analisis/guardar sin login redirige."""
-    resp = client.post("/analisis/guardar", data=_CALC_DATA)
-    assert resp.status_code == 302
-    assert "/auth/login" in resp.headers["Location"]
-
-
 # ── Calcular con login ──────────────────────────────
 
 def test_calcular_con_login(client, verified_user):
@@ -60,20 +53,23 @@ def test_calcular_con_login(client, verified_user):
 
 
 def test_calcular_post_muestra_resultado(client, verified_user):
-    """POST /calcular devuelve presiones front/rear."""
+    """POST /calcular sin save devuelve presiones y saved=None."""
     _login(client, verified_user["email"], verified_user["password"])
     resp = client.post("/calcular", data=_CALC_DATA)
     assert resp.status_code == 200
     assert b"bar" in resp.data
     assert b"psi" in resp.data
+    # Sin save=1 no debe mostrar el mensaje de confirmación
+    assert b"correctamente" not in resp.data
 
 
-# ── Guardar análisis ────────────────────────────────
+# ── Calcular y guardar ──────────────────────────────
 
-def test_guardar_analisis_ok(client, verified_user, app):
-    """POST /analisis/guardar crea fila en analyses."""
+def test_calcular_y_guardar_ok(client, verified_user, app):
+    """POST /calcular con save=1 crea fila en analyses."""
     _login(client, verified_user["email"], verified_user["password"])
-    resp = client.post("/analisis/guardar", data=_CALC_DATA)
+    data = {**_CALC_DATA, "save": "1"}
+    resp = client.post("/calcular", data=data)
     assert resp.status_code == 200
     assert "guardado" in resp.data.decode().lower()
 
@@ -86,14 +82,25 @@ def test_guardar_analisis_ok(client, verified_user, app):
         assert a.rear_bar > 0
 
 
-def test_guardar_datos_invalidos(client, verified_user, app):
-    """POST /analisis/guardar con datos malos no crea fila."""
+def test_calcular_sin_guardar_no_crea_fila(
+    client, verified_user, app
+):
+    """POST /calcular sin save=1 no crea análisis en DB."""
     _login(client, verified_user["email"], verified_user["password"])
-    bad_data = _CALC_DATA.copy()
-    bad_data["rider_weight"] = "999"  # fuera de rango
-    resp = client.post("/analisis/guardar", data=bad_data)
+    client.post("/calcular", data=_CALC_DATA)
+
+    with app.app_context():
+        assert Analysis.query.count() == 0
+
+
+def test_calcular_datos_invalidos_no_guarda(
+    client, verified_user, app
+):
+    """POST /calcular con datos malos no crea fila aunque save=1."""
+    _login(client, verified_user["email"], verified_user["password"])
+    bad_data = {**_CALC_DATA, "rider_weight": "999", "save": "1"}
+    resp = client.post("/calcular", data=bad_data)
     assert resp.status_code == 200
-    assert "no válidos" in resp.data.decode().lower()
 
     with app.app_context():
         assert Analysis.query.count() == 0
@@ -106,8 +113,7 @@ def test_historial_muestra_analisis(
 ):
     """GET /historial muestra los análisis guardados."""
     _login(client, verified_user["email"], verified_user["password"])
-    # Guardar un análisis primero
-    client.post("/analisis/guardar", data=_CALC_DATA)
+    client.post("/calcular", data={**_CALC_DATA, "save": "1"})
 
     resp = client.get("/historial")
     assert resp.status_code == 200
@@ -131,7 +137,7 @@ def test_historial_no_muestra_de_otro_usuario(
     from src.services.auth_service import hash_password
 
     _login(client, verified_user["email"], verified_user["password"])
-    client.post("/analisis/guardar", data=_CALC_DATA)
+    client.post("/calcular", data={**_CALC_DATA, "save": "1"})
     client.post("/auth/logout")
 
     # Crear segundo usuario

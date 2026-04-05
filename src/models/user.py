@@ -39,5 +39,5 @@ class User(UserMixin, db.Model):
         return f"<User {self.username}>"
     
     
-    def get_id(self):
+    def get_id(self):   #Se carga y da el id, cuando hay un login, load_user se activa
         return str(self.alternative_id)  # Cookie de sesión usa el UUID, no el PK

@@ -1,11 +1,11 @@
 import logging
 from flask import (
     Blueprint, render_template, redirect,
-    url_for, flash, request,
+    url_for, flash, request
 )
 from flask_login import (
     login_user, logout_user,
-    login_required, current_user,
+    login_required, current_user
 )
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from src.utils.extensions import db, limiter, oauth
@@ -13,15 +13,15 @@ from src.utils.validators import validar_next
 from src.routes.forms.auth_forms import (
     RegistrationForm, LoginForm,
     ResendVerificationForm, ForgotPasswordForm,
-    ResetPasswordForm,
+    ResetPasswordForm
 )
 from src.services.auth_service import (
     create_user, authenticate_user,
-    decode_jwt, hash_password,
+    decode_jwt, hash_password
 )
 from src.services.email_service import (
     send_verification_email,
-    send_password_reset_email,
+    send_password_reset_email
 )
 from src.models.user import User
 

@@ -8,7 +8,8 @@
         Calculadora de presión
     </h1>
 
-    <form hx-post="{{ url_for('main.calcular_presion') }}"
+    <form id="calc-form"
+          hx-post="{{ url_for('main.calcular_presion') }}"
           hx-target="#resultado"
           hx-swap="innerHTML"
           class="bg-white rounded-lg shadow-sm border
@@ -170,6 +171,19 @@
                 <option value="SURFACE_WET">Mojado</option>
                 <option value="SURFACE_SNOW">Nieve</option>
             </select>
+        </div>
+
+        <!-- Guardar en historial -->
+        <div class="flex items-center gap-2">
+            <input type="checkbox"
+                   name="save"
+                   id="save"
+                   value="1"
+                   class="w-4 h-4 accent-blue-600 cursor-pointer">
+            <label for="save"
+                   class="text-sm text-gray-600 cursor-pointer select-none">
+                Guardar en historial
+            </label>
         </div>
 
         <button type="submit"
