@@ -11,16 +11,16 @@ def send_verification_email(user):
     token = generate_jwt(
         user.id,
         purpose="email_verification",
-        expires_minutes=1440,
+        expires_minutes=1440
     )
     link = url_for(
         "auth.verify_email",
         token=token,
-        _external=True,
+        _external=True
     )
     msg = Message(
-        subject="Verifica tu cuenta - Presion Ruedas",
-        recipients=[user.email],
+        subject="Verifica tu cuenta - Verneris",
+        recipients=[user.email]
     )
     msg.body = (
         f"Hola {user.username},\n\n"

@@ -56,12 +56,12 @@ def generate_jwt(user_id, purpose="general", expires_minutes=60):
         "purpose": purpose,
         "exp": datetime.now(timezone.utc)
         + timedelta(minutes=expires_minutes),
-        "iat": datetime.now(timezone.utc),
+        "iat": datetime.now(timezone.utc)
     }
     return jwt.encode(
         payload,
         current_app.config["SECRET_KEY"],
-        algorithm="HS256",
+        algorithm="HS256"
     )
 
 
@@ -70,7 +70,7 @@ def decode_jwt(token, expected_purpose=None):
         payload = jwt.decode(
             token,
             current_app.config["SECRET_KEY"],
-            algorithms=["HS256"],
+            algorithms=["HS256"]
         )
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None

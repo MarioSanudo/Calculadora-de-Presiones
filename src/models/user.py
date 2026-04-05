@@ -19,7 +19,7 @@ class User(UserMixin, db.Model):
     google_id = db.Column(
         db.String(255), unique=True, nullable=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    is_active_user = db.Column(db.Boolean, default=True)
+    is_active_user = db.Column(db.Boolean, default=True)    #Puede ser útil para banear cuentas
     alternative_id=db.Column(db.String(128), nullable=False, unique=True, default=lambda:str(uuid4()))  #Id más seguro para las cookies
 
 

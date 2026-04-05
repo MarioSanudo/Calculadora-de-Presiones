@@ -20,14 +20,14 @@
                     flex items-center justify-between">
             <a href="/"
                class="text-xl font-bold text-blue-600">
-                Presión Ruedas
+                Calcular Presión Ruedas
             </a>
             <div class="flex items-center gap-4">
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('main.historial') }}"
                        class="text-sm text-blue-600
                               hover:text-blue-800">
-                        Historial
+                        Historial Cálculos
                     </a>
                     <span class="text-gray-600 text-sm">
                         {{ current_user.username }}

@@ -76,7 +76,7 @@ def register():
             )
             flash(
                 "Error al crear la cuenta. Intentalo de nuevo.",
-                "error",
+                "error"
             )
             return render_template(
                 "auth/register.html", form=form
@@ -86,13 +86,12 @@ def register():
             send_verification_email(user)
         except Exception:
             logger.exception(
-                "Error al enviar email de verificacion "
-                "a %s", user.email,
+                "Error al enviar email de verificación "
+                "a %s", user.email
             )
 
         flash(
-            "Cuenta creada. Revisa tu email "
-            "para verificar tienes 24h.",
+            "Cuenta creada. Revisa tu email para verificar tienes 24h.",
             "success"
         )
         return redirect(url_for("auth.login"))
@@ -115,14 +114,20 @@ def login():
     if form.validate_on_submit():
         user = authenticate_user(
             email=form.email.data,
-            password=form.password.data,
+            password=form.password.data
         )
         if user:
             if not user.is_verified:
+                try:
+                    send_verification_email(user)
+                except Exception:
+                    logger.exception(
+                        "Error reenviando verificación en login a %s",
+                        user.email
+                    )
                 flash(
-                    "Verifica tu email antes de "
-                    "iniciar sesion.",
-                    "error"
+                    "Email no verificado. Revisa tu email para verificar tienes 24h.",
+                    "info"
                 )
                 return render_template(
                     "auth/login.html", form=form
@@ -134,7 +139,7 @@ def login():
                 validar_next(next_raw)
                 if next_raw else None
             )
-            flash("Sesion iniciada.", "success")
+            flash("Sesión iniciada.", "success")
             return redirect(
                 next_page if next_page else "/"
             )
@@ -152,7 +157,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("Sesion cerrada.", "info")
+    flash("Sesión cerrada.", "info")
     return redirect(url_for("auth.login"))
 
 
@@ -166,12 +171,17 @@ def verify_email(token):
     if not payload:
         flash(
             "Enlace invalido o expirado.",
-            "error",
+            "error"
         )
         return redirect(url_for("auth.login"))
 
     user = db.session.get(User, payload["user_id"])
     if not user:
+        # Token válido pero user_id inexistente — posible manipulación
+        logger.warning(
+            "verify_email: token válido con user_id inexistente user_id=%s",
+            payload["user_id"]
+        )
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("auth.login"))
 
@@ -194,7 +204,7 @@ def verify_email(token):
         )
         return redirect(url_for("auth.login"))
 
-    flash("Email verificado. Ya puedes iniciar sesion.",
+    flash("Email verificado. Ya puedes iniciar sesión.",
           "success")
     return redirect(url_for("auth.login"))
 

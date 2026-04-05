@@ -90,6 +90,6 @@ class ResetPasswordForm(FlaskForm):
         "Confirmar",
         validators=[
             DataRequired(),
-            EqualTo("password", message="No coinciden.")
+            EqualTo("password", message="No coinciden las contraseñas.")
         ])
     submit = SubmitField("Cambiar contraseña")
