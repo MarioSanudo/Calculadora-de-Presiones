@@ -1,4 +1,7 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import (
+    Blueprint, render_template, request,
+    current_app, flash, make_response, url_for
+)
 from flask_login import login_required, current_user
 from src.services.pressure_service import (
     validate_inputs,
@@ -68,8 +71,12 @@ def calcular_presion():
                 db.session.add(analysis)
                 db.session.commit()
                 saved = True
-            except SQLAlchemyError:
+            except SQLAlchemyError as e:
                 db.session.rollback()
+                current_app.logger.error(
+                    "Error guardando análisis user_id=%s: %s",
+                    current_user.id, e, exc_info=True
+                )
                 saved = False
         else:
             saved = None
@@ -83,7 +90,6 @@ def calcular_presion():
     return render_template(
         "calculator/index.html",
         all_defaults=all_defaults)
-
 
 @main_bp.route("/historial")
 @login_required
@@ -110,7 +116,18 @@ def borrar_analisis(analysis_id):
     try:
         db.session.delete(analysis)
         db.session.commit()
-    except SQLAlchemyError:
+    except SQLAlchemyError as e:
         db.session.rollback()
-        return "", 500
+        current_app.logger.error(
+            "Error borrando análisis id=%s user_id=%s: %s",
+            analysis_id, current_user.id, e, exc_info=True
+        )
+        flash(
+            "No se pudo borrar el análisis. Inténtalo de nuevo.",
+            "error"
+        )
+        # HTMX redirige al historial para mostrar el flash
+        resp = make_response("", 200)   #Ya se manda el mensaje via flash
+        resp.headers["HX-Redirect"] = url_for("main.historial")
+        return resp
     return "", 200

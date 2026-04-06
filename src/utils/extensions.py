@@ -15,7 +15,7 @@ login_manager = LoginManager()
 bcrypt = Bcrypt()
 csrf = CSRFProtect()
 limiter = Limiter(
-    key_func=get_remote_address,
+    key_func=get_remote_address,    #Selecciona por IP no por usuario importante, por usuario es bastante más complicado
     default_limits=["200 per day", "50 per hour"]
 )
 mail = Mail()
