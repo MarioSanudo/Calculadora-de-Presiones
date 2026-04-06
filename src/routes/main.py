@@ -5,9 +5,10 @@ from flask import (
 from flask_login import login_required, current_user
 from src.services.pressure_service import (
     validate_inputs,
-    calculate_pressure
+    calculate_pressure,
+    check_pressure_warnings,
+    to_float, to_int
 )
-from src.services.pressure_service import to_float, to_int
 from src.models.analysis import Analysis
 from src.utils.pressure_constants import RIDE_STYLE_DEFAULTS
 from src.utils.extensions import db, limiter
@@ -49,6 +50,7 @@ def calcular_presion():
                 result=None)
 
         result = calculate_pressure(data)
+        check_pressure_warnings(result, data["rim_type"], data["ride_style"])
 
         if request.form.get("save") == "1":
             analysis = Analysis(

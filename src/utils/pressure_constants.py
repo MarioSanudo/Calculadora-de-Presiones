@@ -1,4 +1,4 @@
-# Tabla de compatibilidad aro/cubierta (origen SRAM), añadir de más fabricantes
+# Tabla de compatibilidad aro/cubierta (origen SRAM), de carácter general
 RIM_TIRE_COMPATIBILITY = [
     {"rim_ref": 15, "min": 18,  "max": 22},
     {"rim_ref": 17, "min": 22,  "max": 25},
@@ -11,7 +11,31 @@ RIM_TIRE_COMPATIBILITY = [
     {"rim_ref": 45, "min": 72,  "max": 84},
     {"rim_ref": 55, "min": 84,  "max": 96},
     {"rim_ref": 76, "min": 96,  "max": 113},
-    {"rim_ref": 94, "min": 114, "max": 133},  # fat bike
+    {"rim_ref": 94, "min": 114, "max": 133}  # fat bike
+]
+
+#Tabla de compatibilidad de Vittoria Hook y Hookless (clincher)
+RIM_TIRE_COMPATIBILITY_VITTORIA= [
+    {"rim_ref": 17, "min":22, "max": 24},
+    {"rim_ref": 19, "min":25, "max": 28},
+    {"rim_ref": 21, "min":29, "max": 34},
+    {"rim_ref": 23, "min":35, "max": 46},
+    {"rim_ref": 25, "min":47, "max": 57},
+    {"rim_ref": 30, "min":58, "max": 65},
+    {"rim_ref": 35, "min":66, "max": 71},
+    {"rim_ref": 45, "min":72, "max": 83}
+]
+
+RIM_TIRE_COMPATIBILITY_SCHWALBE = [
+    {"rim_ref": 15, "min": 18,  "max": 25},
+    {"rim_ref": 17, "min": 22,  "max": 28},
+    {"rim_ref": 19, "min": 25,  "max": 32},
+    {"rim_ref": 21, "min": 28,  "max": 40},
+    {"rim_ref": 23, "min": 35,  "max": 50},
+    {"rim_ref": 25, "min": 42,  "max": 62},
+    {"rim_ref": 30, "min": 55,  "max": 70},
+    {"rim_ref": 35, "min": 62,  "max": 80},
+    {"rim_ref": 45, "min": 70,  "max": 90}
 ]
 
 WHEEL_POSITION_FACTORS = {
@@ -88,3 +112,17 @@ REQUIRED_FIELDS = [
     "rider_weight", "bike_weight", "tire_width",
     "inner_rim_width", "wheel_diameter",
     "tire_casing", "ride_style", "rim_type", "surface"]
+
+
+MAX_PRESSURE_BAR = {
+    "RIM_TYPE_TUBELESS_STRAIGHT": {"WHEEL_FRONT": 4.8, "WHEEL_REAR": 5.0},
+    "RIM_TYPE_TUBELESS_CROCHET":  {"WHEEL_FRONT": 6.5, "WHEEL_REAR": 6.9},
+    "RIM_TYPE_TUBES":             {"WHEEL_FRONT": 7.5, "WHEEL_REAR": 8.3},
+    "RIM_TYPE_TUBULAR":           {"WHEEL_FRONT": 8.0, "WHEEL_REAR": 8.5}
+}
+
+
+PRESSURE_MIN_BAR = {
+    "RIDE_STYLE_ROAD":   3.5,   # por debajo → riesgo de pellizco
+    "RIDE_STYLE_GRAVEL": 1.8,   # tubeless aguanta presiones más bajas
+}

@@ -1,13 +1,14 @@
 import math
 
-from flask import render_template
+from flask import render_template, flash
 from src.utils.pressure_constants import (
     RIM_TIRE_COMPATIBILITY, WHEEL_POSITION_FACTORS,
     CASING_FACTORS, RIDE_STYLE_FACTORS,
     RIM_TYPE_FACTORS_ROAD, SURFACE_FACTORS,
     TIRE_WIDTH_LIMITS, INNER_RIM_LIMITS,
     ALLOWED_DIAMETERS, REQUIRED_FIELDS,
-    RIDE_STYLE_DEFAULTS
+    RIDE_STYLE_DEFAULTS,
+    MAX_PRESSURE_BAR, PRESSURE_MIN_BAR
 )
 
 
@@ -187,3 +188,40 @@ def calculate_pressure(data: dict) -> dict:
         }
 
     return results
+
+
+
+def check_pressure_warnings(
+    result: dict,
+    rim_type: str,
+    ride_style: str
+) -> None:
+    """Lanza flash warnings si alguna rueda cae fuera del rango seguro.
+    - Por debajo del mínimo → riesgo de pellizco
+    - Por encima del máximo del aro → riesgo de reventón
+    """
+    min_bar = PRESSURE_MIN_BAR.get(ride_style)
+    rim_max = MAX_PRESSURE_BAR.get(rim_type, {})
+
+    posiciones = [
+        ("front", "WHEEL_FRONT", "delantera"),
+        ("rear",  "WHEEL_REAR",  "trasera"),
+    ]
+
+    for key, pos_key, label in posiciones:
+        bar = result[key]["bar"]
+
+        if min_bar is not None and bar < min_bar:
+            flash(
+                f"Presión {label} ({bar} bar) muy baja para esta "
+                f"configuración. Mínimo recomendado: {min_bar} bar.",
+                "warning"
+            )
+
+        max_bar = rim_max.get(pos_key)
+        if max_bar is not None and bar > max_bar:
+            flash(
+                f"Presión {label} ({bar} bar) supera el límite del "
+                f"aro ({max_bar} bar). Considera una cubierta más ancha.",
+                "warning"
+            )
