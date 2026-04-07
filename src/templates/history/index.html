@@ -4,7 +4,8 @@
 
 {% block content %}
 <div class="max-w-3xl mx-auto">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">
+    <h1 class="text-2xl font-bold text-[#1A1A18] mb-6
+                font-display">
         Historial de analisis
     </h1>
 
@@ -12,22 +13,23 @@
         <div class="space-y-4">
             {% for a in analyses %}
             <div id="analisis-{{ a.id }}"
-                 class="bg-white border border-gray-200
-                        rounded-lg p-4 shadow-sm">
+                 class="bg-white border border-[#E5E3DF]
+                        rounded-2xl p-5 hover:shadow-md
+                        transition-shadow">
 
                 <div class="flex items-center justify-between
                             mb-3">
-                    <span class="text-xs text-gray-400">
+                    <span class="text-xs text-[#A8A5A0]">
                         {{ a.created_at.strftime("%d/%m/%Y %H:%M") }}
                     </span>
 
                     <div class="flex items-center gap-2">
                         <span class="text-xs font-medium px-2 py-0.5
-                                     rounded
+                                     rounded-full
                             {% if a.ride_style == 'RIDE_STYLE_ROAD' %}
-                                bg-blue-100 text-blue-700
+                                bg-[#FFF0E8] text-[#F25C05]
                             {% else %}
-                                bg-green-100 text-green-700
+                                bg-[#F8F8F7] text-[#1A1A18]
                             {% endif %}">
                             {% if a.ride_style == 'RIDE_STYLE_ROAD' %}
                                 Carretera
@@ -45,7 +47,7 @@
                             hx-swap="outerHTML"
                             hx-confirm="¿Borrar este análisis?"
                             hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
-                            class="text-gray-400 hover:text-red-500
+                            class="text-[#A8A5A0] hover:text-[#DC2626]
                                    transition-colors cursor-pointer"
                             title="Borrar análisis">
                             &#x1F5D1;
@@ -54,55 +56,65 @@
                 </div>
 
                 <div class="grid grid-cols-3 gap-2 text-sm
-                            text-gray-600 mb-3">
+                            text-[#6B6860] mb-3">
                     <div>
-                        <span class="text-gray-400">Peso:</span>
+                        <span class="text-[#A8A5A0]">Peso:</span>
                         {{ a.rider_weight }} kg
                     </div>
                     <div>
-                        <span class="text-gray-400">Bici:</span>
+                        <span class="text-[#A8A5A0]">Bici:</span>
                         {{ a.bike_weight }} kg
                     </div>
                     <div>
-                        <span class="text-gray-400">Cubierta:</span>
+                        <span class="text-[#A8A5A0]">Cubierta:</span>
                         D: {{ a.tire_width_front }} mm / T: {{ a.tire_width_rear }} mm
                     </div>
                     {% if a.altitude is not none %}
                     <div>
-                        <span class="text-gray-400">Altitud:</span>
+                        <span class="text-[#A8A5A0]">Altitud:</span>
                         {{ a.altitude | int }} m
                     </div>
                     {% endif %}
                     {% if a.temp_exterior is not none %}
                     <div>
-                        <span class="text-gray-400">Temperatura:</span>
+                        <span class="text-[#A8A5A0]">Temperatura:</span>
                         {{ a.temp_exterior | int }} °C
                     </div>
                     {% endif %}
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-blue-50 rounded p-2
+                    <div class="bg-[#1A1A18] rounded-xl p-3
                                 text-center">
-                        <p class="text-xs text-gray-500">
+                        <p class="text-xs text-[#A8A5A0]">
                             Delantera
                         </p>
-                        <p class="text-lg font-bold text-blue-600">
-                            {{ a.front_bar }} bar
+                        <p class="text-lg font-bold text-white
+                                  font-mono">
+                            {{ a.front_bar }}
+                            <span class="text-[#F25C05] text-sm">
+                                bar
+                            </span>
                         </p>
-                        <p class="text-xs text-gray-400">
+                        <p class="text-xs text-[#A8A5A0]
+                                  font-mono">
                             {{ a.front_psi }} psi
                         </p>
                     </div>
-                    <div class="bg-indigo-50 rounded p-2
+                    <div class="bg-[#1A1A18] rounded-xl p-3
                                 text-center">
-                        <p class="text-xs text-gray-500">
+                        <p class="text-xs text-[#A8A5A0]">
                             Trasera
                         </p>
-                        <p class="text-lg font-bold text-indigo-600">
-                            {{ a.rear_bar }} bar
+                        <p class="text-lg font-bold text-white
+                                  font-mono">
+                            {{ a.rear_bar }}
+                            <span class="text-[#F25C05] text-sm">
+                                bar
+                            </span>
                         </p>
-                        <p class="text-xs text-gray-400">
+                        <p class="text-xs text-[#A8A5A0]
+                                  font-mono">
                             {{ a.rear_psi }} psi
                         </p>
                     </div>
@@ -113,13 +125,13 @@
         </div>
 
     {% else %}
-        <div class="bg-white border border-gray-200
-                    rounded-lg p-8 text-center">
-            <p class="text-gray-500">
+        <div class="bg-white border border-[#E5E3DF]
+                    rounded-2xl p-8 text-center">
+            <p class="text-[#6B6860]">
                 No tienes analisis guardados.
             </p>
             <a href="{{ url_for('main.calcular_presion') }}"
-               class="text-blue-600 hover:text-blue-800
+               class="text-[#F25C05] hover:text-[#D94F04]
                       text-sm mt-2 inline-block">
                 Ir a la calculadora
             </a>
