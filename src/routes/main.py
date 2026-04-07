@@ -31,10 +31,11 @@ def calcular_presion():
     all_defaults = RIDE_STYLE_DEFAULTS
     if request.method == "POST":
         data = {
-            "rider_weight":    to_float(request.form.get("rider_weight")),
-            "bike_weight":     to_float(request.form.get("bike_weight")),
-            "tire_width":      to_float(request.form.get("tire_width")),
-            "inner_rim_width": to_float(request.form.get("inner_rim_width")),
+            "rider_weight":     to_float(request.form.get("rider_weight")),
+            "bike_weight":      to_float(request.form.get("bike_weight")),
+            "tire_width_front": to_float(request.form.get("tire_width_front")),
+            "tire_width_rear":  to_float(request.form.get("tire_width_rear")),
+            "inner_rim_width":  to_float(request.form.get("inner_rim_width")),
             "wheel_diameter":  to_int(request.form.get("wheel_diameter")),
             "tire_casing":     request.form.get("tire_casing"),
             "ride_style":      request.form.get("ride_style"),

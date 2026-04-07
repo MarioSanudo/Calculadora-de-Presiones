@@ -89,7 +89,7 @@ TIRE_WIDTH_LIMITS = {
 INNER_RIM_LIMITS = {
     "RIM_TYPE_TUBULAR": {"min": 32, "max": 32},  # fijo — tubulares siempre 32mm
     "DEFAULT_ROAD":     {"min": 15, "max": 50},
-    "DEFAULT_MTB":      {"min": 15, "max": 100},
+    "DEFAULT_MTB":      {"min": 15, "max": 100}
 }
 
 # Valores pre-rellenados al seleccionar una modalidad en el formulario
@@ -116,7 +116,8 @@ RIDE_STYLE_DEFAULTS = {
 ALLOWED_DIAMETERS = {559, 571, 584, 622}
 
 REQUIRED_FIELDS = [
-    "rider_weight", "bike_weight", "tire_width",
+    "rider_weight", "bike_weight",
+    "tire_width_front", "tire_width_rear",
     "inner_rim_width", "wheel_diameter",
     "tire_casing", "ride_style", "rim_type", "surface"]
 

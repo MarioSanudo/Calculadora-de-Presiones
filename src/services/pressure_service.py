@@ -91,23 +91,26 @@ def validate_inputs(data: dict) -> list:
 
 
     # 4. Ancho de cubierta — clave tupla primero, luego clave string
-    tire_width = data["tire_width"]
     limit_key = (ride_style, rim_type)
 
     if limit_key in TIRE_WIDTH_LIMITS:
         limits = TIRE_WIDTH_LIMITS[limit_key]
-
-    elif ride_style in TIRE_WIDTH_LIMITS:
+    elif ride_style in TIRE_WIDTH_LIMITS:   #Si no es tubeless, y no coincide llegará hasta aquí
         limits = TIRE_WIDTH_LIMITS[ride_style]
-
     else:
         limits = None
 
-    if limits and not (limits["min"] <= tire_width <= limits["max"]):
+    tire_width_front = data["tire_width_front"]
+    if limits and not (limits["min"] <= tire_width_front <= limits["max"]):
         errors.append(
-            f"Ancho de cubierta debe estar entre "
-            f"{limits['min']} y {limits['max']} mm "
-            f"para esta configuración.")
+            f"Ancho cubierta delantera debe estar entre "
+            f"{limits['min']} y {limits['max']} mm para esta configuración.")
+
+    tire_width_rear = data["tire_width_rear"]
+    if limits and not (limits["min"] <= tire_width_rear <= limits["max"]):
+        errors.append(
+            f"Ancho cubierta trasera debe estar entre "
+            f"{limits['min']} y {limits['max']} mm para esta configuración.")
 
 
     # 5. Anchura interior del aro y creo que puede estar mal llega limit con None
@@ -139,47 +142,47 @@ def validate_inputs(data: dict) -> list:
 def calculate_pressure(data: dict) -> dict:
 
     #Ya están validados los datos
-    rider_weight = data["rider_weight"]
-    bike_weight = data["bike_weight"]
-    tire_width = data["tire_width"]
+    rider_weight    = data["rider_weight"]
+    bike_weight     = data["bike_weight"]
+    tire_width_front = data["tire_width_front"]
+    tire_width_rear  = data["tire_width_rear"]
     inner_rim_width = data["inner_rim_width"]
-    wheel_diameter = data["wheel_diameter"]
-    tire_casing = data["tire_casing"]
-    ride_style = data["ride_style"]
-    rim_type = data["rim_type"]
-    surface = data["surface"]
-    tire_brand = data["tire_brand"]
+    wheel_diameter  = data["wheel_diameter"]
+    tire_casing     = data["tire_casing"]
+    ride_style      = data["ride_style"]
+    rim_type        = data["rim_type"]
+    surface         = data["surface"]
+    tire_brand      = data["tire_brand"]
 
-    # Paso 1: anchura efectiva según aro real vs aro de referencia
-    ref_rim = get_rim_ref(tire_width, tire_brand)
-    if ref_rim == 0.0:
-        raise ValueError(
-            f"Ancho de cubierta {tire_width} mm fuera del rango "
-            "de la tabla de compatibilidad aro/cubierta."
-        )
-    effective_width = tire_width + 0.4 * (inner_rim_width - ref_rim)
-
-    # Se modela la cubierta como sección circular → toro perfecto   R = radio mayor (centro rueda → centro sección), r = radio menor
-    R = wheel_diameter / 2 + effective_width / 2
-    r = effective_width / 2
-    torus_area = 4 * math.pi ** 2 * R * r  # en mm²
-
-    # Paso 3: factor de peso normalizado respecto al valor de referencia 180
+    # Paso 2: factor de peso normalizado respecto al valor de referencia 180
     total = 2.2 * (bike_weight + rider_weight)
     weight_factor = 1 + (total - 180) * 0.0025
 
-    # Paso 4: factores correctores comunes a ambas ruedas
-    rim_factor = get_rim_factor(rim_type)
+    # Paso 3: factores correctores comunes a ambas ruedas
+    rim_factor   = get_rim_factor(rim_type)   #Si no cumple da coeficiente normal, por eso no hay que controlar error como en get_rim_ref
     style_factor = RIDE_STYLE_FACTORS[ride_style]
-    surf_factor = SURFACE_FACTORS[surface]
-    cas_factor = CASING_FACTORS[tire_casing]
+    surf_factor  = SURFACE_FACTORS[surface]
+    cas_factor   = CASING_FACTORS[tire_casing]
 
     results = {}
     for position, key in [("WHEEL_FRONT", "front"), ("WHEEL_REAR", "rear")]:
-        wheel_factor = WHEEL_POSITION_FACTORS[position]
 
-        # Paso 5: presión base (modelo empírico SRAM/Zipp)
-        # Coeficientes 8.684670773 y -1.304556655 NO modificar — calibrados
+        # Paso 1: anchura efectiva — cada rueda usa su propio ancho de cubierta
+        tw = tire_width_front if position == "WHEEL_FRONT" else tire_width_rear
+        ref_rim = get_rim_ref(tw, tire_brand)
+        if ref_rim == 0.0:
+            raise ValueError(
+                f"Ancho de cubierta {tw} mm ({key}) fuera del rango "
+                "de la tabla de compatibilidad aro/cubierta."
+            )
+        effective_width = tw + 0.4 * (inner_rim_width - ref_rim)
+
+        # Se modela la cubierta como sección circular → toro perfecto
+        R = wheel_diameter / 2 + effective_width / 2
+        r = effective_width / 2
+        torus_area = 4 * math.pi ** 2 * R * r  # en mm²
+
+        wheel_factor = WHEEL_POSITION_FACTORS[position]
         pressure_psi = (
             10 ** 8.684670773
             * torus_area ** -1.304556655

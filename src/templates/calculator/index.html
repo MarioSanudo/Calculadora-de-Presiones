@@ -67,21 +67,38 @@
             </div>
         </div>
 
-        <!-- Ancho cubierta / anchura aro -->
+        <!-- Ancho cubiertas delantera / trasera -->
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium
                               text-gray-700 mb-1">
-                    Ancho cubierta (mm)
+                    Cubierta delantera (mm)
                 </label>
                 <input type="number"
-                       name="tire_width"
-                       id="tire_width"
+                       name="tire_width_front"
+                       id="tire_width_front"
                        step="1" min="18" max="65"
                        class="w-full border border-gray-300 rounded
                               px-3 py-2 text-sm focus:outline-none
                               focus:ring-2 focus:ring-blue-400">
             </div>
+            <div>
+                <label class="block text-sm font-medium
+                              text-gray-700 mb-1">
+                    Cubierta trasera (mm)
+                </label>
+                <input type="number"
+                       name="tire_width_rear"
+                       id="tire_width_rear"
+                       step="1" min="18" max="65"
+                       class="w-full border border-gray-300 rounded
+                              px-3 py-2 text-sm focus:outline-none
+                              focus:ring-2 focus:ring-blue-400">
+            </div>
+        </div>
+
+        <!-- Anchura interior aro / anchura aro -->
+        <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium
                               text-gray-700 mb-1">
@@ -226,7 +243,8 @@
         if (!defaultParam) return;  // No delvuelve nada None si la modalidad no existe o es None
 
         document.getElementById("bike_weight").value      = defaultParam.bike_weight;
-        document.getElementById("tire_width").value       = defaultParam.tire_width;
+        document.getElementById("tire_width_front").value = defaultParam.tire_width;
+        document.getElementById("tire_width_rear").value  = defaultParam.tire_width;
         document.getElementById("inner_rim_width").value  = defaultParam.inner_rim_width;
         document.getElementById("wheel_diameter").value   = String(defaultParam.wheel_diameter);
         document.getElementById("rim_type").value         = String(defaultParam.rim_type);
