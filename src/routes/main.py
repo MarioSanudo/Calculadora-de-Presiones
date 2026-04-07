@@ -39,7 +39,8 @@ def calcular_presion():
             "tire_casing":     request.form.get("tire_casing"),
             "ride_style":      request.form.get("ride_style"),
             "rim_type":        request.form.get("rim_type"),
-            "surface":         request.form.get("surface")
+            "surface":         request.form.get("surface"),
+            "tire_brand":      request.form.get("tire_brand")
             }
 
         errors = validate_inputs(data)

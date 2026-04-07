@@ -2,7 +2,8 @@ import math
 
 from flask import render_template, flash
 from src.utils.pressure_constants import (
-    RIM_TIRE_COMPATIBILITY, WHEEL_POSITION_FACTORS,
+    RIM_TIRE_COMPATIBILITY, TIRE_BRAND_COMPATIBILITY,
+    WHEEL_POSITION_FACTORS,
     CASING_FACTORS, RIDE_STYLE_FACTORS,
     RIM_TYPE_FACTORS_ROAD, SURFACE_FACTORS,
     TIRE_WIDTH_LIMITS, INNER_RIM_LIMITS,
@@ -33,11 +34,12 @@ def calcular_get():
 
 
 
-def get_rim_ref(tire_width: float) -> float:   #Devuelve el aro de referencia para un ancho de cubierta dado
-    for row in RIM_TIRE_COMPATIBILITY:
+def get_rim_ref(tire_width: float, tire_brand: str) -> float:   #Devuelve el aro de referencia para un ancho de cubierta dado
+    table = TIRE_BRAND_COMPATIBILITY.get(tire_brand, RIM_TIRE_COMPATIBILITY)
+    for row in table:
         if row["min"] <= tire_width < row["max"]:
             return row["rim_ref"]
-    return 0.0  # fuera de rango — validate_inputs lo bloquea antes de llegar aquí, de todas formas hay que añadir capa
+    return 0.0  # fuera de rango, controlado en la main y en el validate inputs
 
 
 
@@ -86,6 +88,7 @@ def validate_inputs(data: dict) -> list:
     rim_type = data["rim_type"]
     if rim_type not in RIM_TYPE_FACTORS_ROAD:   #Mirar también para gravel
         errors.append(f"Tipo de aro '{rim_type}' no válido.")
+
 
     # 4. Ancho de cubierta — clave tupla primero, luego clave string
     tire_width = data["tire_width"]
@@ -145,9 +148,10 @@ def calculate_pressure(data: dict) -> dict:
     ride_style = data["ride_style"]
     rim_type = data["rim_type"]
     surface = data["surface"]
+    tire_brand = data["tire_brand"]
 
     # Paso 1: anchura efectiva según aro real vs aro de referencia
-    ref_rim = get_rim_ref(tire_width)
+    ref_rim = get_rim_ref(tire_width, tire_brand)
     if ref_rim == 0.0:
         raise ValueError(
             f"Ancho de cubierta {tire_width} mm fuera del rango "
