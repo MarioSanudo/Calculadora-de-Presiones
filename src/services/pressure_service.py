@@ -148,6 +148,11 @@ def calculate_pressure(data: dict) -> dict:
 
     # Paso 1: anchura efectiva según aro real vs aro de referencia
     ref_rim = get_rim_ref(tire_width)
+    if ref_rim == 0.0:
+        raise ValueError(
+            f"Ancho de cubierta {tire_width} mm fuera del rango "
+            "de la tabla de compatibilidad aro/cubierta."
+        )
     effective_width = tire_width + 0.4 * (inner_rim_width - ref_rim)
 
     # Se modela la cubierta como sección circular → toro perfecto   R = radio mayor (centro rueda → centro sección), r = radio menor
@@ -184,44 +189,33 @@ def calculate_pressure(data: dict) -> dict:
         bar = pressure_psi / 14.5038
         results[key] = {
             "bar": round(bar, 2),
-            "psi": round(pressure_psi, 2),
+            "psi": round(pressure_psi, 2)
         }
 
     return results
 
 
 
-def check_pressure_warnings(
-    result: dict,
-    rim_type: str,
-    ride_style: str
-) -> None:
-    """Lanza flash warnings si alguna rueda cae fuera del rango seguro.
-    - Por debajo del mínimo → riesgo de pellizco
-    - Por encima del máximo del aro → riesgo de reventón
-    """
+def check_pressure_warnings(result: dict, rim_type: str, ride_style: str) -> None:
     min_bar = PRESSURE_MIN_BAR.get(ride_style)
     rim_max = MAX_PRESSURE_BAR.get(rim_type, {})
 
     posiciones = [
         ("front", "WHEEL_FRONT", "delantera"),
-        ("rear",  "WHEEL_REAR",  "trasera"),
+        ("rear",  "WHEEL_REAR",  "trasera")
     ]
 
     for key, pos_key, label in posiciones:
         bar = result[key]["bar"]
-
         if min_bar is not None and bar < min_bar:
             flash(
-                f"Presión {label} ({bar} bar) muy baja para esta "
-                f"configuración. Mínimo recomendado: {min_bar} bar.",
+                f"Presión {label} ({bar} bar) muy baja para esta configuración. Mínimo recomendado: {min_bar} bar.",
                 "warning"
             )
 
         max_bar = rim_max.get(pos_key)
         if max_bar is not None and bar > max_bar:
             flash(
-                f"Presión {label} ({bar} bar) supera el límite del "
-                f"aro ({max_bar} bar). Considera una cubierta más ancha.",
+                f"Presión {label} ({bar} bar) supera el límite del aro ({max_bar} bar). Considera una cubierta más ancha.",
                 "warning"
             )

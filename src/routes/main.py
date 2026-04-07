@@ -49,7 +49,13 @@ def calcular_presion():
                 errors=errors,
                 result=None)
 
-        result = calculate_pressure(data)
+        try:
+            result = calculate_pressure(data)
+        except ValueError as e:
+            return render_template(
+                "calculator/_result.html",
+                errors=[str(e)],
+                result=None)
         check_pressure_warnings(result, data["rim_type"], data["ride_style"])
 
         if request.form.get("save") == "1":
