@@ -11,7 +11,8 @@ class Analysis(db.Model):
     # Parámetros de entrada
     rider_weight = db.Column(db.Float, nullable=False)
     bike_weight = db.Column(db.Float, nullable=False)
-    tire_width = db.Column(db.Float, nullable=False)
+    tire_width_front = db.Column(db.Float, nullable=False)
+    tire_width_rear = db.Column(db.Float, nullable=False)
     inner_rim_width = db.Column(db.Float, nullable=False)
     wheel_diameter = db.Column(db.Integer, nullable=False)
     tire_casing = db.Column(db.String(50), nullable=False)
