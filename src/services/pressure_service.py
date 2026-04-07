@@ -98,19 +98,18 @@ def validate_inputs(data: dict) -> list:
     elif ride_style in TIRE_WIDTH_LIMITS:   #Si no es tubeless, y no coincide llegará hasta aquí
         limits = TIRE_WIDTH_LIMITS[ride_style]
     else:
+        errors.append(
+            f"Combinación de modalidad '{ride_style}' y aro '{rim_type}' sin límites definidos.")
         limits = None
 
-    tire_width_front = data["tire_width_front"]
-    if limits and not (limits["min"] <= tire_width_front <= limits["max"]):
-        errors.append(
-            f"Ancho cubierta delantera debe estar entre "
-            f"{limits['min']} y {limits['max']} mm para esta configuración.")
-
-    tire_width_rear = data["tire_width_rear"]
-    if limits and not (limits["min"] <= tire_width_rear <= limits["max"]):
-        errors.append(
-            f"Ancho cubierta trasera debe estar entre "
-            f"{limits['min']} y {limits['max']} mm para esta configuración.")
+    if limits:
+        for field, label in [("tire_width_front", "delantera"), ("tire_width_rear", "trasera")]:
+            tw = data[field]
+            if not (limits["min"] <= tw <= limits["max"]):
+                errors.append(
+                    f"Ancho cubierta {label} debe estar entre "
+                    f"{limits['min']} y {limits['max']} mm para esta configuración."
+                )
 
 
     # 5. Anchura interior del aro y creo que puede estar mal llega limit con None
