@@ -115,11 +115,14 @@ RIDE_STYLE_DEFAULTS = {
 # Diámetros permitidos: 622=700c, 584=650b, 559=26", 571=27.5"
 ALLOWED_DIAMETERS = {559, 571, 584, 622}
 
+ALTITUDE_LIMITS = {"min": 0, "max": 4500}  # metros sobre el nivel del mar
+
 REQUIRED_FIELDS = [
     "rider_weight", "bike_weight",
     "tire_width_front", "tire_width_rear",
     "inner_rim_width", "wheel_diameter",
-    "tire_casing", "ride_style", "rim_type", "surface"]
+    "tire_casing", "ride_style", "rim_type", "surface",
+    "altitude"]
 
 
 MAX_PRESSURE_BAR = {

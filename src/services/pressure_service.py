@@ -9,9 +9,34 @@ from src.utils.pressure_constants import (
     TIRE_WIDTH_LIMITS, INNER_RIM_LIMITS,
     ALLOWED_DIAMETERS, REQUIRED_FIELDS,
     RIDE_STYLE_DEFAULTS,
-    MAX_PRESSURE_BAR, PRESSURE_MIN_BAR
+    MAX_PRESSURE_BAR, PRESSURE_MIN_BAR,
+    ALTITUDE_LIMITS
 )
 
+
+
+def presion_atmosferica(altitud_m: float) -> float:
+    """Presión atmosférica (Pa) a una altitud dada usando la fórmula barométrica."""
+    P0 = 101325    # Pa — presión a nivel del mar
+    L  = 0.0065    # K/m — gradiente térmico troposférico
+    T0 = 288.15    # K — temperatura estándar a nivel del mar
+    g  = 9.80665   # m/s² — aceleración gravitacional
+    M  = 0.0289644 # kg/mol — masa molar del aire seco
+    R  = 8.31446   # J/(mol·K) — constante de los gases ideales
+    return P0 * (1 - L * altitud_m / T0) ** (g * M / (R * L))
+
+
+def correccion_altitud(presion_bar: float, altitud_m: float) -> float:
+    """Suma a la presión base el delta por diferencia de presión atmosférica.
+    A mayor altitud → menos presión exterior → se añade presión interna
+    para mantener la misma deformación de la cubierta.
+    Si altitud_m == 0 el delta es ~0, no hay corrección."""
+    if altitud_m == 0:
+        return presion_bar
+    P_mar     = 101325
+    P_altitud = presion_atmosferica(altitud_m)
+    delta_bar = (P_mar - P_altitud) / 100000
+    return presion_bar + delta_bar
 
 
 def to_float(val):
@@ -134,6 +159,13 @@ def validate_inputs(data: dict) -> list:
             f"Diámetro de rueda '{wheel_diameter}' no válido. "
             f"Valores permitidos: {sorted(ALLOWED_DIAMETERS)}.")
 
+    # 7. Altitud
+    altitude = data["altitude"]
+    if not (ALTITUDE_LIMITS["min"] <= altitude <= ALTITUDE_LIMITS["max"]):
+        errors.append(
+            f"La altitud debe estar entre "
+            f"{ALTITUDE_LIMITS['min']} y {ALTITUDE_LIMITS['max']} metros.")
+
     return errors
 
 
@@ -152,6 +184,7 @@ def calculate_pressure(data: dict) -> dict:
     rim_type        = data["rim_type"]
     surface         = data["surface"]
     tire_brand      = data["tire_brand"]
+    altitude        = data["altitude"]
 
     # Paso 2: factor de peso normalizado respecto al valor de referencia 180
     total = 2.2 * (bike_weight + rider_weight)
@@ -193,6 +226,12 @@ def calculate_pressure(data: dict) -> dict:
             * cas_factor
         )
         bar = pressure_psi / 14.5038
+
+        # Corrección por altitud: a mayor altitud menos presión exterior,
+        # el neumático necesita algo más de presión interna para la misma deformación
+        bar = correccion_altitud(bar, altitude)
+        pressure_psi = bar * 14.5038
+
         results[key] = {
             "bar": round(bar, 2),
             "psi": round(pressure_psi, 2)

@@ -8,15 +8,18 @@ from src.services.pressure_service import (
 # 60kg ciclista, 8kg bici, 28mm, aro 23mm interno, 700c,
 # carretera, seco, cámara, carcasa estándar.
 BASE_DATA = {
-    "rider_weight":    60.0,
-    "bike_weight":     8.0,
-    "tire_width":      28.0,
-    "inner_rim_width": 23.0,
-    "wheel_diameter":  622,
-    "tire_casing":     "TIRE_CASING_STANDARD",
-    "ride_style":      "RIDE_STYLE_ROAD",
-    "rim_type":        "RIM_TYPE_TUBES",
-    "surface":         "SURFACE_DRY",
+    "rider_weight":     60.0,
+    "bike_weight":      8.0,
+    "tire_width_front": 28.0,
+    "tire_width_rear":  28.0,
+    "inner_rim_width":  23.0,
+    "wheel_diameter":   622,
+    "tire_casing":      "TIRE_CASING_STANDARD",
+    "ride_style":       "RIDE_STYLE_ROAD",
+    "rim_type":         "RIM_TYPE_TUBES",
+    "surface":          "SURFACE_DRY",
+    "tire_brand":       "TIRE_BRAND_GENERAL",
+    "altitude":         0,
 }
 
 
@@ -30,7 +33,7 @@ def test_caso_base():
 def test_valores_intermedios():
     """Verifica los pasos intermedios de la fórmula."""
     # 28mm → rango 25-29 en la tabla → aro de referencia 19mm
-    assert get_rim_ref(28.0) == 19
+    assert get_rim_ref(28.0, "TIRE_BRAND_GENERAL") == 19
     # effective_width = 28 + 0.4 * (23 - 19) = 29.6
     assert 28.0 + 0.4 * (23.0 - 19.0) == pytest.approx(29.6)
 
@@ -87,7 +90,7 @@ class TestValidateInputs:
 
     def test_tire_width_fuera_rango_road(self):
         """15mm está por debajo del mínimo para carretera (18mm)."""
-        data = {**BASE_DATA, "tire_width": 15}
+        data = {**BASE_DATA, "tire_width_front": 15, "tire_width_rear": 15}
         errors = validate_inputs(data)
         assert any("Ancho" in e for e in errors)
 
@@ -95,8 +98,9 @@ class TestValidateInputs:
         """Road + tubeless crochet → máximo 50mm."""
         data = {
             **BASE_DATA,
-            "rim_type":   "RIM_TYPE_TUBELESS_CROCHET",
-            "tire_width": 60.0,
+            "rim_type":        "RIM_TYPE_TUBELESS_CROCHET",
+            "tire_width_front": 60.0,
+            "tire_width_rear":  60.0,
         }
         errors = validate_inputs(data)
         assert any("Ancho" in e for e in errors)

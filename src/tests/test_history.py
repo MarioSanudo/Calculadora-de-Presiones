@@ -6,15 +6,18 @@ _VALID_PASS = "Securepass1!"
 
 # Datos de cálculo válidos para reutilizar en los tests
 _CALC_DATA = {
-    "rider_weight": "70",
-    "bike_weight": "8",
-    "tire_width": "28",
-    "inner_rim_width": "23",
-    "wheel_diameter": "622",
-    "tire_casing": "TIRE_CASING_STANDARD",
-    "ride_style": "RIDE_STYLE_ROAD",
-    "rim_type": "RIM_TYPE_TUBES",
-    "surface": "SURFACE_DRY",
+    "rider_weight":     "70",
+    "bike_weight":      "8",
+    "tire_width_front": "28",
+    "tire_width_rear":  "28",
+    "inner_rim_width":  "23",
+    "wheel_diameter":   "622",
+    "tire_casing":      "TIRE_CASING_STANDARD",
+    "ride_style":       "RIDE_STYLE_ROAD",
+    "rim_type":         "RIM_TYPE_TUBES",
+    "surface":          "SURFACE_DRY",
+    "tire_brand":       "TIRE_BRAND_GENERAL",
+    "altitude":         "0",
 }
 
 

@@ -41,7 +41,8 @@ def calcular_presion():
             "ride_style":      request.form.get("ride_style"),
             "rim_type":        request.form.get("rim_type"),
             "surface":         request.form.get("surface"),
-            "tire_brand":      request.form.get("tire_brand")
+            "tire_brand":      request.form.get("tire_brand"),
+            "altitude":        to_float(request.form.get("altitude"))
             }
 
         errors = validate_inputs(data)
@@ -73,6 +74,7 @@ def calcular_presion():
                 ride_style=data["ride_style"],
                 rim_type=data["rim_type"],
                 surface=data["surface"],
+                altitude=data["altitude"],
                 front_bar=result["front"]["bar"],
                 front_psi=result["front"]["psi"],
                 rear_bar=result["rear"]["bar"],
