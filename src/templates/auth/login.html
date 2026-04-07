@@ -3,9 +3,10 @@
 {% block title %}Iniciar sesion{% endblock %}
 
 {% block content %}
-<div class="max-w-md mx-auto bg-white p-6
-            rounded-lg shadow">
-    <h1 class="text-2xl font-bold mb-6 text-center">
+<div class="max-w-md mx-auto bg-white p-8
+            rounded-2xl border border-[#E5E3DF]">
+    <h1 class="text-2xl font-bold mb-6 text-center
+               text-[#1A1A18] font-display">
         Iniciar sesión
     </h1>
 
@@ -17,17 +18,19 @@
         <div class="mb-4">
             {{ form.email.label(
                 class="block text-sm font-medium
-                       text-gray-700 mb-1") }}
+                       text-[#1A1A18] mb-1") }}
 
             {{ form.email(
-                class="w-full px-3 py-2 border
-                       border-gray-300 rounded
+                class="w-full px-4 py-3 border
+                       border-[#E5E3DF] rounded-xl
                        focus:outline-none
-                       focus:ring-2 focus:ring-blue-500",
+                       focus:ring-2 focus:ring-[#F25C05]/20
+                       focus:border-[#F25C05]
+                       transition-colors",
                 placeholder="tu@email.com")}}
 
             {% for error in form.email.errors %}
-                <p class="text-red-500 text-xs mt-1">
+                <p class="text-[#DC2626] text-xs mt-1">
                     {{ error }}
                 </p>
             {% endfor %}
@@ -37,63 +40,69 @@
         <div class="mb-6">
             {{ form.password.label(
                 class="block text-sm font-medium
-                       text-gray-700 mb-1") }}
+                       text-[#1A1A18] mb-1") }}
             {{ form.password(
-                class="w-full px-3 py-2 border
-                       border-gray-300 rounded
+                class="w-full px-4 py-3 border
+                       border-[#E5E3DF] rounded-xl
                        focus:outline-none
-                       focus:ring-2 focus:ring-blue-500",
+                       focus:ring-2 focus:ring-[#F25C05]/20
+                       focus:border-[#F25C05]
+                       transition-colors",
                 placeholder="•••••••••••••••••••") }}
 
             {% for error in form.password.errors %}
-                <p class="text-red-500 text-xs mt-1">
+                <p class="text-[#DC2626] text-xs mt-1">
                     {{ error }}
                 </p>
             {% endfor %}
         </div>
 
         {{ form.submit(
-            class="w-full bg-blue-600 text-white py-2
-                   rounded hover:bg-blue-700
-                   font-medium cursor-pointer") }}
+            class="w-full bg-[#F25C05] text-white py-3
+                   rounded-full hover:bg-[#D94F04]
+                   font-semibold cursor-pointer
+                   transition-colors") }}
     </form>
 
     <!-- Separador -->
     <div class="flex items-center my-4">
         <div class="flex-grow border-t
-                    border-gray-300"></div>
-        <span class="px-3 text-sm text-gray-500">o</span>
+                    border-[#E5E3DF]"></div>
+        <span class="px-3 text-sm text-[#A8A5A0]">o</span>
         <div class="flex-grow border-t
-                    border-gray-300"></div>
+                    border-[#E5E3DF]"></div>
     </div>
 
     <!-- Google OAuth -->
     <a href="{{ url_for('auth.google_login') }}"
        class="w-full block text-center bg-white
-              border border-gray-300 text-gray-700
-              py-2 rounded hover:bg-gray-50
-              font-medium">
+              border border-[#E5E3DF] text-[#1A1A18]
+              py-3 rounded-full hover:border-[#C9C6C0]
+              font-medium transition-colors">
         Continuar con Google
     </a>
 
-    <div class="text-center text-sm text-gray-500 mt-4
+    <div class="text-center text-sm text-[#6B6860] mt-4
                 space-y-1">
         <p>
             <a href="{{ url_for('auth.forgot_password') }}"
-               class="text-blue-600 hover:underline">
+               class="text-[#F25C05] hover:text-[#D94F04]
+                      hover:underline">
                 Olvidaste tu contraseña?
             </a>
         </p>
         <p>
             <a href="{{ url_for('auth.resend_verification') }}"
-               class="text-blue-600 hover:underline">
+               class="text-[#F25C05] hover:text-[#D94F04]
+                      hover:underline">
                 Reenviar email de verificación de correo
             </a>
         </p>
         <p>
             No tienes cuenta?
             <a href="{{ url_for('auth.register') }}"
-               class="text-blue-600 hover:underline">
+               class="text-[#F25C05] hover:text-[#D94F04]
+                      hover:underline">
                 Registrate
             </a>
         </p>
