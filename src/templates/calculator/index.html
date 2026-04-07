@@ -3,265 +3,322 @@
 {% block title %}Calculadora de presion{% endblock %}
 
 {% block content %}
-<div class="max-w-xl mx-auto">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">
-        Calculadora de presión
-    </h1>
+<div class="max-w-5xl mx-auto lg:grid lg:grid-cols-[1fr,400px]
+            lg:gap-8 lg:items-start">
 
-    <form id="calc-form"
-          hx-post="{{ url_for('main.calcular_presion') }}"
-          hx-target="#resultado"
-          hx-swap="innerHTML"
-          class="bg-white rounded-lg shadow-sm border
-                 border-gray-200 p-6 space-y-4">
+    <!-- Columna izquierda: formulario -->
+    <div>
+        <h1 class="text-3xl font-bold text-[#1A1A18] mb-6
+                    font-display">
+            Calculadora de presión
+        </h1>
 
-        <!-- CSRF -->
-        <input type="hidden"
-               name="csrf_token"
-               value="{{ csrf_token() }}">
+        <form id="calc-form"
+              hx-post="{{ url_for('main.calcular_presion') }}"
+              hx-target="#resultado"
+              hx-swap="innerHTML"
+              class="bg-white rounded-2xl border
+                     border-[#E5E3DF] p-6 space-y-5">
 
-        <!-- Modalidad -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-                Modalidad
-            </label>
-            <select name="ride_style"
-                    id="ride_style"
+            <!-- CSRF -->
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token() }}">
 
-                    class="w-full border border-gray-300 rounded
-                           px-3 py-2 text-sm focus:outline-none
-                           focus:ring-2 focus:ring-blue-400">
-                <option value="RIDE_STYLE_ROAD">Carretera</option>
-                <option value="RIDE_STYLE_GRAVEL">Gravel</option>
-            </select>
-        </div>
-
-        <!-- Peso ciclista / bici -->
-        <div class="grid grid-cols-2 gap-4">
+            <!-- Modalidad -->
             <div>
                 <label class="block text-sm font-medium
-                              text-gray-700 mb-1">
-                    Peso ciclista (kg)
+                              text-[#1A1A18] mb-1">
+                    Modalidad
                 </label>
-                <input type="number"
-                       name="rider_weight"
-                       id="rider_weight"
-                       step="0.1" min="20" max="200"
-                       placeholder="70"
-                       class="w-full border border-gray-300 rounded
-                              px-3 py-2 text-sm focus:outline-none
-                              focus:ring-2 focus:ring-blue-400">
+                <select name="ride_style"
+                        id="ride_style"
+                        class="w-full border border-[#E5E3DF]
+                               rounded-xl px-4 py-3 text-sm
+                               focus:outline-none focus:ring-2
+                               focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors">
+                    <option value="RIDE_STYLE_ROAD">Carretera</option>
+                    <option value="RIDE_STYLE_GRAVEL">Gravel</option>
+                </select>
             </div>
+
+            <!-- Peso ciclista / bici -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium
+                                  text-[#1A1A18] mb-1">
+                        Peso ciclista (kg)
+                    </label>
+                    <input type="number"
+                           name="rider_weight"
+                           id="rider_weight"
+                           step="0.1" min="20" max="200"
+                           placeholder="70"
+                           class="w-full border border-[#E5E3DF]
+                                  rounded-xl px-4 py-3 text-sm
+                                  focus:outline-none focus:ring-2
+                                  focus:ring-[#F25C05]/20
+                                  focus:border-[#F25C05]
+                                  transition-colors font-mono">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium
+                                  text-[#1A1A18] mb-1">
+                        Peso bici (kg)
+                    </label>
+                    <input type="number"
+                           name="bike_weight"
+                           id="bike_weight"
+                           step="0.1" min="1" max="25"
+                           class="w-full border border-[#E5E3DF]
+                                  rounded-xl px-4 py-3 text-sm
+                                  focus:outline-none focus:ring-2
+                                  focus:ring-[#F25C05]/20
+                                  focus:border-[#F25C05]
+                                  transition-colors font-mono">
+                </div>
+            </div>
+
+            <!-- Ancho cubiertas delantera / trasera -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium
+                                  text-[#1A1A18] mb-1">
+                        Cubierta delantera (mm)
+                    </label>
+                    <input type="number"
+                           name="tire_width_front"
+                           id="tire_width_front"
+                           step="1" min="18" max="65"
+                           class="w-full border border-[#E5E3DF]
+                                  rounded-xl px-4 py-3 text-sm
+                                  focus:outline-none focus:ring-2
+                                  focus:ring-[#F25C05]/20
+                                  focus:border-[#F25C05]
+                                  transition-colors font-mono">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium
+                                  text-[#1A1A18] mb-1">
+                        Cubierta trasera (mm)
+                    </label>
+                    <input type="number"
+                           name="tire_width_rear"
+                           id="tire_width_rear"
+                           step="1" min="18" max="65"
+                           class="w-full border border-[#E5E3DF]
+                                  rounded-xl px-4 py-3 text-sm
+                                  focus:outline-none focus:ring-2
+                                  focus:ring-[#F25C05]/20
+                                  focus:border-[#F25C05]
+                                  transition-colors font-mono">
+                </div>
+            </div>
+
+            <!-- Anchura interior aro -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium
+                                  text-[#1A1A18] mb-1">
+                        Anchura interior aro (mm)
+                    </label>
+                    <input type="number"
+                           name="inner_rim_width"
+                           id="inner_rim_width"
+                           step="1" min="15" max="50"
+                           class="w-full border border-[#E5E3DF]
+                                  rounded-xl px-4 py-3 text-sm
+                                  focus:outline-none focus:ring-2
+                                  focus:ring-[#F25C05]/20
+                                  focus:border-[#F25C05]
+                                  transition-colors font-mono">
+                </div>
+            </div>
+
+            <!-- Diámetro rueda -->
             <div>
                 <label class="block text-sm font-medium
-                              text-gray-700 mb-1">
-                    Peso bici (kg)
+                              text-[#1A1A18] mb-1">
+                    Diametro de rueda
                 </label>
-                <input type="number"
-                       name="bike_weight"
-                       id="bike_weight"
-                       step="0.1" min="1" max="25"
-                       class="w-full border border-gray-300 rounded
-                              px-3 py-2 text-sm focus:outline-none
-                              focus:ring-2 focus:ring-blue-400">
+                <select name="wheel_diameter"
+                        id="wheel_diameter"
+                        class="w-full border border-[#E5E3DF]
+                               rounded-xl px-4 py-3 text-sm
+                               focus:outline-none focus:ring-2
+                               focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors">
+                    <option value="622">
+                        700c (622mm)
+                    </option>
+                    <option value="584">
+                        650b (584 mm)
+                    </option>
+                </select>
             </div>
-        </div>
 
-        <!-- Ancho cubiertas delantera / trasera -->
-        <div class="grid grid-cols-2 gap-4">
+            <!-- Tipo de aro -->
             <div>
                 <label class="block text-sm font-medium
-                              text-gray-700 mb-1">
-                    Cubierta delantera (mm)
+                              text-[#1A1A18] mb-1">
+                    Sistema de cubierta
                 </label>
-                <input type="number"
-                       name="tire_width_front"
-                       id="tire_width_front"
-                       step="1" min="18" max="65"
-                       class="w-full border border-gray-300 rounded
-                              px-3 py-2 text-sm focus:outline-none
-                              focus:ring-2 focus:ring-blue-400">
+                <select name="rim_type"
+                        id="rim_type"
+                        class="w-full border border-[#E5E3DF]
+                               rounded-xl px-4 py-3 text-sm
+                               focus:outline-none focus:ring-2
+                               focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors">
+                    <option value="RIM_TYPE_TUBES">
+                        Con cámara
+                    </option>
+                    <option value="RIM_TYPE_TUBELESS_CROCHET">
+                        Tubeless gancho
+                    </option>
+                    <option value="RIM_TYPE_TUBELESS_STRAIGHT">
+                        Tubeless hookless
+                    </option>
+                    <option value="RIM_TYPE_TUBULAR">
+                        Tubular
+                    </option>
+                </select>
             </div>
+
+            <!-- Carcasa -->
             <div>
                 <label class="block text-sm font-medium
-                              text-gray-700 mb-1">
-                    Cubierta trasera (mm)
+                              text-[#1A1A18] mb-1">
+                    Tipo de carcasa
                 </label>
-                <input type="number"
-                       name="tire_width_rear"
-                       id="tire_width_rear"
-                       step="1" min="18" max="65"
-                       class="w-full border border-gray-300 rounded
-                              px-3 py-2 text-sm focus:outline-none
-                              focus:ring-2 focus:ring-blue-400">
+                <select name="tire_casing"
+                        id="tire_casing"
+                        class="w-full border border-[#E5E3DF]
+                               rounded-xl px-4 py-3 text-sm
+                               focus:outline-none focus:ring-2
+                               focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors">
+                    <option value="TIRE_CASING_THIN">Ligera</option>
+                    <option value="TIRE_CASING_STANDARD">Estándar</option>
+                    <option value="TIRE_CASING_REINFORCED">Reforzada</option>
+                    <option value="TIRE_CASING_DOUBLE">Doble ply / DH</option>
+                </select>
             </div>
-        </div>
 
-        <!-- Anchura interior aro / anchura aro -->
-        <div class="grid grid-cols-2 gap-4">
+            <!-- Marca de cubierta -->
             <div>
                 <label class="block text-sm font-medium
-                              text-gray-700 mb-1">
-                    Anchura interior aro (mm)
+                              text-[#1A1A18] mb-1">
+                    Marca de cubierta
                 </label>
-                <input type="number"
-                       name="inner_rim_width"
-                       id="inner_rim_width"
-                       step="1" min="15" max="50"
-                       class="w-full border border-gray-300 rounded
-                              px-3 py-2 text-sm focus:outline-none
-                              focus:ring-2 focus:ring-blue-400">
+                <select name="tire_brand"
+                        id="tire_brand"
+                        class="w-full border border-[#E5E3DF]
+                               rounded-xl px-4 py-3 text-sm
+                               focus:outline-none focus:ring-2
+                               focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors">
+                    <option value="TIRE_BRAND_GENERAL">Pirelli, Continental, Otras marcas...</option>
+                    <option value="TIRE_BRAND_VITTORIA">Vittoria</option>
+                    <option value="TIRE_BRAND_SCHWALBE">Schwalbe</option>
+                </select>
             </div>
-        </div>
 
-        <!-- Diámetro rueda -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-                Diametro de rueda
-            </label>
-            <select name="wheel_diameter"
-                    id="wheel_diameter"
-                    class="w-full border border-gray-300 rounded
-                           px-3 py-2 text-sm focus:outline-none
-                           focus:ring-2 focus:ring-blue-400">
-                <option value="622">
-                    700c (622mm)
-                </option>
-                <option value="584">
-                    650b (584 mm)
-                </option>
-            </select>
-        </div>
-
-        <!-- Tipo de aro -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-                Sistema de cubierta
-            </label>
-            <select name="rim_type"
-                    id="rim_type"
-                    class="w-full border border-gray-300 rounded
-                           px-3 py-2 text-sm focus:outline-none
-                           focus:ring-2 focus:ring-blue-400">
-                <option value="RIM_TYPE_TUBES">
-                    Con cámara
-                </option>
-                <option value="RIM_TYPE_TUBELESS_CROCHET">
-                    Tubeless gancho
-                </option>
-                <option value="RIM_TYPE_TUBELESS_STRAIGHT">
-                    Tubeless hookless
-                </option>
-                <option value="RIM_TYPE_TUBULAR">
-                    Tubular
-                </option>
-            </select>
-        </div>
-
-        <!-- Carcasa -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-                Tipo de carcasa
-            </label>
-            <select name="tire_casing"
-                    id="tire_casing"
-                    class="w-full border border-gray-300 rounded
-                           px-3 py-2 text-sm focus:outline-none
-                           focus:ring-2 focus:ring-blue-400">
-                <option value="TIRE_CASING_THIN">Ligera</option>
-                <option value="TIRE_CASING_STANDARD">Estándar</option>
-                <option value="TIRE_CASING_REINFORCED">Reforzada</option>
-                <option value="TIRE_CASING_DOUBLE">Doble ply / DH</option>
-            </select>
-        </div>
-
-        <!-- Marca de cubierta -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-                Marca de cubierta
-            </label>
-            <select name="tire_brand"
-                    id="tire_brand"
-                    class="w-full border border-gray-300 rounded
-                           px-3 py-2 text-sm focus:outline-none
-                           focus:ring-2 focus:ring-blue-400">
-                <option value="TIRE_BRAND_GENERAL">Pirelli, Continental, Otras marcas...</option>
-                <option value="TIRE_BRAND_VITTORIA">Vittoria</option>
-                <option value="TIRE_BRAND_SCHWALBE">Schwalbe</option>
-            </select>
-        </div>
-
-        <!-- Superficie -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-                Superficie
-            </label>
-            <select name="surface"
-                    class="w-full border border-gray-300 rounded
-                           px-3 py-2 text-sm focus:outline-none
-                           focus:ring-2 focus:ring-blue-400">
-                <option value="SURFACE_DRY">Seco</option>
-                <option value="SURFACE_WET">Mojado</option>
-                <option value="SURFACE_SNOW">Nieve</option>
-            </select>
-        </div>
-
-        <!-- Altitud / Temperatura -->
-        <div class="grid grid-cols-2 gap-4">
+            <!-- Superficie -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                    Altitud media (m)
+                <label class="block text-sm font-medium
+                              text-[#1A1A18] mb-1">
+                    Superficie
                 </label>
-                <input type="number"
-                       name="altitude"
-                       id="altitude"
-                       step="1" min="0" max="4500"
-                       value="0"
-                       placeholder="0"
-                       class="w-full border border-gray-300 rounded
-                              px-3 py-2 text-sm focus:outline-none
-                              focus:ring-2 focus:ring-blue-400">
+                <select name="surface"
+                        class="w-full border border-[#E5E3DF]
+                               rounded-xl px-4 py-3 text-sm
+                               focus:outline-none focus:ring-2
+                               focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors">
+                    <option value="SURFACE_DRY">Seco</option>
+                    <option value="SURFACE_WET">Mojado</option>
+                    <option value="SURFACE_SNOW">Nieve</option>
+                </select>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">
-                    Temperatura exterior (°C)
+
+            <!-- Altitud / Temperatura -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium
+                                  text-[#1A1A18] mb-1">
+                        Altitud media (m)
+                    </label>
+                    <input type="number"
+                           name="altitude"
+                           id="altitude"
+                           step="1" min="0" max="4500"
+                           value="0"
+                           placeholder="0"
+                           class="w-full border border-[#E5E3DF]
+                                  rounded-xl px-4 py-3 text-sm
+                                  focus:outline-none focus:ring-2
+                                  focus:ring-[#F25C05]/20
+                                  focus:border-[#F25C05]
+                                  transition-colors font-mono">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium
+                                  text-[#1A1A18] mb-1">
+                        Temperatura exterior (°C)
+                    </label>
+                    <input type="number"
+                           name="temp_exterior"
+                           id="temp_exterior"
+                           step="1" min="-20" max="50"
+                           value="20"
+                           placeholder="20"
+                           class="w-full border border-[#E5E3DF]
+                                  rounded-xl px-4 py-3 text-sm
+                                  focus:outline-none focus:ring-2
+                                  focus:ring-[#F25C05]/20
+                                  focus:border-[#F25C05]
+                                  transition-colors font-mono">
+                </div>
+            </div>
+
+            <!-- Guardar en historial -->
+            <div class="flex items-center gap-2">
+                <input type="checkbox"
+                       name="save"
+                       id="save"
+                       value="1"
+                       class="w-4 h-4 accent-[#F25C05]
+                              cursor-pointer">
+                <label for="save"
+                       class="text-sm text-[#6B6860]
+                              cursor-pointer select-none">
+                    Guardar en historial
                 </label>
-                <input type="number"
-                       name="temp_exterior"
-                       id="temp_exterior"
-                       step="1" min="-20" max="50"
-                       value="20"
-                       placeholder="20"
-                       class="w-full border border-gray-300 rounded
-                              px-3 py-2 text-sm focus:outline-none
-                              focus:ring-2 focus:ring-blue-400">
             </div>
-        </div>
 
-        <!-- Guardar en historial -->
-        <div class="flex items-center gap-2">
-            <input type="checkbox"
-                   name="save"
-                   id="save"
-                   value="1"
-                   class="w-4 h-4 accent-blue-600 cursor-pointer">
-            <label for="save"
-                   class="text-sm text-gray-600 cursor-pointer select-none">
-                Guardar en historial
-            </label>
-        </div>
+            <button type="submit"
+                    class="w-full bg-[#F25C05] text-white py-3
+                           rounded-full hover:bg-[#D94F04]
+                           font-semibold cursor-pointer
+                           text-base transition-colors">
+                Calcular presión
+            </button>
 
-        <button type="submit"
-                class="w-full bg-blue-600 text-white py-2
-                       rounded hover:bg-blue-700
-                       font-medium cursor-pointer">
-            Calcular presión
-        </button>
+        </form>
+    </div>
 
-    </form>
-
-    <!-- Zona de resultado (HTMX swap target) -->
-    <div id="resultado" class="mt-6"></div>
+    <!-- Columna derecha: resultado (HTMX swap target) -->
+    <div id="resultado"
+         class="mt-6 lg:mt-12 lg:sticky lg:top-24">
+    </div>
 
 </div>
 
