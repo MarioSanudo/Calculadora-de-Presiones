@@ -1,40 +1,58 @@
 {% if errors %}
-    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-        <p class="text-red-700 font-medium mb-2">
+    <div class="bg-red-50 border border-[#DC2626]/20
+                rounded-2xl p-4">
+        <p class="text-[#DC2626] font-medium mb-2">
             Corrige los siguientes errores:
         </p>
         <ul class="list-disc list-inside space-y-1">
             {% for error in errors %}
-                <li class="text-red-600 text-sm">{{ error }}</li>
+                <li class="text-[#DC2626] text-sm">{{ error }}</li>
             {% endfor %}
         </ul>
     </div>
 
 {% elif result %}
-    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <h2 class="text-lg font-semibold text-gray-800 mb-4">
+    <div class="bg-[#1A1A18] rounded-2xl p-6">
+        <h2 class="text-lg font-semibold text-white mb-4
+                    font-display">
             Presión recomendada
         </h2>
         <div class="grid grid-cols-2 gap-4">
 
             <!-- Rueda delantera -->
-            <div class="bg-blue-50 rounded-lg p-4 text-center">
-                <p class="text-sm text-gray-500 mb-1">Delantera</p>
-                <p class="text-3xl font-bold text-blue-600">
-                    {{ result.front.bar }} bar
+            <div class="bg-white/10 rounded-xl p-4 text-center">
+                <p class="text-sm text-[#A8A5A0] mb-1">
+                    Delantera
                 </p>
-                <p class="text-sm text-gray-400 mt-1">
+                <p class="text-4xl font-bold text-white
+                          font-mono">
+                    {{ result.front.bar }}
+                </p>
+                <p class="text-[#F25C05] text-lg font-semibold
+                          mt-1">
+                    BAR
+                </p>
+                <p class="text-sm text-[#A8A5A0] mt-2
+                          font-mono">
                     {{ result.front.psi }} psi
                 </p>
             </div>
 
             <!-- Rueda trasera -->
-            <div class="bg-indigo-50 rounded-lg p-4 text-center">
-                <p class="text-sm text-gray-500 mb-1">Trasera</p>
-                <p class="text-3xl font-bold text-indigo-600">
-                    {{ result.rear.bar }} bar
+            <div class="bg-white/10 rounded-xl p-4 text-center">
+                <p class="text-sm text-[#A8A5A0] mb-1">
+                    Trasera
                 </p>
-                <p class="text-sm text-gray-400 mt-1">
+                <p class="text-4xl font-bold text-white
+                          font-mono">
+                    {{ result.rear.bar }}
+                </p>
+                <p class="text-[#F25C05] text-lg font-semibold
+                          mt-1">
+                    BAR
+                </p>
+                <p class="text-sm text-[#A8A5A0] mt-2
+                          font-mono">
                     {{ result.rear.psi }} psi
                 </p>
             </div>
@@ -44,23 +62,25 @@
         <!-- Avisos de presión fuera de rango -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% for category, message in messages %}
-                <div class="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-3">
-                    <p class="text-amber-700 text-sm">{{ message }}</p>
+                <div class="mt-4 bg-[#D97706]/10 border
+                            border-[#D97706]/20 rounded-xl p-3">
+                    <p class="text-[#D97706] text-sm">
+                        {{ message }}
+                    </p>
                 </div>
             {% endfor %}
         {% endwith %}
 
         <!-- Feedback de guardado -->
         {% if saved is true %}
-            <p class="mt-3 text-green-600 text-sm font-medium">
+            <p class="mt-3 text-[#16A34A] text-sm font-medium">
                 Análisis guardado correctamente.
             </p>
         {% elif saved is false %}
-            <p class="mt-3 text-red-600 text-sm font-medium">
+            <p class="mt-3 text-[#DC2626] text-sm font-medium">
                 Error al guardar el análisis.
             </p>
         {% endif %}
-
 
     </div>
 {% endif %}
