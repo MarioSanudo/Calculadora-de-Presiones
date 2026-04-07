@@ -20,6 +20,7 @@ BASE_DATA = {
     "surface":          "SURFACE_DRY",
     "tire_brand":       "TIRE_BRAND_GENERAL",
     "altitude":         0,
+    "temp_exterior":    20.0,
 }
 
 

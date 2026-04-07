@@ -67,6 +67,18 @@
                         <span class="text-gray-400">Cubierta:</span>
                         D: {{ a.tire_width_front }} mm / T: {{ a.tire_width_rear }} mm
                     </div>
+                    {% if a.altitude is not none %}
+                    <div>
+                        <span class="text-gray-400">Altitud:</span>
+                        {{ a.altitude | int }} m
+                    </div>
+                    {% endif %}
+                    {% if a.temp_exterior is not none %}
+                    <div>
+                        <span class="text-gray-400">Temperatura:</span>
+                        {{ a.temp_exterior | int }} °C
+                    </div>
+                    {% endif %}
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">

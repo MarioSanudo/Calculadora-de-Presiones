@@ -220,7 +220,7 @@ def test_login_unverified_blocked(client, app):
         "email": "unverified@example.com",
         "password": _VALID_PASS,
     })
-    assert b"Verifica tu email" in resp.data
+    assert b"Email no verificado" in resp.data
 
 
 # ── Next param ──────────────────────────────────────
@@ -281,7 +281,7 @@ def test_logout(client, verified_user):
         "/auth/logout", follow_redirects=True
     )
     assert resp.status_code == 200
-    assert b"Sesion cerrada" in resp.data
+    assert "Sesión cerrada" in resp.data.decode("utf-8")
 
 
 # ── Email verification ──────────────────────────────
@@ -426,7 +426,7 @@ def test_resend_verification_existing(client, app):
         )
         assert mock_send.called
 
-    assert b"Email de verificacion enviado" in resp.data
+    assert "Email de verificación enviado" in resp.data.decode("utf-8")
 
 
 def test_resend_verification_nonexistent(client):
@@ -443,7 +443,7 @@ def test_resend_verification_nonexistent(client):
 def test_forgot_password_page_loads(client):
     resp = client.get("/auth/forgot-password")
     assert resp.status_code == 200
-    assert b"Recuperar contrasena" in resp.data
+    assert "Recuperar contraseña" in resp.data.decode("utf-8")
 
 
 def test_forgot_password_sends_email(
@@ -491,7 +491,7 @@ def test_reset_password_success(
         },
         follow_redirects=True,
     )
-    assert b"Contrasena cambiada" in resp.data
+    assert "Contraseña cambiada" in resp.data.decode("utf-8")
 
     # Verificar que el login funciona con la nueva pass
     resp = client.post("/auth/login", data={
@@ -519,7 +519,7 @@ def test_reset_password_expired_token(
         f"/auth/reset-password/{token}",
         follow_redirects=True,
     )
-    assert b"invalido o expirado" in resp.data
+    assert "inválido o expirado" in resp.data.decode("utf-8")
 
 
 def test_reset_password_db_error(
@@ -574,7 +574,7 @@ def test_reset_password_wrong_purpose(
         f"/auth/reset-password/{token}",
         follow_redirects=True,
     )
-    assert b"invalido o expirado" in resp.data
+    assert "inválido o expirado" in resp.data.decode("utf-8")
 
 
 # ── Google OAuth ────────────────────────────────────

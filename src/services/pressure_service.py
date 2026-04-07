@@ -10,7 +10,7 @@ from src.utils.pressure_constants import (
     ALLOWED_DIAMETERS, REQUIRED_FIELDS,
     RIDE_STYLE_DEFAULTS,
     MAX_PRESSURE_BAR, PRESSURE_MIN_BAR,
-    ALTITUDE_LIMITS
+    ALTITUDE_LIMITS, TEMP_EXTERIOR_LIMITS
 )
 
 
@@ -24,6 +24,19 @@ def presion_atmosferica(altitud_m: float) -> float:
     M  = 0.0289644 # kg/mol — masa molar del aire seco
     R  = 8.31446   # J/(mol·K) — constante de los gases ideales
     return P0 * (1 - L * altitud_m / T0) ** (g * M / (R * L))
+
+
+def correccion_temperatura(
+    presion_bar: float,
+    temp_exterior_c: float,
+    temp_inflado_c: float = 20.0,
+) -> float:
+    """Ley del gas ideal: P1/T1 = P2/T2. Temp en Kelvin.
+    temp_inflado_c es siempre 20°C (taller/casa).
+    temp_exterior_c es la temperatura real de rodaje."""
+    T1 = temp_inflado_c + 273.15
+    T2 = temp_exterior_c + 273.15
+    return presion_bar * (T2 / T1)
 
 
 def correccion_altitud(presion_bar: float, altitud_m: float) -> float:
@@ -166,6 +179,13 @@ def validate_inputs(data: dict) -> list:
             f"La altitud debe estar entre "
             f"{ALTITUDE_LIMITS['min']} y {ALTITUDE_LIMITS['max']} metros.")
 
+    # 8. Temperatura exterior de rodaje
+    temp_exterior = data["temp_exterior"]
+    if not (TEMP_EXTERIOR_LIMITS["min"] <= temp_exterior <= TEMP_EXTERIOR_LIMITS["max"]):
+        errors.append(
+            f"La temperatura debe estar entre "
+            f"{TEMP_EXTERIOR_LIMITS['min']} y {TEMP_EXTERIOR_LIMITS['max']} °C.")
+
     return errors
 
 
@@ -185,6 +205,7 @@ def calculate_pressure(data: dict) -> dict:
     surface         = data["surface"]
     tire_brand      = data["tire_brand"]
     altitude        = data["altitude"]
+    temp_exterior   = data["temp_exterior"]
 
     # Paso 2: factor de peso normalizado respecto al valor de referencia 180
     total = 2.2 * (bike_weight + rider_weight)
@@ -227,8 +248,9 @@ def calculate_pressure(data: dict) -> dict:
         )
         bar = pressure_psi / 14.5038
 
-        # Corrección por altitud: a mayor altitud menos presión exterior,
-        # el neumático necesita algo más de presión interna para la misma deformación
+        # Corrección por temperatura: ley del gas ideal (hinchado a 20°C)
+        bar = correccion_temperatura(bar, temp_exterior)
+        # Corrección por altitud: menos presión atmosférica → más presión interna
         bar = correccion_altitud(bar, altitude)
         pressure_psi = bar * 14.5038
 

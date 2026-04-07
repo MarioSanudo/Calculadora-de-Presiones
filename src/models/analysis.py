@@ -19,7 +19,8 @@ class Analysis(db.Model):
     ride_style = db.Column(db.String(50), nullable=False)
     rim_type = db.Column(db.String(50), nullable=False)
     surface = db.Column(db.String(50), nullable=False)
-    altitude = db.Column(db.Float, nullable=False)   # nullable para compatibilidad con registros anteriores
+    altitude = db.Column(db.Float, nullable=False)
+    temp_exterior = db.Column(db.Float, nullable=False)
 
     # Resultados del cálculo
     front_bar = db.Column(db.Float, nullable=False)

@@ -30,8 +30,8 @@ def test_register_rate_limit_devuelve_429(client):
         "password": "securepass123",
         "confirm_password": "securepass123"
     }
-    # El límite es 3 por minuto; 4ª petición debe devolver 429
-    for i in range(3):
+    # El límite es 5 por minuto; 6ª petición debe devolver 429
+    for i in range(5):
         d = dict(data)
         d["email"] = f"rl{i}@example.com"
         client.post("/auth/register", data=d)
@@ -50,7 +50,7 @@ def test_429_contiene_mensaje_espera(client):
         "password": "securepass123",
         "confirm_password": "securepass123"
     }
-    for i in range(3):
+    for i in range(5):
         d = dict(data)
         d["email"] = f"t{i}@example.com"
         client.post("/auth/register", data=d)
