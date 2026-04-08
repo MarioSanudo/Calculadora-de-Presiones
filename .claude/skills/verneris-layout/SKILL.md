@@ -91,6 +91,18 @@ Para hero, sección inmersiva, login y register usar URLs Unsplash directas:
 Ciclismo de carretera o gravel: ruedas, cubiertas, válvulas, asfalto mojado,
 detalles mecánicos. Sin MTB ni ciclismo de montaña genérico.
 
+### Imágenes externas — queries Unsplash específicas
+Usar exclusivamente estas búsquedas para garantizar resultados de ciclismo,
+no motos ni deporte genérico:
+
+- Hero/fondo general: `photo-1558618666-fcd25c85cd64` (ciclista carretera)
+- Sección inmersiva: `photo-1541625602330-2277a4c46182` (pelotón carretera)  
+- Detalle cubierta/rueda: `photo-1571068316344-75bc76f77890` (detalle rueda bici)
+- Login/Register: `photo-1504280390367-361c6d9f38f4` (ciclista soledad carretera)
+
+Formato siempre: `https://images.unsplash.com/photo-ID?w=1200&q=80`
+Nunca usar queries de texto en Unsplash — usar IDs directos de fotos verificadas.
+
 ### Imágenes propias
 Siempre con `url_for('static', filename='img/archivo')`.
 Nunca hardcodear paths relativos.
