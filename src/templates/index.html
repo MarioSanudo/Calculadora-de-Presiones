@@ -3,43 +3,205 @@
 {% block title %}Calcula la presión de tus ruedas{% endblock %}
 
 {% block hero %}
-<div class="bg-[#1A1A18] px-4 py-20 lg:py-28">
-    <div class="max-w-5xl mx-auto">
-        <h1 class="text-5xl lg:text-6xl font-extrabold text-white
-                    font-display tracking-tight mb-6">
-            Presion óptima para tus ruedas
-        </h1>
-        <p class="text-lg text-[#A8A5A0] mb-10 max-w-xl">
-            Calcula la presión ideal según tu peso, disciplina,
-            ancho de neumatico y tipo de terreno.
-            Guarda tu historial y gestiona varias bicicletas.
-        </p>
+{# ── 1. HERO ── fondo oscuro, texto izquierda, imagen derecha #}
+<div class="bg-[#1A1A18] overflow-hidden">
+    <div class="max-w-5xl mx-auto px-4 py-20 lg:py-28
+                flex flex-col lg:flex-row items-center gap-12">
 
-        {% if current_user.is_authenticated %}
-            <a href="{{ url_for('main.calcular_presion')}}"
-               class="inline-block bg-[#F25C05] text-white
-                      px-8 py-4 rounded-full text-lg
-                      hover:bg-[#D94F04] font-semibold
-                      transition-colors">
-                Calcular presión
-            </a>
-        {% else %}
-            <div class="flex gap-4">
-                <a href="{{ url_for('auth.register') }}"
-                   class="bg-[#F25C05] text-white px-8 py-4
-                          rounded-full text-lg hover:bg-[#D94F04]
-                          font-semibold transition-colors">
-                    Empezar gratis
-                </a>
-                <a href="{{ url_for('auth.login') }}"
-                   class="border border-[#E5E3DF] text-white
+        <!-- Texto -->
+        <div class="flex-1">
+            <h1 class="text-5xl lg:text-6xl font-extrabold text-white
+                        font-display tracking-tight mb-6">
+                Presion óptima para tus ruedas
+            </h1>
+            <p class="text-lg text-[#A8A5A0] mb-10 max-w-xl">
+                Calcula la presión ideal según tu peso, disciplina,
+                ancho de neumatico y tipo de terreno.
+                Guarda tu historial y gestiona varias bicicletas.
+            </p>
+
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.calcular_presion')}}"
+                   class="inline-block bg-[#F25C05] text-white
                           px-8 py-4 rounded-full text-lg
-                          hover:border-[#F25C05]
-                          font-semibold transition-colors">
-                    Iniciar sesión
+                          hover:bg-[#D94F04] font-semibold
+                          transition-colors">
+                    Calcular presión
                 </a>
-            </div>
-        {% endif %}
+            {% else %}
+                <div class="flex flex-wrap gap-4">
+                    <a href="{{ url_for('auth.register') }}"
+                       class="bg-[#F25C05] text-white px-8 py-4
+                              rounded-full text-lg hover:bg-[#D94F04]
+                              font-semibold transition-colors">
+                        Empezar gratis
+                    </a>
+                    <a href="{{ url_for('auth.login') }}"
+                       class="bg-[#E5E3DF] hover:bg-[#C9C6C0]
+                              text-[#1A1A18] px-8 py-4
+                              rounded-full text-lg
+                              font-semibold transition-colors">
+                        Iniciar sesión
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Imagen derecha -->
+        <div class="flex-1 w-full lg:max-w-lg
+                    rounded-2xl overflow-hidden
+                    aspect-[4/3] relative">
+            <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1200&q=80"
+                 alt="Rueda de bicicleta de carretera"
+                 class="absolute inset-0 w-full h-full object-cover">
+        </div>
+
     </div>
 </div>
+{% endblock %}
+
+{% block content %}
+
+{# ── 2. CÓMO FUNCIONA ── 3 pasos, fondo claro #}
+<section class="-mx-4 bg-[#F8F8F7] px-4 py-16">
+    <div class="max-w-5xl mx-auto">
+        <h2 class="text-3xl font-bold font-display text-[#1A1A18]
+                   text-center mb-12 tracking-tight">
+            Cómo funciona
+        </h2>
+        <div class="grid md:grid-cols-3 gap-8">
+
+            <div class="text-center">
+                <div class="w-12 h-12 bg-[#F25C05] rounded-full
+                            flex items-center justify-center
+                            text-white font-bold text-lg
+                            mx-auto mb-4">
+                    1
+                </div>
+                <h3 class="font-semibold text-[#1A1A18] mb-2">
+                    Introduce tus datos
+                </h3>
+                <p class="text-sm text-[#6B6860]">
+                    Peso, disciplina, ancho de cubierta,
+                    sistema tubeless y condiciones de la ruta.
+                </p>
+            </div>
+
+            <div class="text-center">
+                <div class="w-12 h-12 bg-[#F25C05] rounded-full
+                            flex items-center justify-center
+                            text-white font-bold text-lg
+                            mx-auto mb-4">
+                    2
+                </div>
+                <h3 class="font-semibold text-[#1A1A18] mb-2">
+                    Cálculo con física real
+                </h3>
+                <p class="text-sm text-[#6B6860]">
+                    No una tabla estática. Formulaciones físicas
+                    con correcciones de temperatura y altitud.
+                </p>
+            </div>
+
+            <div class="text-center">
+                <div class="w-12 h-12 bg-[#F25C05] rounded-full
+                            flex items-center justify-center
+                            text-white font-bold text-lg
+                            mx-auto mb-4">
+                    3
+                </div>
+                <h3 class="font-semibold text-[#1A1A18] mb-2">
+                    Presión exacta al instante
+                </h3>
+                <p class="text-sm text-[#6B6860]">
+                    Delantera y trasera en BAR y PSI.
+                    Guarda el análisis y compara salidas.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{# ── 3. IMAGEN INMERSIVA ── ancho completo con overlay #}
+<section class="-mx-4 relative h-72 overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1534787238916-9ba6764efd4f?w=1200&q=80"
+         alt="Asfalto mojado desde la bicicleta"
+         class="absolute inset-0 w-full h-full object-cover">
+    <div class="absolute inset-0 bg-black/65
+                flex items-center justify-center">
+        <p class="text-white font-display font-bold
+                  text-3xl lg:text-4xl text-center
+                  max-w-2xl px-4 leading-tight">
+            La presión incorrecta no se nota hasta que ya es tarde.
+        </p>
+    </div>
+</section>
+
+{# ── 4. SOBRE EL PROYECTO ── 2 columnas: texto + foto #}
+<section class="py-16">
+    <div class="max-w-5xl mx-auto
+                flex flex-col md:flex-row gap-12 items-center">
+
+        <!-- Texto -->
+        <div class="flex-1">
+            <h2 class="text-3xl font-bold font-display
+                       text-[#1A1A18] mb-6 tracking-tight">
+                Sobre el proyecto
+            </h2>
+
+            <p class="text-[#6B6860] text-sm leading-relaxed mb-4">
+                Soy Mario, estudiante de ingeniería eléctrica y ciclista
+                amateur. Construyo Verneris en solitario, compaginándolo
+                con la carrera. Ahora también hago running, pero las
+                ruedas siguen siendo lo mío.
+            </p>
+            <p class="text-[#6B6860] text-sm leading-relaxed mb-4">
+                Verneris nació de una frustración concreta: la presión
+                correcta de los neumáticos es uno de los factores más
+                ignorados y más influyentes en rendimiento y confort. Las
+                herramientas que existen están incompletas o en inglés.
+                Verneris es gratuita y está pensada para cualquier ciclista.
+            </p>
+            <p class="text-[#6B6860] text-sm leading-relaxed mb-4">
+                No es una tabla estática. Está basado en formulaciones
+                físicas con correcciones propias de temperatura, altitud
+                y tipo de carcasa. Ingeniería aplicada al ciclismo.
+            </p>
+            <p class="text-[#6B6860] text-sm leading-relaxed">
+                La ingeniería eléctrica abre otra dimensión.
+                Verneris es el primero de una familia de productos
+                técnicos accesibles. Sin más detalle por ahora.
+            </p>
+        </div>
+
+        <!-- Foto personal -->
+        <div class="flex-shrink-0 w-full md:w-72">
+            <img src="{{ url_for('static', filename='img/Foto-Mario-Ciclismo.jpeg') }}"
+                 alt="Mario Sañudo"
+                 class="w-full h-80 object-cover rounded-2xl">
+        </div>
+
+    </div>
+</section>
+
+{# ── 5. CTA FINAL ── franja naranja ancho completo #}
+<section class="-mx-4 bg-[#F25C05] px-4 py-14 text-center">
+    <h2 class="text-3xl font-bold font-display text-white
+               mb-4 tracking-tight">
+        Empieza a rodar con la presión correcta
+    </h2>
+    <p class="text-white/80 text-sm mb-8 max-w-md mx-auto">
+        Gratis. Sin registro obligatorio para probar.
+        Guarda tu historial cuando quieras.
+    </p>
+    <a href="{{ url_for('main.calcular_presion') }}"
+       class="inline-block bg-white text-[#F25C05]
+              px-8 py-4 rounded-full text-lg
+              hover:bg-[#F8F8F7] font-bold
+              transition-colors">
+        Calcular ahora
+    </a>
+</section>
+
 {% endblock %}
