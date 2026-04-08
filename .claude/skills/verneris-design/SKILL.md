@@ -182,6 +182,13 @@ Google Fonts import (pegar en `<head>` de `base.html`):
 - Tabla o lista de cards. Cada entrada muestra: fecha, configuración resumida, presión resultado.
 - Ordenado por fecha descendente.
 - Acción "Cargar esta configuración" que rellena el formulario vía HTMX.
+
+### Botón secundario — forma consistente con primario
+- Los botones secundarios mantienen la misma forma que el primario (rounded-full,
+mismo padding) pero en tono gris neutro. Nunca borde simple sobre fondo blanco.
+
+- Regla: en Verneris solo existen dos tipos de botón — naranja (acción principal)
+y gris (#E5E3DF, acción secundaria). Ningún botón con solo borde y fondo blanco.
  
 ---
  

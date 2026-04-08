@@ -3,10 +3,9 @@
 {% block title %}Calculadora de presion{% endblock %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto lg:grid lg:grid-cols-[1fr,400px]
-            lg:gap-8 lg:items-start">
+<div class="max-w-2xl mx-auto">
 
-    <!-- Columna izquierda: formulario -->
+    <!-- Formulario -->
     <div>
         <h1 class="text-3xl font-bold text-[#1A1A18] mb-6
                     font-display">
@@ -315,9 +314,8 @@
         </form>
     </div>
 
-    <!-- Columna derecha: resultado (HTMX swap target) -->
-    <div id="resultado"
-         class="mt-6 lg:mt-12 lg:sticky lg:top-24">
+    <!-- Resultado (HTMX swap target) -->
+    <div id="resultado" class="mt-6">
     </div>
 
 </div>

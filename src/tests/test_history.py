@@ -61,7 +61,7 @@ def test_calcular_post_muestra_resultado(client, verified_user):
     _login(client, verified_user["email"], verified_user["password"])
     resp = client.post("/calcular", data=_CALC_DATA)
     assert resp.status_code == 200
-    assert b"bar" in resp.data
+    assert b"BAR" in resp.data
     assert b"psi" in resp.data
     # Sin save=1 no debe mostrar el mensaje de confirmación
     assert b"correctamente" not in resp.data
