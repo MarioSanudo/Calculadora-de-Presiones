@@ -3,147 +3,173 @@
 {% block title %}Registro{% endblock %}
 
 {% block content %}
-<div class="max-w-md mx-auto bg-white p-8
-            rounded-2xl border border-[#E5E3DF]">
-    <h1 class="text-2xl font-bold mb-6 text-center
-               text-[#1A1A18] font-display">
-        Crear cuenta
-    </h1>
+<div class="-mx-4 -mt-6 min-h-[calc(100vh-64px)]
+            flex">
 
-    <form method="POST"
-          action="{{ url_for('auth.register') }}">
-        {{ form.hidden_tag() }}
+    <!-- Columna izquierda: formulario -->
+    <div class="w-full md:w-2/5 flex items-center
+                justify-center px-6 py-12">
+        <div class="w-full max-w-sm">
+            <h1 class="text-2xl font-bold mb-6 text-center
+                       text-[#1A1A18] font-display">
+                Crear cuenta
+            </h1>
 
-        <!-- Username -->
-        <div class="mb-4">
-            {{ form.username.label(
-                class="block text-sm font-medium
-                       text-[#1A1A18] mb-1") }}
-            {{ form.username(
-                class="w-full px-4 py-3 border
-                       border-[#E5E3DF] rounded-xl
-                       focus:outline-none
-                       focus:ring-2 focus:ring-[#F25C05]/20
-                       focus:border-[#F25C05]
-                       transition-colors",
-                placeholder="Tu nombre de usuario") }}
+            <form method="POST"
+                  action="{{ url_for('auth.register') }}">
+                {{ form.hidden_tag() }}
 
-            {% for error in form.username.errors %}
-                <p class="text-[#DC2626] text-xs mt-1">
-                    {{ error }}
-                </p>
-            {% endfor %}
+                <!-- Username -->
+                <div class="mb-4">
+                    {{ form.username.label(
+                        class="block text-sm font-medium
+                               text-[#1A1A18] mb-1") }}
+                    {{ form.username(
+                        class="w-full px-4 py-3 border
+                               border-[#E5E3DF] rounded-xl
+                               focus:outline-none
+                               focus:ring-2 focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors",
+                        placeholder="Tu nombre de usuario") }}
+
+                    {% for error in form.username.errors %}
+                        <p class="text-[#DC2626] text-xs mt-1">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <!-- Surname -->
+                <div class="mb-4">
+                    {{ form.surname.label(
+                        class="block text-sm font-medium
+                               text-[#1A1A18] mb-1"
+                    ) }}
+                    {{ form.surname(
+                        class="w-full px-4 py-3 border
+                               border-[#E5E3DF] rounded-xl
+                               focus:outline-none
+                               focus:ring-2 focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors",
+                        placeholder="Tu apellido") }}
+
+                    {% for error in form.surname.errors %}
+                        <p class="text-[#DC2626] text-xs mt-1">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <!-- Email -->
+                <div class="mb-4">
+                    {{ form.email.label(
+                        class="block text-sm font-medium
+                               text-[#1A1A18] mb-1"
+                    ) }}
+                    {{ form.email(
+                        class="w-full px-4 py-3 border
+                               border-[#E5E3DF] rounded-xl
+                               focus:outline-none
+                               focus:ring-2 focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors",
+                        placeholder="tu@email.com") }}
+
+                    {% for error in form.email.errors %}
+                        <p class="text-[#DC2626] text-xs mt-1">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                    {{ form.password.label(
+                        class="block text-sm font-medium
+                               text-[#1A1A18] mb-1"
+                    ) }}
+                    {{ form.password(
+                        class="w-full px-4 py-3 border
+                               border-[#E5E3DF] rounded-xl
+                               focus:outline-none
+                               focus:ring-2 focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors",
+                        placeholder="•••••••••••••••••••") }}
+                    {% for error in form.password.errors %}
+                        <p class="text-[#DC2626] text-xs mt-1">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-6">
+                    {{ form.confirm_password.label(
+                        class="block text-sm font-medium
+                               text-[#1A1A18] mb-1") }}
+                    {{ form.confirm_password(
+                        class="w-full px-4 py-3 border
+                               border-[#E5E3DF] rounded-xl
+                               focus:outline-none
+                               focus:ring-2 focus:ring-[#F25C05]/20
+                               focus:border-[#F25C05]
+                               transition-colors",
+                        placeholder="Repite la contraseña"
+                    ) }}
+                    {% for error in form.confirm_password.errors %}
+                        <p class="text-[#DC2626] text-xs mt-1">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                {{ form.submit(
+                    class="w-full bg-[#F25C05] text-white py-3
+                           rounded-full hover:bg-[#D94F04]
+                           font-semibold cursor-pointer
+                           transition-colors") }}
+            </form>
+
+            <!-- Separador -->
+            <div class="flex items-center my-4">
+                <div class="flex-grow border-t
+                            border-[#E5E3DF]"></div>
+                <span class="px-3 text-sm text-[#A8A5A0]">o</span>
+                <div class="flex-grow border-t
+                            border-[#E5E3DF]"></div>
+            </div>
+
+            <p class="text-center text-sm text-[#6B6860] mt-4">
+                Ya tienes cuenta?
+                <a href="{{ url_for('auth.login') }}"
+                   class="text-[#F25C05] hover:text-[#D94F04]
+                          hover:underline">
+                    Inicia sesión
+                </a>
+            </p>
         </div>
-
-        <!-- Surname -->
-        <div class="mb-4">
-            {{ form.surname.label(
-                class="block text-sm font-medium
-                       text-[#1A1A18] mb-1"
-            ) }}
-            {{ form.surname(
-                class="w-full px-4 py-3 border
-                       border-[#E5E3DF] rounded-xl
-                       focus:outline-none
-                       focus:ring-2 focus:ring-[#F25C05]/20
-                       focus:border-[#F25C05]
-                       transition-colors",
-                placeholder="Tu apellido") }}
-
-            {% for error in form.surname.errors %}
-                <p class="text-[#DC2626] text-xs mt-1">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </div>
-
-        <!-- Email -->
-        <div class="mb-4">
-            {{ form.email.label(
-                class="block text-sm font-medium
-                       text-[#1A1A18] mb-1"
-            ) }}
-            {{ form.email(
-                class="w-full px-4 py-3 border
-                       border-[#E5E3DF] rounded-xl
-                       focus:outline-none
-                       focus:ring-2 focus:ring-[#F25C05]/20
-                       focus:border-[#F25C05]
-                       transition-colors",
-                placeholder="tu@email.com") }}
-
-            {% for error in form.email.errors %}
-                <p class="text-[#DC2626] text-xs mt-1">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </div>
-
-        <!-- Password -->
-        <div class="mb-4">
-            {{ form.password.label(
-                class="block text-sm font-medium
-                       text-[#1A1A18] mb-1"
-            ) }}
-            {{ form.password(
-                class="w-full px-4 py-3 border
-                       border-[#E5E3DF] rounded-xl
-                       focus:outline-none
-                       focus:ring-2 focus:ring-[#F25C05]/20
-                       focus:border-[#F25C05]
-                       transition-colors",
-                placeholder="•••••••••••••••••••") }}
-            {% for error in form.password.errors %}
-                <p class="text-[#DC2626] text-xs mt-1">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mb-6">
-            {{ form.confirm_password.label(
-                class="block text-sm font-medium
-                       text-[#1A1A18] mb-1") }}
-            {{ form.confirm_password(
-                class="w-full px-4 py-3 border
-                       border-[#E5E3DF] rounded-xl
-                       focus:outline-none
-                       focus:ring-2 focus:ring-[#F25C05]/20
-                       focus:border-[#F25C05]
-                       transition-colors",
-                placeholder="Repite la contraseña"
-            ) }}
-            {% for error in form.confirm_password.errors %}
-                <p class="text-[#DC2626] text-xs mt-1">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </div>
-
-        {{ form.submit(
-            class="w-full bg-[#F25C05] text-white py-3
-                   rounded-full hover:bg-[#D94F04]
-                   font-semibold cursor-pointer
-                   transition-colors") }}
-    </form>
-
-    <!-- Separador -->
-    <div class="flex items-center my-4">
-        <div class="flex-grow border-t
-                    border-[#E5E3DF]"></div>
-        <span class="px-3 text-sm text-[#A8A5A0]">o</span>
-        <div class="flex-grow border-t
-                    border-[#E5E3DF]"></div>
     </div>
 
-    <p class="text-center text-sm text-[#6B6860] mt-4">
-        Ya tienes cuenta?
-        <a href="{{ url_for('auth.login') }}"
-           class="text-[#F25C05] hover:text-[#D94F04]
-                  hover:underline">
-            Inicia sesión
-        </a>
-    </p>
+    <!-- Columna derecha: imagen (solo desktop) -->
+    <div class="hidden md:block md:w-3/5 relative
+                overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=1200&q=80"
+             alt="Detalle cubierta ciclismo"
+             class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/55
+                    flex flex-col justify-end p-12">
+            <p class="text-white font-display font-bold
+                      text-3xl leading-tight mb-2">
+                Ingeniería aplicada<br>al ciclismo.
+            </p>
+            <p class="text-white/60 text-sm">
+                Gratis. Sin tablas. Con física real.
+            </p>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
