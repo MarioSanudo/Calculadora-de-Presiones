@@ -80,11 +80,14 @@
 
             <!-- Google OAuth -->
             <a href="{{ url_for('auth.google_login') }}"
-               class="w-full block text-center
+               class="w-full flex items-center gap-2
+                      justify-center
                       bg-[#E5E3DF] hover:bg-[#C9C6C0]
                       text-[#1A1A18] py-3 rounded-full
                       font-medium transition-colors">
-                Continuar con Google
+                <img src="https://www.google.com/favicon.ico"
+                     width="18" height="18" alt="Google">
+                <span>Continuar con Google</span>
             </a>
 
             <div class="text-center text-sm text-[#6B6860] mt-4
