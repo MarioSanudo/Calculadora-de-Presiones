@@ -114,5 +114,77 @@
         {% block content %}{% endblock %}
     </main>
 
+    <!-- Footer -->
+    <footer class="bg-[#1A1A18] border-t border-white/10 mt-16">
+        <div class="max-w-5xl mx-auto px-4 py-10
+                    flex flex-col md:flex-row items-center
+                    justify-between gap-6">
+
+            <!-- Logo -->
+            <a href="/"
+               class="text-xl font-bold text-white
+                      font-display tracking-tight">
+                Verneris
+            </a>
+
+            <!-- Links -->
+            <nav class="flex gap-6 text-sm text-[#6B6860]">
+                <a href="{{ url_for('main.calcular_presion') }}"
+                   class="hover:text-white transition-colors">
+                    Calculadora
+                </a>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.historial') }}"
+                   class="hover:text-white transition-colors">
+                    Historial
+                </a>
+                {% endif %}
+            </nav>
+
+            <!-- Redes sociales -->
+            <div class="flex items-center gap-4">
+                <!-- Twitter / X -->
+                <a href="https://x.com/SanudoMario"
+                   target="_blank" rel="noopener"
+                   class="text-[#6B6860] hover:text-[#F25C05]
+                          transition-colors"
+                   aria-label="Twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="w-5 h-5" fill="currentColor"
+                         viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227
+                                 7.959 8.502 11.54H16.17l-5.214
+                                 -6.817L4.99 21.75H1.68l7.73
+                                 -8.503L1.254 2.25H8.08l4.713
+                                 6.231zm-1.161 17.52h1.833
+                                 L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+
+                <!-- Strava -->
+                <a href="https://www.strava.com/athletes/64718951"
+                   target="_blank" rel="noopener"
+                   class="text-[#6B6860] hover:text-[#F25C05]
+                          transition-colors"
+                   aria-label="Strava">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="w-5 h-5" fill="currentColor"
+                         viewBox="0 0 24 24">
+                        <path d="M15.387 17.944l-2.089-4.116h-3.065
+                                 L15.387 24l5.154-10.172h-3.066m-7.632
+                                 -5.772l2.655 5.172h4.066L10.912
+                                 0 4.21 13.228h4.066"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="border-t border-white/10 py-4 text-center
+                    text-xs text-[#6B6860]">
+            © 2025 Verneris. Hecho con criterio.
+        </div>
+    </footer>
+
 </body>
 </html>
