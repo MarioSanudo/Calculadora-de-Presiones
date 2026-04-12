@@ -18,7 +18,7 @@ RIM_TIRE_COMPATIBILITY = [
 RIM_TIRE_COMPATIBILITY_VITTORIA= [
     {"rim_ref": 17, "min":22, "max": 24},
     {"rim_ref": 19, "min":25, "max": 28},
-    {"rim_ref": 21, "min":29, "max": 34},
+    {"rim_ref": 21, "min":28, "max": 34},
     {"rim_ref": 23, "min":35, "max": 46},
     {"rim_ref": 25, "min":47, "max": 57},
     {"rim_ref": 30, "min":58, "max": 65},

@@ -33,7 +33,7 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 # ── Register ────────────────────────────────────────
 
 @auth_bp.route("/register", methods=["GET", "POST"])
-@limiter.limit("5 per minute")
+@limiter.limit("10 per minute")
 def register():
     if current_user.is_authenticated:
         return redirect("/")
@@ -104,7 +104,7 @@ def register():
 # ── Login ───────────────────────────────────────────
 
 @auth_bp.route("/login", methods=["GET", "POST"])
-@limiter.limit("5 per minute")
+@limiter.limit("10 per minute")
 def login():
     if current_user.is_authenticated:
         return redirect("/")
@@ -184,6 +184,15 @@ def verify_email(token):
             payload["user_id"]
         )
         flash("Usuario no encontrado.", "error")
+        return redirect(url_for("auth.login"))
+
+    # Usuario logueado distinto al del token → posible reciclaje
+    if current_user.is_authenticated and current_user.id != user.id:
+        logger.warning(
+            "verify_email: token de user_id=%s usado por user_id=%s logueado",
+            user.id, current_user.id
+        )
+        flash("Acción no permitida estas intentando atacar.", "error")
         return redirect(url_for("auth.login"))
 
     if user.is_verified:
@@ -306,6 +315,15 @@ def reset_password(token):
     if not user:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("auth.forgot_password"))
+
+    # Usuario logueado distinto al del token → posible reciclaje
+    if current_user.is_authenticated and current_user.id != user.id:
+        logger.warning(
+            "reset_password: token de user_id=%s usado por user_id=%s logueado",
+            user.id, current_user.id
+        )
+        flash("Acción no permitida estas intentando atacar.", "error")
+        return redirect(url_for("auth.login"))
 
     form = ResetPasswordForm()
 

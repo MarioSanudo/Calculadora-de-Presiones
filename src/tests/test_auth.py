@@ -577,6 +577,95 @@ def test_reset_password_wrong_purpose(
     assert "inválido o expirado" in resp.data.decode("utf-8")
 
 
+# ── Token recycling ─────────────────────────────────
+
+def test_verify_email_token_recycling_blocked(
+    client, app, verified_user
+):
+    """Usuario A logueado no puede usar token de verificación de B."""
+    # Crear usuario B sin verificar
+    with app.app_context():
+        from src.utils.extensions import db
+        user_b = User(
+            username="Victim",
+            surname="User",
+            email="victim@example.com",
+            password_hash="hashed",
+            is_verified=False,
+        )
+        db.session.add(user_b)
+        db.session.commit()
+        token_b = generate_jwt(
+            user_b.id, purpose="email_verification"
+        )
+
+    # Login como usuario A
+    client.post("/auth/login", data={
+        "email": verified_user["email"],
+        "password": verified_user["password"],
+    })
+
+    resp = client.get(
+        f"/auth/verify/{token_b}",
+        follow_redirects=True,
+    )
+    assert "Acci" in resp.data.decode("utf-8")
+    assert "no permitida" in resp.data.decode("utf-8")
+
+    # B sigue sin verificar
+    with app.app_context():
+        user_b = User.query.filter_by(
+            email="victim@example.com"
+        ).first()
+        assert user_b.is_verified is False
+
+
+def test_reset_password_token_recycling_blocked(
+    client, app, verified_user
+):
+    """Usuario A logueado no puede usar token de reset de B."""
+    with app.app_context():
+        from src.utils.extensions import db
+        from src.services.auth_service import hash_password
+        user_b = User(
+            username="Victim2",
+            surname="User",
+            email="victim2@example.com",
+            password_hash=hash_password("Original1!"),
+            is_verified=True,
+        )
+        db.session.add(user_b)
+        db.session.commit()
+        token_b = generate_jwt(
+            user_b.id, purpose="password_reset"
+        )
+
+    # Login como usuario A
+    client.post("/auth/login", data={
+        "email": verified_user["email"],
+        "password": verified_user["password"],
+    })
+
+    resp = client.post(
+        f"/auth/reset-password/{token_b}",
+        data={
+            "password": "Hacked123!",
+            "confirm_password": "Hacked123!",
+        },
+        follow_redirects=True,
+    )
+    assert "Acci" in resp.data.decode("utf-8")
+    assert "no permitida" in resp.data.decode("utf-8")
+
+    # La contraseña de B no cambió
+    from src.services.auth_service import check_password
+    with app.app_context():
+        user_b = User.query.filter_by(
+            email="victim2@example.com"
+        ).first()
+        assert check_password(user_b.password_hash, "Original1!")
+
+
 # ── Google OAuth ────────────────────────────────────
 
 def test_google_login_redirects(client):
