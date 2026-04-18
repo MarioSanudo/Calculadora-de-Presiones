@@ -47,10 +47,12 @@
                             hx-swap="outerHTML"
                             hx-confirm="¿Borrar este análisis?"
                             hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
-                            class="text-[#A8A5A0] hover:text-[#DC2626]
-                                   transition-colors cursor-pointer"
+                            class="font-bold text-xl text-red-500
+                                   hover:text-red-600 leading-none
+                                   transition-colors cursor-pointer
+                                   px-1"
                             title="Borrar análisis">
-                            &#x1F5D1;
+                            &times;
                         </button>
                     </div>
                 </div>

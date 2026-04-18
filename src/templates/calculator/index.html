@@ -3,316 +3,854 @@
 {% block title %}Calculadora de presion{% endblock %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto">
+<div class="max-w-3xl mx-auto">
+
+    <!-- Header -->
+    <div class="mb-6 flex items-end justify-between
+                border-b border-line pb-5">
+        <div>
+            <div class="font-mono text-xs text-mute
+                        uppercase tracking-widest">
+                · Calculadora
+            </div>
+            <h1 class="font-display font-extrabold text-ink
+                       text-3xl sm:text-4xl tracking-tight mt-1">
+                Presión exacta, ahora.
+            </h1>
+        </div>
+    </div>
 
     <!-- Formulario -->
-    <div>
-        <h1 class="text-3xl font-bold text-[#1A1A18] mb-6
-                    font-display">
-            Calculadora de presión
-        </h1>
+    <form id="calc-form"
+          hx-post="{{ url_for('main.calcular_presion') }}"
+          hx-target="#resultado"
+          hx-swap="innerHTML"
+          class="space-y-6">
 
-        <form id="calc-form"
-              hx-post="{{ url_for('main.calcular_presion') }}"
-              hx-target="#resultado"
-              hx-swap="innerHTML"
-              class="bg-white rounded-2xl border
-                     border-[#E5E3DF] p-6 space-y-5">
+        <!-- CSRF -->
+        <input type="hidden"
+               name="csrf_token"
+               value="{{ csrf_token() }}">
 
-            <!-- CSRF -->
-            <input type="hidden"
-                   name="csrf_token"
-                   value="{{ csrf_token() }}">
-
-            <!-- Modalidad -->
-            <div>
-                <label class="block text-sm font-medium
-                              text-[#1A1A18] mb-1">
-                    Modalidad
-                </label>
-                <select name="ride_style"
-                        id="ride_style"
-                        class="w-full border border-[#E5E3DF]
-                               rounded-xl px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2
-                               focus:ring-[#F25C05]/20
-                               focus:border-[#F25C05]
-                               transition-colors">
-                    <option value="RIDE_STYLE_ROAD">Carretera</option>
-                    <option value="RIDE_STYLE_GRAVEL">Gravel</option>
-                </select>
-            </div>
-
-            <!-- Peso ciclista / bici -->
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium
-                                  text-[#1A1A18] mb-1">
-                        Peso ciclista (kg)
-                    </label>
-                    <input type="number"
-                           name="rider_weight"
-                           id="rider_weight"
-                           step="0.1" min="20" max="200"
-                           placeholder="70"
-                           class="w-full border border-[#E5E3DF]
-                                  rounded-xl px-4 py-3 text-sm
-                                  focus:outline-none focus:ring-2
-                                  focus:ring-[#F25C05]/20
-                                  focus:border-[#F25C05]
-                                  transition-colors font-mono">
+        <!-- PASO 01 — Ciclista & bici -->
+        <section class="bg-white border border-line
+                        rounded-2xl overflow-hidden">
+            <header class="px-5 py-3 border-b border-line
+                           flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="font-mono text-[11px] text-orange
+                                 uppercase tracking-widest">
+                        Paso 01
+                    </span>
+                    <span class="font-display font-bold
+                                 text-ink text-lg">
+                        Ciclista &amp; bici
+                    </span>
                 </div>
+            </header>
+
+            <div class="p-5 space-y-6">
+
+                <!-- Modalidad -->
                 <div>
-                    <label class="block text-sm font-medium
-                                  text-[#1A1A18] mb-1">
-                        Peso bici (kg)
-                    </label>
-                    <input type="number"
-                           name="bike_weight"
-                           id="bike_weight"
-                           step="0.1" min="1" max="25"
-                           class="w-full border border-[#E5E3DF]
-                                  rounded-xl px-4 py-3 text-sm
-                                  focus:outline-none focus:ring-2
-                                  focus:ring-[#F25C05]/20
-                                  focus:border-[#F25C05]
-                                  transition-colors font-mono">
+                    <div class="flex items-baseline justify-between
+                                mb-2">
+                        <label class="text-sm font-medium text-ink">
+                            Modalidad
+                        </label>
+                        <span class="text-[11px] font-mono text-mute">
+                            ride_style
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2"
+                         data-toggle="ride_style"
+                         data-target="ride_style">
+                        <button type="button"
+                                data-val="RIDE_STYLE_ROAD"
+                                aria-pressed="true"
+                                class="tcard text-left p-3
+                                       rounded-xl border border-line
+                                       bg-paper hover:border-ink
+                                       transition-colors">
+                            <div class="flex items-center
+                                        justify-between">
+                                <svg class="w-5 h-5"
+                                     viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor"
+                                     stroke-width="1.5">
+                                    <circle cx="12" cy="12" r="8"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                <span class="font-mono text-[10px]
+                                             text-mute">
+                                    23–32c
+                                </span>
+                            </div>
+                            <div class="font-display font-bold
+                                        text-base mt-2">
+                                Carretera
+                            </div>
+                        </button>
+                        <button type="button"
+                                data-val="RIDE_STYLE_GRAVEL"
+                                aria-pressed="false"
+                                class="tcard text-left p-3
+                                       rounded-xl border border-line
+                                       bg-paper hover:border-ink
+                                       transition-colors">
+                            <div class="flex items-center
+                                        justify-between">
+                                <svg class="w-5 h-5"
+                                     viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor"
+                                     stroke-width="1.5">
+                                    <circle cx="12" cy="12" r="8"/>
+                                    <circle cx="12" cy="12" r="4"/>
+                                    <path d="M4 12h1M19 12h1
+                                             M12 4v1M12 19v1"/>
+                                </svg>
+                                <span class="font-mono text-[10px]
+                                             text-mute">
+                                    35–50c
+                                </span>
+                            </div>
+                            <div class="font-display font-bold
+                                        text-base mt-2">
+                                Gravel
+                            </div>
+                        </button>
+                    </div>
+                    <input type="hidden"
+                           name="ride_style"
+                           id="ride_style"
+                           value="RIDE_STYLE_ROAD">
                 </div>
-            </div>
 
-            <!-- Ancho cubiertas delantera / trasera -->
-            <div class="grid grid-cols-2 gap-4">
+                <!-- Peso ciclista / bici -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label for="rider_weight"
+                                   class="text-sm font-medium
+                                          text-ink">
+                                Peso ciclista
+                            </label>
+                            <span class="text-[11px] font-mono
+                                         text-mute">
+                                kg
+                            </span>
+                        </div>
+                        <div class="stepper flex items-stretch
+                                    bg-paper border border-line
+                                    rounded-xl"
+                             data-stepper="rider_weight"
+                             data-step="0.5">
+                            <button type="button"
+                                    class="step-down px-4 text-lg
+                                           text-ink hover:bg-line
+                                           transition-colors">
+                                −
+                            </button>
+                            <input type="number"
+                                   name="rider_weight"
+                                   id="rider_weight"
+                                   step="0.1" min="20" max="200"
+                                   placeholder="70"
+                                   class="flex-1 bg-transparent
+                                          text-center font-mono
+                                          font-medium text-xl py-2
+                                          focus:outline-none">
+                            <button type="button"
+                                    class="step-up px-4 text-lg
+                                           text-ink hover:bg-line
+                                           transition-colors">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label for="bike_weight"
+                                   class="text-sm font-medium
+                                          text-ink">
+                                Peso bici
+                            </label>
+                            <span class="text-[11px] font-mono
+                                         text-mute">
+                                kg
+                            </span>
+                        </div>
+                        <div class="stepper flex items-stretch
+                                    bg-paper border border-line
+                                    rounded-xl"
+                             data-stepper="bike_weight"
+                             data-step="0.1">
+                            <button type="button"
+                                    class="step-down px-4 text-lg
+                                           text-ink hover:bg-line
+                                           transition-colors">
+                                −
+                            </button>
+                            <input type="number"
+                                   name="bike_weight"
+                                   id="bike_weight"
+                                   step="0.1" min="1" max="25"
+                                   class="flex-1 bg-transparent
+                                          text-center font-mono
+                                          font-medium text-xl py-2
+                                          focus:outline-none">
+                            <button type="button"
+                                    class="step-up px-4 text-lg
+                                           text-ink hover:bg-line
+                                           transition-colors">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PASO 02 — Setup de la bici -->
+        <section class="bg-white border border-line
+                        rounded-2xl overflow-hidden">
+            <header class="px-5 py-3 border-b border-line
+                           flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="font-mono text-[11px] text-orange
+                                 uppercase tracking-widest">
+                        Paso 02
+                    </span>
+                    <span class="font-display font-bold
+                                 text-ink text-lg">
+                        Setup de la bici
+                    </span>
+                </div>
+            </header>
+
+            <div class="p-5 space-y-6">
+
+                <!-- Anchura cubiertas -->
+                <div class="grid sm:grid-cols-2 gap-5">
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label for="tire_width_front"
+                                   class="text-sm font-medium
+                                          text-ink">
+                                Cubierta delantera
+                            </label>
+                            <span class="font-mono text-base
+                                         text-ink">
+                                <b id="tw-front-val">28</b>
+                                <span class="text-mute text-xs">
+                                    mm
+                                </span>
+                            </span>
+                        </div>
+                        <input type="range"
+                               name="tire_width_front"
+                               id="tire_width_front"
+                               step="1" min="18" max="65" value="28"
+                               data-readout="tw-front-val"
+                               class="w-full accent-ink">
+                        <div class="flex justify-between
+                                    text-[10px] font-mono
+                                    text-mute mt-1">
+                            <span>18</span><span>65</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label for="tire_width_rear"
+                                   class="text-sm font-medium
+                                          text-ink">
+                                Cubierta trasera
+                            </label>
+                            <span class="font-mono text-base
+                                         text-ink">
+                                <b id="tw-rear-val">30</b>
+                                <span class="text-mute text-xs">
+                                    mm
+                                </span>
+                            </span>
+                        </div>
+                        <input type="range"
+                               name="tire_width_rear"
+                               id="tire_width_rear"
+                               step="1" min="18" max="65" value="30"
+                               data-readout="tw-rear-val"
+                               class="w-full accent-ink">
+                        <div class="flex justify-between
+                                    text-[10px] font-mono
+                                    text-mute mt-1">
+                            <span>18</span><span>65</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anchura aro / Diámetro rueda -->
+                <div class="grid sm:grid-cols-2 gap-5">
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label for="inner_rim_width"
+                                   class="text-sm font-medium
+                                          text-ink">
+                                Anchura interior del aro
+                            </label>
+                            <span class="text-[11px] font-mono
+                                         text-mute">
+                                mm
+                            </span>
+                        </div>
+                        <div class="stepper flex items-stretch
+                                    bg-paper border border-line
+                                    rounded-xl"
+                             data-stepper="inner_rim_width"
+                             data-step="1">
+                            <button type="button"
+                                    class="step-down px-4 text-lg
+                                           text-ink hover:bg-line
+                                           transition-colors">
+                                −
+                            </button>
+                            <input type="number"
+                                   name="inner_rim_width"
+                                   id="inner_rim_width"
+                                   step="1" min="15" max="50"
+                                   class="flex-1 bg-transparent
+                                          text-center font-mono
+                                          font-medium text-xl py-2
+                                          focus:outline-none">
+                            <button type="button"
+                                    class="step-up px-4 text-lg
+                                           text-ink hover:bg-line
+                                           transition-colors">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label class="text-sm font-medium
+                                          text-ink">
+                                Diámetro de rueda
+                            </label>
+                            <span class="text-[11px] font-mono
+                                         text-mute">
+                                wheel_diameter
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2"
+                             data-toggle="wheel_diameter"
+                             data-target="wheel_diameter">
+                            <button type="button"
+                                    data-val="622"
+                                    aria-pressed="true"
+                                    class="tcard p-3 rounded-xl
+                                           border border-line
+                                           bg-paper hover:border-ink
+                                           transition-colors
+                                           text-left">
+                                <div class="font-display font-bold
+                                            text-ink">
+                                    700c
+                                </div>
+                                <div class="font-mono text-[10px]
+                                            text-mute mt-0.5">
+                                    622 mm
+                                </div>
+                            </button>
+                            <button type="button"
+                                    data-val="584"
+                                    aria-pressed="false"
+                                    class="tcard p-3 rounded-xl
+                                           border border-line
+                                           bg-paper hover:border-ink
+                                           transition-colors
+                                           text-left">
+                                <div class="font-display font-bold
+                                            text-ink">
+                                    650b
+                                </div>
+                                <div class="font-mono text-[10px]
+                                            text-mute mt-0.5">
+                                    584 mm
+                                </div>
+                            </button>
+                        </div>
+                        <input type="hidden"
+                               name="wheel_diameter"
+                               id="wheel_diameter"
+                               value="622">
+                    </div>
+                </div>
+
+                <!-- Sistema de cubierta -->
                 <div>
-                    <label class="block text-sm font-medium
-                                  text-[#1A1A18] mb-1">
-                        Cubierta delantera (mm)
-                    </label>
-                    <input type="number"
-                           name="tire_width_front"
-                           id="tire_width_front"
-                           step="1" min="18" max="65"
-                           class="w-full border border-[#E5E3DF]
-                                  rounded-xl px-4 py-3 text-sm
-                                  focus:outline-none focus:ring-2
-                                  focus:ring-[#F25C05]/20
-                                  focus:border-[#F25C05]
-                                  transition-colors font-mono">
+                    <div class="flex items-baseline
+                                justify-between mb-2">
+                        <label class="text-sm font-medium text-ink">
+                            Sistema de cubierta
+                        </label>
+                        <span class="text-[11px] font-mono text-mute">
+                            rim_type
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4
+                                gap-2"
+                         data-toggle="rim_type"
+                         data-target="rim_type">
+                        <button type="button"
+                                data-val="RIM_TYPE_TUBES"
+                                aria-pressed="false"
+                                class="tcard text-left p-3
+                                       rounded-xl border border-line
+                                       bg-paper hover:border-ink
+                                       transition-colors">
+                            <svg class="w-5 h-5 mb-2"
+                                 viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5">
+                                <circle cx="12" cy="12" r="8"/>
+                                <path d="M4 12h16"/>
+                            </svg>
+                            <div class="font-display font-bold
+                                        text-sm">
+                                Cámara
+                            </div>
+                            <div class="font-mono text-[10px]
+                                        text-mute mt-0.5">
+                                Butilo / látex
+                            </div>
+                        </button>
+                        <button type="button"
+                                data-val="RIM_TYPE_TUBELESS_CROCHET"
+                                aria-pressed="true"
+                                class="tcard text-left p-3
+                                       rounded-xl border border-line
+                                       bg-paper hover:border-ink
+                                       transition-colors">
+                            <svg class="w-5 h-5 mb-2"
+                                 viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5">
+                                <circle cx="12" cy="12" r="8"/>
+                                <path d="M8 8l8 8"/>
+                            </svg>
+                            <div class="font-display font-bold
+                                        text-sm">
+                                Tubeless gancho
+                            </div>
+                            <div class="font-mono text-[10px]
+                                        text-mute mt-0.5">
+                                Estándar
+                            </div>
+                        </button>
+                        <button type="button"
+                                data-val="RIM_TYPE_TUBELESS_STRAIGHT"
+                                aria-pressed="false"
+                                class="tcard text-left p-3
+                                       rounded-xl border border-line
+                                       bg-paper hover:border-ink
+                                       transition-colors">
+                            <svg class="w-5 h-5 mb-2"
+                                 viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5">
+                                <circle cx="12" cy="12" r="8"/>
+                                <path d="M8 16l8-8"/>
+                            </svg>
+                            <div class="font-display font-bold
+                                        text-sm">
+                                Hookless
+                            </div>
+                            <div class="font-mono text-[10px]
+                                        text-mute mt-0.5">
+                                Max 5.0 bar
+                            </div>
+                        </button>
+                        <button type="button"
+                                data-val="RIM_TYPE_TUBULAR"
+                                aria-pressed="false"
+                                class="tcard text-left p-3
+                                       rounded-xl border border-line
+                                       bg-paper hover:border-ink
+                                       transition-colors">
+                            <svg class="w-5 h-5 mb-2"
+                                 viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5">
+                                <circle cx="12" cy="12" r="8"/>
+                                <circle cx="12" cy="12" r="5"/>
+                            </svg>
+                            <div class="font-display font-bold
+                                        text-sm">
+                                Tubular
+                            </div>
+                            <div class="font-mono text-[10px]
+                                        text-mute mt-0.5">
+                                Pegado
+                            </div>
+                        </button>
+                    </div>
+                    <input type="hidden"
+                           name="rim_type"
+                           id="rim_type"
+                           value="RIM_TYPE_TUBELESS_CROCHET">
                 </div>
+
+                <!-- Carcasa / Marca -->
+                <div class="grid sm:grid-cols-2 gap-5">
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label class="text-sm font-medium
+                                          text-ink">
+                                Carcasa
+                            </label>
+                            <span class="text-[11px] font-mono
+                                         text-mute">
+                                tire_casing
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-4 gap-1
+                                    bg-paper border border-line
+                                    rounded-xl p-1"
+                             data-toggle="tire_casing"
+                             data-target="tire_casing"
+                             data-variant="seg">
+                            <button type="button"
+                                    data-val="TIRE_CASING_THIN"
+                                    aria-pressed="false"
+                                    class="tseg text-center p-2
+                                           rounded-lg
+                                           text-mute
+                                           hover:bg-white
+                                           transition-colors">
+                                <div class="font-medium text-xs">
+                                    Ligera
+                                </div>
+                            </button>
+                            <button type="button"
+                                    data-val="TIRE_CASING_STANDARD"
+                                    aria-pressed="true"
+                                    class="tseg text-center p-2
+                                           rounded-lg
+                                           text-mute
+                                           hover:bg-white
+                                           transition-colors">
+                                <div class="font-medium text-xs">
+                                    Estándar
+                                </div>
+                            </button>
+                            <button type="button"
+                                    data-val="TIRE_CASING_REINFORCED"
+                                    aria-pressed="false"
+                                    class="tseg text-center p-2
+                                           rounded-lg
+                                           text-mute
+                                           hover:bg-white
+                                           transition-colors">
+                                <div class="font-medium text-xs">
+                                    Reforz.
+                                </div>
+                            </button>
+                            <button type="button"
+                                    data-val="TIRE_CASING_DOUBLE"
+                                    aria-pressed="false"
+                                    class="tseg text-center p-2
+                                           rounded-lg
+                                           text-mute
+                                           hover:bg-white
+                                           transition-colors">
+                                <div class="font-medium text-xs">
+                                    DH
+                                </div>
+                            </button>
+                        </div>
+                        <input type="hidden"
+                               name="tire_casing"
+                               id="tire_casing"
+                               value="TIRE_CASING_STANDARD">
+                    </div>
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label class="text-sm font-medium
+                                          text-ink">
+                                Marca de cubierta
+                            </label>
+                            <span class="text-[11px] font-mono
+                                         text-mute">
+                                tire_brand
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-1
+                                    bg-paper border border-line
+                                    rounded-xl p-1"
+                             data-toggle="tire_brand"
+                             data-target="tire_brand"
+                             data-variant="seg">
+                            <button type="button"
+                                    data-val="TIRE_BRAND_GENERAL"
+                                    aria-pressed="true"
+                                    class="tseg text-center p-2
+                                           rounded-lg
+                                           text-mute
+                                           hover:bg-white
+                                           transition-colors">
+                                <div class="font-medium text-xs">
+                                    General
+                                </div>
+                            </button>
+                            <button type="button"
+                                    data-val="TIRE_BRAND_VITTORIA"
+                                    aria-pressed="false"
+                                    class="tseg text-center p-2
+                                           rounded-lg
+                                           text-mute
+                                           hover:bg-white
+                                           transition-colors">
+                                <div class="font-medium text-xs">
+                                    Vittoria
+                                </div>
+                            </button>
+                            <button type="button"
+                                    data-val="TIRE_BRAND_SCHWALBE"
+                                    aria-pressed="false"
+                                    class="tseg text-center p-2
+                                           rounded-lg
+                                           text-mute
+                                           hover:bg-white
+                                           transition-colors">
+                                <div class="font-medium text-xs">
+                                    Schwalbe
+                                </div>
+                            </button>
+                        </div>
+                        <input type="hidden"
+                               name="tire_brand"
+                               id="tire_brand"
+                               value="TIRE_BRAND_GENERAL">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PASO 03 — Condiciones -->
+        <section class="bg-white border border-line
+                        rounded-2xl overflow-hidden">
+            <header class="px-5 py-3 border-b border-line
+                           flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="font-mono text-[11px] text-orange
+                                 uppercase tracking-widest">
+                        Paso 03
+                    </span>
+                    <span class="font-display font-bold
+                                 text-ink text-lg">
+                        Condiciones
+                    </span>
+                </div>
+            </header>
+
+            <div class="p-5 space-y-6">
+
+                <!-- Superficie -->
                 <div>
-                    <label class="block text-sm font-medium
-                                  text-[#1A1A18] mb-1">
-                        Cubierta trasera (mm)
-                    </label>
-                    <input type="number"
-                           name="tire_width_rear"
-                           id="tire_width_rear"
-                           step="1" min="18" max="65"
-                           class="w-full border border-[#E5E3DF]
-                                  rounded-xl px-4 py-3 text-sm
-                                  focus:outline-none focus:ring-2
-                                  focus:ring-[#F25C05]/20
-                                  focus:border-[#F25C05]
-                                  transition-colors font-mono">
+                    <div class="flex items-baseline
+                                justify-between mb-2">
+                        <label class="text-sm font-medium text-ink">
+                            Superficie
+                        </label>
+                        <span class="text-[11px] font-mono text-mute">
+                            surface
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2"
+                         data-toggle="surface"
+                         data-target="surface">
+                        <button type="button"
+                                data-val="SURFACE_DRY"
+                                aria-pressed="true"
+                                class="tcard text-left p-3
+                                       rounded-xl border border-line
+                                       bg-paper hover:border-ink
+                                       transition-colors
+                                       flex items-center gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0"
+                                 viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5">
+                                <path d="M4 18h16M6 14h12
+                                         M8 10h8"/>
+                            </svg>
+                            <div>
+                                <div class="font-display font-bold
+                                            text-sm">
+                                    Seco
+                                </div>
+                                <div class="font-mono text-[10px]
+                                            text-mute">
+                                    Asfalto
+                                </div>
+                            </div>
+                        </button>
+                        <button type="button"
+                                data-val="SURFACE_WET"
+                                aria-pressed="false"
+                                class="tcard text-left p-3
+                                       rounded-xl border border-line
+                                       bg-paper hover:border-ink
+                                       transition-colors
+                                       flex items-center gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0"
+                                 viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5">
+                                <path d="M7 4c0 5-5 7-5 10a5 5 0
+                                         0010 0c0-3-5-5-5-10z
+                                         M17 3c0 3-3 4-3 6a3 3 0
+                                         006 0c0-2-3-3-3-6z"/>
+                            </svg>
+                            <div>
+                                <div class="font-display font-bold
+                                            text-sm">
+                                    Mojado
+                                </div>
+                                <div class="font-mono text-[10px]
+                                            text-mute">
+                                    Lluvia
+                                </div>
+                            </div>
+                        </button>
+                        <button type="button"
+                                data-val="SURFACE_SNOW"
+                                aria-pressed="false"
+                                class="tcard text-left p-3
+                                       rounded-xl border border-line
+                                       bg-paper hover:border-ink
+                                       transition-colors
+                                       flex items-center gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0"
+                                 viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5">
+                                <path d="M12 2v20M4 6l16 12
+                                         M4 18L20 6M2 12h20"/>
+                            </svg>
+                            <div>
+                                <div class="font-display font-bold
+                                            text-sm">
+                                    Nieve
+                                </div>
+                                <div class="font-mono text-[10px]
+                                            text-mute">
+                                    Suelto
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <input type="hidden"
+                           name="surface"
+                           id="surface"
+                           value="SURFACE_DRY">
                 </div>
-            </div>
 
-            <!-- Anchura interior aro -->
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium
-                                  text-[#1A1A18] mb-1">
-                        Anchura interior aro (mm)
-                    </label>
-                    <input type="number"
-                           name="inner_rim_width"
-                           id="inner_rim_width"
-                           step="1" min="15" max="50"
-                           class="w-full border border-[#E5E3DF]
-                                  rounded-xl px-4 py-3 text-sm
-                                  focus:outline-none focus:ring-2
-                                  focus:ring-[#F25C05]/20
-                                  focus:border-[#F25C05]
-                                  transition-colors font-mono">
+                <!-- Altitud / Temperatura -->
+                <div class="grid sm:grid-cols-2 gap-5">
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label for="altitude"
+                                   class="text-sm font-medium
+                                          text-ink">
+                                Altitud media
+                            </label>
+                            <span class="font-mono text-base
+                                         text-ink">
+                                <b id="alt-val">0</b>
+                                <span class="text-mute text-xs">
+                                    m
+                                </span>
+                            </span>
+                        </div>
+                        <input type="range"
+                               name="altitude"
+                               id="altitude"
+                               step="1" min="0" max="4500"
+                               value="0"
+                               data-readout="alt-val"
+                               class="w-full accent-ink">
+                        <div class="flex justify-between
+                                    text-[10px] font-mono
+                                    text-mute mt-1">
+                            <span>0</span><span>4500</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-baseline
+                                    justify-between mb-2">
+                            <label for="temp_exterior"
+                                   class="text-sm font-medium
+                                          text-ink">
+                                Temperatura exterior
+                            </label>
+                            <span class="font-mono text-base
+                                         text-ink">
+                                <b id="temp-val">20</b>
+                                <span class="text-mute text-xs">
+                                    °C
+                                </span>
+                            </span>
+                        </div>
+                        <input type="range"
+                               name="temp_exterior"
+                               id="temp_exterior"
+                               step="1" min="-20" max="50"
+                               value="20"
+                               data-readout="temp-val"
+                               class="w-full accent-ink">
+                        <div class="flex justify-between
+                                    text-[10px] font-mono
+                                    text-mute mt-1">
+                            <span>−20</span><span>50</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Diámetro rueda -->
-            <div>
-                <label class="block text-sm font-medium
-                              text-[#1A1A18] mb-1">
-                    Diametro de rueda
-                </label>
-                <select name="wheel_diameter"
-                        id="wheel_diameter"
-                        class="w-full border border-[#E5E3DF]
-                               rounded-xl px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2
-                               focus:ring-[#F25C05]/20
-                               focus:border-[#F25C05]
-                               transition-colors">
-                    <option value="622">
-                        700c (622mm)
-                    </option>
-                    <option value="584">
-                        650b (584 mm)
-                    </option>
-                </select>
             </div>
+        </section>
 
-            <!-- Tipo de aro -->
-            <div>
-                <label class="block text-sm font-medium
-                              text-[#1A1A18] mb-1">
-                    Sistema de cubierta
-                </label>
-                <select name="rim_type"
-                        id="rim_type"
-                        class="w-full border border-[#E5E3DF]
-                               rounded-xl px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2
-                               focus:ring-[#F25C05]/20
-                               focus:border-[#F25C05]
-                               transition-colors">
-                    <option value="RIM_TYPE_TUBES">
-                        Con cámara
-                    </option>
-                    <option value="RIM_TYPE_TUBELESS_CROCHET">
-                        Tubeless gancho
-                    </option>
-                    <option value="RIM_TYPE_TUBELESS_STRAIGHT">
-                        Tubeless hookless
-                    </option>
-                    <option value="RIM_TYPE_TUBULAR">
-                        Tubular
-                    </option>
-                </select>
-            </div>
-
-            <!-- Carcasa -->
-            <div>
-                <label class="block text-sm font-medium
-                              text-[#1A1A18] mb-1">
-                    Tipo de carcasa
-                </label>
-                <select name="tire_casing"
-                        id="tire_casing"
-                        class="w-full border border-[#E5E3DF]
-                               rounded-xl px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2
-                               focus:ring-[#F25C05]/20
-                               focus:border-[#F25C05]
-                               transition-colors">
-                    <option value="TIRE_CASING_THIN">Ligera</option>
-                    <option value="TIRE_CASING_STANDARD">Estándar</option>
-                    <option value="TIRE_CASING_REINFORCED">Reforzada</option>
-                    <option value="TIRE_CASING_DOUBLE">Doble ply / DH</option>
-                </select>
-            </div>
-
-            <!-- Marca de cubierta -->
-            <div>
-                <label class="block text-sm font-medium
-                              text-[#1A1A18] mb-1">
-                    Marca de cubierta
-                </label>
-                <select name="tire_brand"
-                        id="tire_brand"
-                        class="w-full border border-[#E5E3DF]
-                               rounded-xl px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2
-                               focus:ring-[#F25C05]/20
-                               focus:border-[#F25C05]
-                               transition-colors">
-                    <option value="TIRE_BRAND_GENERAL">Pirelli, Continental, Otras marcas...</option>
-                    <option value="TIRE_BRAND_VITTORIA">Vittoria</option>
-                    <option value="TIRE_BRAND_SCHWALBE">Schwalbe</option>
-                </select>
-            </div>
-
-            <!-- Superficie -->
-            <div>
-                <label class="block text-sm font-medium
-                              text-[#1A1A18] mb-1">
-                    Superficie
-                </label>
-                <select name="surface"
-                        class="w-full border border-[#E5E3DF]
-                               rounded-xl px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2
-                               focus:ring-[#F25C05]/20
-                               focus:border-[#F25C05]
-                               transition-colors">
-                    <option value="SURFACE_DRY">Seco</option>
-                    <option value="SURFACE_WET">Mojado</option>
-                    <option value="SURFACE_SNOW">Nieve</option>
-                </select>
-            </div>
-
-            <!-- Altitud / Temperatura -->
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium
-                                  text-[#1A1A18] mb-1">
-                        Altitud media (m)
-                    </label>
-                    <input type="number"
-                           name="altitude"
-                           id="altitude"
-                           step="1" min="0" max="4500"
-                           value="0"
-                           placeholder="0"
-                           class="w-full border border-[#E5E3DF]
-                                  rounded-xl px-4 py-3 text-sm
-                                  focus:outline-none focus:ring-2
-                                  focus:ring-[#F25C05]/20
-                                  focus:border-[#F25C05]
-                                  transition-colors font-mono">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium
-                                  text-[#1A1A18] mb-1">
-                        Temperatura exterior (°C)
-                    </label>
-                    <input type="number"
-                           name="temp_exterior"
-                           id="temp_exterior"
-                           step="1" min="-20" max="50"
-                           value="20"
-                           placeholder="20"
-                           class="w-full border border-[#E5E3DF]
-                                  rounded-xl px-4 py-3 text-sm
-                                  focus:outline-none focus:ring-2
-                                  focus:ring-[#F25C05]/20
-                                  focus:border-[#F25C05]
-                                  transition-colors font-mono">
-                </div>
-            </div>
-
-            <!-- Guardar en historial -->
-            <div class="flex items-center gap-2">
+        <!-- Acciones finales -->
+        <div class="flex flex-wrap gap-3 items-center pt-2">
+            <label class="flex items-center gap-2 text-sm
+                          text-mute select-none cursor-pointer">
                 <input type="checkbox"
                        name="save"
                        id="save"
                        value="1"
-                       class="w-4 h-4 accent-[#F25C05]
-                              cursor-pointer">
-                <label for="save"
-                       class="text-sm text-[#6B6860]
-                              cursor-pointer select-none">
-                    Guardar en historial
-                </label>
-            </div>
-
+                       class="w-4 h-4 accent-orange cursor-pointer">
+                Guardar en historial
+            </label>
             <button type="submit"
-                    class="w-full bg-[#F25C05] text-white py-3
-                           rounded-full hover:bg-[#D94F04]
-                           font-semibold cursor-pointer
-                           text-base transition-colors">
+                    class="ml-auto rounded-full bg-[#F25C05]
+                           hover:bg-orange-dark text-white
+                           font-semibold px-6 py-3
+                           transition-colors cursor-pointer">
                 Calcular presión
             </button>
+        </div>
 
-        </form>
-    </div>
+    </form>
 
     <!-- Resultado (HTMX swap target) -->
     <div id="resultado" class="mt-6">
@@ -342,6 +880,111 @@
         const selectModalidad = document.getElementById("ride_style");
         aplicarDefectos(selectModalidad.value);
         selectModalidad.addEventListener("change", (e) => aplicarDefectos(e.target.value));
+    });
+
+    // --- Helpers visuales: toggle cards, steppers y sliders ---
+
+    // Aplica estado visual a un botón en función de si está pulsado o no.
+    // Cards (tcard) pasan a fondo oscuro; segmentados (seg) a pill blanco.
+    function applyToggleVisual(group, btn, pressed) {
+        const isSeg = group.dataset.variant === "seg";
+        btn.setAttribute("aria-pressed", pressed ? "true" : "false");
+
+        if (isSeg) {
+            btn.classList.toggle("bg-white", pressed);
+            btn.classList.toggle("shadow-sm", pressed);
+            btn.classList.toggle("text-ink", pressed);
+            btn.classList.toggle("text-mute", !pressed);
+        } else {
+            btn.classList.toggle("bg-ink", pressed);
+            btn.classList.toggle("border-ink", pressed);
+            btn.classList.toggle("text-white", pressed);
+            btn.classList.toggle("bg-paper", !pressed);
+            btn.classList.toggle("text-ink", !pressed);
+            // Subtítulos font-mono en blanco cuando activo (legibles sobre ink)
+            btn.querySelectorAll(".font-mono").forEach(el => {
+                el.classList.toggle("text-white", pressed);
+                el.classList.toggle("text-mute", !pressed);
+            });
+        }
+    }
+
+    // Sincroniza el estado visual de un grupo al valor del hidden input
+    function syncToggleGroup(group) {
+        const hidden = document.getElementById(group.dataset.target);
+        if (!hidden) return;
+        group.querySelectorAll("button[data-val]").forEach(b => {
+            applyToggleVisual(group, b, b.dataset.val === hidden.value);
+        });
+    }
+
+    function syncAllToggleVisuals() {
+        document.querySelectorAll("[data-toggle]").forEach(syncToggleGroup);
+    }
+
+    // Lectura en vivo de los sliders (mm, m, °C)
+    function syncSliderReadouts() {
+        document.querySelectorAll("input[type=range][data-readout]").forEach(slider => {
+            const readout = document.getElementById(slider.dataset.readout);
+            if (readout) readout.textContent = slider.value;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        // Toggle cards / segmented pills
+        document.querySelectorAll("[data-toggle]").forEach(group => {
+            group.addEventListener("click", (e) => {
+                const btn = e.target.closest("button[data-val]");
+                if (!btn || btn.disabled) return;
+                const hidden = document.getElementById(group.dataset.target);
+                if (!hidden) return;
+                hidden.value = btn.dataset.val;
+                syncToggleGroup(group);
+                // ride_style dispara change → aplicarDefectos recalcula el resto
+                if (hidden.id === "ride_style") {
+                    hidden.dispatchEvent(new Event("change"));
+                    syncAllToggleVisuals();
+                    syncSliderReadouts();
+                }
+            });
+        });
+
+        // Steppers − / +
+        document.querySelectorAll("[data-stepper]").forEach(stepper => {
+            const input = document.getElementById(stepper.dataset.stepper);
+            if (!input) return;
+            const step = parseFloat(stepper.dataset.step || input.step || "1");
+            const minAttr = input.min;
+            const maxAttr = input.max;
+            const min = minAttr !== "" ? parseFloat(minAttr) : -Infinity;
+            const max = maxAttr !== "" ? parseFloat(maxAttr) : Infinity;
+            const clamp = v => Math.min(max, Math.max(min, v));
+            const fmt = v => Number.isInteger(step) ? v.toFixed(0) : v.toFixed(1);
+
+            stepper.querySelector(".step-down").addEventListener("click", () => {
+                const v = clamp(parseFloat(input.value || "0") - step);
+                input.value = fmt(v);
+                input.dispatchEvent(new Event("input", { bubbles: true }));
+            });
+            stepper.querySelector(".step-up").addEventListener("click", () => {
+                const v = clamp(parseFloat(input.value || "0") + step);
+                input.value = fmt(v);
+                input.dispatchEvent(new Event("input", { bubbles: true }));
+            });
+        });
+
+        // Sliders — readout en tiempo real
+        document.querySelectorAll("input[type=range][data-readout]").forEach(slider => {
+            slider.addEventListener("input", () => {
+                const readout = document.getElementById(slider.dataset.readout);
+                if (readout) readout.textContent = slider.value;
+            });
+        });
+
+        // Estado inicial tras aplicarDefectos (cargado arriba)
+        syncAllToggleVisuals();
+        syncSliderReadouts();
     });
 </script>
 
