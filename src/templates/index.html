@@ -16,7 +16,7 @@
                         uppercase tracking-widest mb-6">
                 <span class="w-1.5 h-1.5 rounded-full
                              bg-[#F25C05] animate-pulse"></span>
-                Presión · calculada, no estimada
+                Presión calculada, no inventada
             </div>
 
             <h1 class="font-display font-extrabold text-white
@@ -30,9 +30,9 @@
             <p class="text-[#A8A5A0] text-base sm:text-lg mt-6
                       max-w-xl leading-relaxed">
                 Fórmulas físicas con corrección de temperatura,
-                altitud, carcasa y ancho efectivo del aro.
-                Delantera y trasera, en bar y psi.
-                Sin tablas genéricas.
+                altitud, ancho efectivo del aro, peso del conjunto...
+                Presiones delantera y trasera, en bar y psi.
+                Sin tablas genéricas, automatizado y preciso para que obtengas la presión óptima en un click    .
             </p>
 
             <!-- CTAs -->
@@ -42,7 +42,9 @@
                        class="bg-[#F25C05] hover:bg-[#D94F04]
                               text-white font-semibold
                               px-7 py-3.5 rounded-full
-                              transition-colors text-base
+                              transition-colors transition-transform
+                              duration-150 text-base
+                              hover:scale-[1.02] active:scale-[0.98]
                               inline-flex items-center gap-2">
                         Calcular gratis
                         <span aria-hidden="true">→</span>
@@ -52,7 +54,9 @@
                        class="bg-[#F25C05] hover:bg-[#D94F04]
                               text-white font-semibold
                               px-7 py-3.5 rounded-full
-                              transition-colors text-base
+                              transition-colors transition-transform
+                              duration-150 text-base
+                              hover:scale-[1.02] active:scale-[0.98]
                               inline-flex items-center gap-2">
                         Calcular gratis
                         <span aria-hidden="true">→</span>
@@ -85,15 +89,15 @@
                         font-mono text-xs text-[#A8A5A0]">
                 <span>
                     <b class="text-white font-medium">Gratis</b>
-                    · sin registro para probar
+                     sin registro para probar
                 </span>
                 <span>
                     <b class="text-white font-medium">±0.05 bar</b>
-                    · precisión típica
+                     tolerancia precisión
                 </span>
                 <span>
                     <b class="text-white font-medium">12 variables</b>
-                    · en el modelo
+                     en el modelo
                 </span>
             </div>
         </div>
@@ -107,7 +111,7 @@
                 <div class="flex items-center justify-between
                             text-[11px] uppercase tracking-widest
                             text-[#A8A5A0]">
-                    <span>// muestra · carretera · 70 kg</span>
+                    <span>// muestra  carretera  70 kg</span>
                     <span class="flex items-center gap-1.5
                                  text-[#F25C05]">
                         <span class="w-1.5 h-1.5 rounded-full
@@ -128,7 +132,7 @@
                                     leading-none"
                              style="font-size:60px;
                                     letter-spacing:-0.03em">
-                            4.09
+                            <span id="hero-front-val">4.09</span>
                             <span class="font-mono text-[#F25C05]
                                          text-sm align-top ml-1">
                                 bar
@@ -149,7 +153,7 @@
                                     leading-none"
                              style="font-size:60px;
                                     letter-spacing:-0.03em">
-                            4.35
+                            <span id="hero-rear-val">4.35</span>
                             <span class="font-mono text-[#F25C05]
                                          text-sm align-top ml-1">
                                 bar
@@ -171,7 +175,9 @@
                     </div>
                     <div class="h-[3px] bg-white/10 rounded-full">
                         <div class="h-full bg-[#F25C05] rounded-full"
-                             style="width:92%"></div>
+                             style="width:0%;
+                                    animation: fill-bar 1.2s ease-out forwards;
+                                    animation-delay: 0.4s;"></div>
                     </div>
                 </div>
 
@@ -187,11 +193,11 @@
                     <div>
                         <div class="text-[#A8A5A0]">Carcasa</div>
                         <div class="text-white font-medium mt-0.5">
-                            Estándar · 120 TPI
+                            Estándar (120 TPI)
                         </div>
                     </div>
                     <div>
-                        <div class="text-[#A8A5A0]">Δ Temp</div>
+                        <div class="text-[#A8A5A0]">ΔTemp</div>
                         <div class="text-white font-medium mt-0.5">
                             +0.04 bar
                         </div>
@@ -207,19 +213,27 @@
 
 {% block content %}
 
-{# ── Estilo local: conectores discontinuos entre pasos ── #}
 <style>
-    .step-connector {
-        position: absolute; top: 28px;
-        left: calc(50% + 28px); right: calc(-50% + 28px);
-        height: 1px;
-        background-image: repeating-linear-gradient(
-            90deg, #D6D2C6 0 4px, transparent 4px 10px
-        );
+    @keyframes fill-bar {
+        from { width: 0%; }
+        to   { width: 92%; }
     }
-    @media (max-width: 767px) {
-        .step-connector { display: none; }
+
+    @keyframes fade-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
+
+    /* ocultas por defecto, visibles al entrar en viewport */
+    .card-step { opacity: 0; }
+
+    .card-step.visible {
+        animation: fade-up 0.5s ease-out forwards;
+    }
+
+    .card-step:nth-child(1).visible { animation-delay: 0s;    }
+    .card-step:nth-child(2).visible { animation-delay: 0.15s; }
+    .card-step:nth-child(3).visible { animation-delay: 0.30s; }
 </style>
 
 {# ── 2. CÓMO FUNCIONA ── 3 pasos con conectores #}
@@ -232,7 +246,7 @@
             <div class="md:col-span-7">
                 <div class="font-mono text-xs text-[#6B6860]
                             uppercase tracking-widest mb-3">
-                    · Método
+                     Método
                 </div>
                 <h2 class="font-display font-extrabold text-[#1A1A18]
                            leading-[0.98] tracking-tight
@@ -252,7 +266,7 @@
 
             <!-- Paso 01 -->
             <div class="bg-white border border-[#E5E3DF]
-                        rounded-2xl p-6 relative">
+                        rounded-2xl p-6 relative card-step">
                 <div class="flex items-center justify-between
                             mb-5 relative">
                     <div class="w-14 h-14 rounded-full bg-[#1A1A18]
@@ -269,7 +283,7 @@
                               height="14" rx="2"/>
                         <path d="M7 10h10M7 14h6"/>
                     </svg>
-                    <span class="step-connector"></span>
+
                 </div>
                 <h3 class="font-display font-bold text-[#1A1A18]
                            text-2xl mb-2 leading-tight">
@@ -308,7 +322,7 @@
 
             <!-- Paso 02 -->
             <div class="bg-white border border-[#E5E3DF]
-                        rounded-2xl p-6 relative">
+                        rounded-2xl p-6 relative card-step">
                 <div class="flex items-center justify-between
                             mb-5 relative">
                     <div class="w-14 h-14 rounded-full bg-[#1A1A18]
@@ -328,7 +342,7 @@
                         <ellipse cx="12" cy="12" rx="10" ry="4"
                                  transform="rotate(-60 12 12)"/>
                     </svg>
-                    <span class="step-connector"></span>
+
                 </div>
                 <h3 class="font-display font-bold text-[#1A1A18]
                            text-2xl mb-2 leading-tight">
@@ -353,7 +367,7 @@
 
             <!-- Paso 03 — card oscuro -->
             <div class="bg-[#1A1A18] text-white rounded-2xl p-6
-                        relative">
+                        relative card-step">
                 <div class="flex items-center justify-between mb-5">
                     <div class="w-14 h-14 rounded-full bg-white/10
                                 text-white flex items-center
@@ -419,6 +433,173 @@
     </div>
 </section>
 
+{# ── 3. POR QUÉ NO UNA TABLA ── comparativa genérica vs Verneris #}
+<section class="-mx-4 bg-white px-4 py-20">
+    <div class="max-w-5xl mx-auto">
+
+        <!-- Header: título solo, toda la fuerza -->
+        <h2 class="font-display font-extrabold text-[#1A1A18]
+                   leading-[0.92] tracking-tight
+                   text-[56px] sm:text-[64px] mb-12">
+            Las tablas no saben qué<br>
+            temperatura hace hoy.
+        </h2>
+
+        <!-- Grid comparativo: 1 col mobile, 2 col desktop -->
+        <div class="grid md:grid-cols-2 gap-6">
+
+            <!-- CARD IZQUIERDA: tabla genérica -->
+            <div class="bg-[#F8F8F7] border border-[#E5E3DF]
+                        rounded-2xl overflow-hidden">
+
+                <!-- Header del card -->
+                <div class="flex justify-between items-center
+                            px-5 py-3 border-b border-[#E5E3DF]">
+                    <span class="font-mono text-[11px] uppercase
+                                 tracking-widest text-[#6B6860]">
+                        TABLA ESTÁTICA · GENÉRICA
+                    </span>
+                    <span class="bg-white border border-[#E5E3DF]
+                                 rounded-full px-3 py-1 font-mono
+                                 text-[11px] text-[#6B6860]">
+                        3 variables
+                    </span>
+                </div>
+
+                <!-- Fila 01 -->
+                <div class="border-b border-[#E5E3DF] px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#A8A5A0]
+                                 w-8 flex-shrink-0">01</span>
+                    <span class="text-sm text-[#6B6860] flex-1">
+                        Mira peso y ancho de cubierta.
+                    </span>
+                    <span class="text-[#A8A5A0] font-mono text-lg">—</span>
+                </div>
+
+                <!-- Fila 02 -->
+                <div class="border-b border-[#E5E3DF] px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#A8A5A0]
+                                 w-8 flex-shrink-0">02</span>
+                    <span class="text-sm text-[#6B6860] flex-1">
+                        Ignora carcasa y aro real.
+                    </span>
+                    <span class="text-[#EF4444] font-bold text-lg">×</span>
+                </div>
+
+                <!-- Fila 03 -->
+                <div class="border-b border-[#E5E3DF] px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#A8A5A0]
+                                 w-8 flex-shrink-0">03</span>
+                    <span class="text-sm text-[#6B6860] flex-1">
+                        Ignora temperatura y altitud.
+                    </span>
+                    <span class="text-[#EF4444] font-bold text-lg">×</span>
+                </div>
+
+                <!-- Fila 04 -->
+                <div class="border-b border-[#E5E3DF] px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#A8A5A0]
+                                 w-8 flex-shrink-0">04</span>
+                    <span class="text-sm text-[#6B6860] flex-1">
+                        Rango amplio: ±0.5 bar.
+                    </span>
+                    <span class="text-[#EF4444] font-bold text-lg">×</span>
+                </div>
+
+                <!-- Fila 05 -->
+                <div class="px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#A8A5A0]
+                                 w-8 flex-shrink-0">05</span>
+                    <span class="text-sm text-[#6B6860] flex-1">
+                        Redondea en saltos de 0.5.
+                    </span>
+                    <span class="text-[#EF4444] font-bold text-lg">×</span>
+                </div>
+
+            </div>
+
+            <!-- CARD DERECHA: Verneris -->
+            <div class="bg-[#1A1A18] rounded-2xl overflow-hidden">
+
+                <!-- Header del card -->
+                <div class="flex justify-between items-center
+                            px-5 py-3 border-b border-white/10">
+                    <span class="font-mono text-[11px] uppercase
+                                 tracking-widest text-[#F25C05]">
+                        VERNERIS · MODELO FÍSICO
+                    </span>
+                    <span class="bg-white/10 rounded-full px-3 py-1
+                                 font-mono text-[11px] text-[#A8A5A0]">
+                        12 variables
+                    </span>
+                </div>
+
+                <!-- Fila 01 -->
+                <div class="border-b border-white/10 px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#6B6860]
+                                 w-8 flex-shrink-0">01</span>
+                    <span class="text-sm text-white flex-1">
+                        Área toroidal real con aro efectivo.
+                    </span>
+                    <span class="text-[#F25C05] font-bold text-lg">✓</span>
+                </div>
+
+                <!-- Fila 02 -->
+                <div class="border-b border-white/10 px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#6B6860]
+                                 w-8 flex-shrink-0">02</span>
+                    <span class="text-sm text-white flex-1">
+                        Carcasa, marca y sistema de aro.
+                    </span>
+                    <span class="text-[#F25C05] font-bold text-lg">✓</span>
+                </div>
+
+                <!-- Fila 03 -->
+                <div class="border-b border-white/10 px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#6B6860]
+                                 w-8 flex-shrink-0">03</span>
+                    <span class="text-sm text-white flex-1">
+                        Ley del gas ideal por temperatura.
+                    </span>
+                    <span class="text-[#F25C05] font-bold text-lg">✓</span>
+                </div>
+
+                <!-- Fila 04 -->
+                <div class="border-b border-white/10 px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#6B6860]
+                                 w-8 flex-shrink-0">04</span>
+                    <span class="text-sm text-white flex-1">
+                        Fórmula barométrica por altitud.
+                    </span>
+                    <span class="text-[#F25C05] font-bold text-lg">✓</span>
+                </div>
+
+                <!-- Fila 05 -->
+                <div class="px-5 py-3
+                            flex items-center justify-between">
+                    <span class="font-mono text-[11px] text-[#6B6860]
+                                 w-8 flex-shrink-0">05</span>
+                    <span class="text-sm text-white flex-1">
+                        Resultado ±0.05 bar con desglose.
+                    </span>
+                    <span class="text-[#F25C05] font-bold text-lg">✓</span>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
 {# ── 3. IMAGEN INMERSIVA ── ancho completo con overlay #}
 <section class="-mx-4 relative h-72 overflow-hidden">
     <img src="https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=1200&q=80"
@@ -449,8 +630,7 @@
             <p class="text-[#6B6860] text-sm leading-relaxed mb-4">
                 Soy Mario, estudiante de ingeniería eléctrica y ciclista
                 amateur. Construyo Verneris en solitario, compaginándolo
-                con la carrera. Ahora también hago running, pero las
-                ruedas siguen siendo lo mío.
+                con la carrera.
             </p>
             <p class="text-[#6B6860] text-sm leading-relaxed mb-4">
                 Verneris nació de una frustración concreta: la presión
@@ -459,15 +639,10 @@
                 herramientas que existen están incompletas o en inglés.
                 Verneris es gratuita y está pensada para cualquier ciclista.
             </p>
-            <p class="text-[#6B6860] text-sm leading-relaxed mb-4">
-                No es una tabla estática. Está basado en formulaciones
-                físicas con correcciones propias de temperatura, altitud
-                y tipo de carcasa. Ingeniería aplicada al ciclismo.
-            </p>
             <p class="text-[#6B6860] text-sm leading-relaxed">
-                La ingeniería eléctrica abre otra dimensión.
+                La ingeniería eléctrica es mi rama profesional.
                 Verneris es el primero de una familia de productos
-                técnicos accesibles. Sin más detalle por ahora.
+                técnicos accesibles. Sin más detalle por ahora...
             </p>
         </div>
 
@@ -499,5 +674,46 @@
         Calcular ahora
     </a>
 </section>
+
+<script>
+    // Fade-up cards al entrar en viewport
+    const cards = document.querySelectorAll('.card-step');
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // solo una vez
+                }
+            });
+        },
+        { threshold: 0.15 }
+    );
+    cards.forEach(card => observer.observe(card));
+
+    // Counter-up en los números del panel hero
+    function animateValue(id, target, duration) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const steps = 40;
+        const stepTime = duration / steps;
+        let current = 0;
+
+        const timer = setInterval(() => {
+            current += target / steps;
+            if (current >= target) {
+                el.textContent = target.toFixed(2);
+                clearInterval(timer);
+            } else {
+                el.textContent = current.toFixed(2);
+            }
+        }, stepTime);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        animateValue('hero-front-val', 4.09, 800);
+        animateValue('hero-rear-val',  4.35, 800);
+    });
+</script>
 
 {% endblock %}
