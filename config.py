@@ -46,6 +46,19 @@ class DevelopmentConfig(Config):
     )
 
 
+class ProductionConfig(Config):
+    DEBUG=False
+
+    # Resend — producción
+    MAIL_SERVER = "smtp.resend.com"
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = "resend"
+    MAIL_PASSWORD = os.environ.get("RESEND_API_KEY")
+    MAIL_DEFAULT_SENDER = os.environ.get(
+        "MAIL_DEFAULT_SENDER", "noreply@verneris.com"
+    )
+
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
