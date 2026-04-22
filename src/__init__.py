@@ -84,4 +84,24 @@ def app_creation(config_class=None):
     app.register_blueprint(main_bp)
     app.register_blueprint(errors_bp)
 
+    # Reverse proxy (Railway / nginx): IP real del cliente para rate limit
+    if not app.debug:
+        from werkzeug.middleware.proxy_fix import ProxyFix
+        app.wsgi_app = ProxyFix(
+            app.wsgi_app, x_for=1, x_proto=1, x_host=1
+        )
+
+    @app.after_request
+    def security_headers(response):
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Referrer-Policy"] = (
+            "strict-origin-when-cross-origin"
+        )
+        if not app.debug:
+            response.headers["Strict-Transport-Security"] = (
+                "max-age=31536000; includeSubDomains"
+            )
+        return response
+
     return app
