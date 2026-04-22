@@ -471,3 +471,4 @@ def google_callback():
     login_user(user)
     flash("Cuenta creada con Google.", "success")
     return redirect("/")
+

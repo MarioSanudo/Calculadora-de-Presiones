@@ -10,6 +10,7 @@ from .utils.extensions import (
 from config import DevelopmentConfig
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
 import os
 
 logging.basicConfig(
@@ -20,8 +21,11 @@ logging.basicConfig(
 def app_creation(config_class=None):
     
     sentry_sdk.init(
-        dsn= os.environ.get("DSN"),
-        integrations=[FlaskIntegration()],  traces_sample_rate=0.2)
+        dsn=os.environ.get("DSN"),  #El de producción
+        integrations=[FlaskIntegration(), LoggingIntegration(
+                    level=logging.INFO,        # breadcrumbs desde INFO
+                    event_level=logging.ERROR)],  # eventos en Sentry desde ERROR  
+                    traces_sample_rate=0.2)
 
     app = Flask(__name__, template_folder="templates")
     app.config.from_object(config_class or DevelopmentConfig)
