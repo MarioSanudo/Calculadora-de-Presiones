@@ -57,7 +57,7 @@ class ProductionConfig(Config):
     MAIL_USERNAME = "resend"    
     MAIL_PASSWORD = os.environ.get("RESEND_API_KEY")
     MAIL_DEFAULT_SENDER = os.environ.get(
-        "MAIL_DEFAULT_SENDER", "noreply@verneris.com")
+        "MAIL_DEFAULT_SENDER", "noreply@verneris.es")
     
     SQLALCHEMY_DATABASE_URI=os.getenv("DATABASE_URL")
 
