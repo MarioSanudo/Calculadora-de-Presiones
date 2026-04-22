@@ -2,33 +2,47 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 import logging
+import os
 from flask import Flask
 from .utils.extensions import (
     db, migrate, login_manager,
     bcrypt, csrf, limiter, mail, oauth
 )
-from config import DevelopmentConfig
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
-import os
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(levelname)s %(name)s: %(message)s")
 
 
+def _get_config():
+    from config import (
+        DevelopmentConfig, ProductionConfig, TestingConfig
+    )
+    env = os.environ.get("FLASK_ENV", "development")
+    return {
+        "production": ProductionConfig,
+        "testing": TestingConfig,
+    }.get(env, DevelopmentConfig)
+
+
 def app_creation(config_class=None):
-    
-    sentry_sdk.init(
-        dsn=os.environ.get("DSN"),  #El de producción
-        integrations=[FlaskIntegration(), LoggingIntegration(
-                    level=logging.INFO,        # breadcrumbs desde INFO
-                    event_level=logging.ERROR)],  # eventos en Sentry desde ERROR  
-                    traces_sample_rate=0.2)
+    config_class = config_class or _get_config()
+
+    dsn = os.environ.get("DSN")
+    if dsn and os.environ.get("FLASK_ENV") == "production":
+        sentry_sdk.init(
+            dsn=dsn,
+            integrations=[FlaskIntegration(), LoggingIntegration(
+                        level=logging.INFO,        # breadcrumbs desde INFO
+                        event_level=logging.ERROR)],  # eventos en Sentry desde ERROR
+            traces_sample_rate=0.2,
+            environment="production")
 
     app = Flask(__name__, template_folder="templates")
-    app.config.from_object(config_class or DevelopmentConfig)
+    app.config.from_object(config_class)
 
     # Extensiones
     db.init_app(app)
