@@ -1,5 +1,5 @@
 import os
-import resend
+from datetime import timedelta
 from secrets import token_hex
 
 # Directorio raíz del proyecto
@@ -14,6 +14,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
+    PERMANENT_SESSION_LIFETIME = timedelta(days=7)
+    WTF_CSRF_TIME_LIMIT = 3600
 
     # Flask-Mail con Mailtrap si es desarrollo
     MAIL_SERVER = os.environ.get(
@@ -36,6 +38,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    SESSION_COOKIE_SECURE = False
     SQLALCHEMY_DATABASE_URI = (
         os.getenv("DATABASE_URL_DEVELOPMENT")
         or f"sqlite:///{DB_DEV_PATH}"
@@ -43,7 +46,9 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-    DEBUG=False
+    DEBUG = False
+    SESSION_COOKIE_SECURE = True
+    PREFERRED_URL_SCHEME = "https"
 
     # Resend — producción, utilizando SMPT como comunicación aunque predomine API ya esta configurado con flask-mail
     MAIL_SERVER = "smtp.resend.com"
