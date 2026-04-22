@@ -1,4 +1,5 @@
 import os
+import resend
 from secrets import token_hex
 
 # Directorio raíz del proyecto
@@ -28,11 +29,9 @@ class Config:
 
     # Google OAuth
     GOOGLE_CLIENT_ID = os.environ.get(
-        "GOOGLE_CLIENT_ID"
-    )
+        "GOOGLE_CLIENT_ID")
     GOOGLE_CLIENT_SECRET = os.environ.get(
-        "GOOGLE_CLIENT_SECRET"
-    )
+        "GOOGLE_CLIENT_SECRET")
 
 
 class DevelopmentConfig(Config):
@@ -46,15 +45,16 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     DEBUG=False
 
-    # Resend — producción
+    # Resend — producción, utilizando SMPT como comunicación aunque predomine API ya esta configurado con flask-mail
     MAIL_SERVER = "smtp.resend.com"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = "resend"
+    MAIL_USERNAME = "resend"    
     MAIL_PASSWORD = os.environ.get("RESEND_API_KEY")
     MAIL_DEFAULT_SENDER = os.environ.get(
-        "MAIL_DEFAULT_SENDER", "noreply@verneris.com"
-    )
+        "MAIL_DEFAULT_SENDER", "noreply@verneris.com")
+    
+    SQLALCHEMY_DATABASE_URI=os.getenv("DATABASE_URL")
 
 class TestingConfig(Config):
     TESTING = True
