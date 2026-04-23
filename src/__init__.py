@@ -38,7 +38,7 @@ def app_creation(config_class=None):
             integrations=[FlaskIntegration(), LoggingIntegration(
                         level=logging.INFO,        # breadcrumbs desde INFO
                         event_level=logging.ERROR)],  # eventos en Sentry desde ERROR
-            traces_sample_rate=0.2,
+            traces_sample_rate=1,
             environment="production")
 
     app = Flask(__name__, template_folder="templates")

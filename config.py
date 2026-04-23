@@ -59,7 +59,12 @@ class ProductionConfig(Config):
     MAIL_DEFAULT_SENDER = os.environ.get(
         "MAIL_DEFAULT_SENDER", "noreply@verneris.es")
     
-    SQLALCHEMY_DATABASE_URI=os.getenv("DATABASE_URL")
+    # DATABASE_PUBLIC_URL para acceso externo (railway run local)
+    # DATABASE_URL para acceso interno (dentro de Railway)
+    SQLALCHEMY_DATABASE_URI = (
+        os.getenv("DATABASE_PUBLIC_URL")
+        or os.getenv("DATABASE_URL")
+    )
 
 class TestingConfig(Config):
     TESTING = True
