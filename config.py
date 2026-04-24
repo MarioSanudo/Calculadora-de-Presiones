@@ -52,7 +52,7 @@ class ProductionConfig(Config):
 
     # Resend — producción, utilizando SMPT como comunicación aunque predomine API ya esta configurado con flask-mail
     MAIL_SERVER = "smtp.resend.com"
-    MAIL_PORT = 587
+    MAIL_PORT = 2525    
     MAIL_USE_TLS = True
     MAIL_USERNAME = "resend"    
     MAIL_PASSWORD = os.environ.get("RESEND_API_KEY")
