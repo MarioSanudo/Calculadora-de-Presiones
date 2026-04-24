@@ -27,6 +27,7 @@ class Config:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
+    USE_RESEND_API = False
 
 
     # Google OAuth
@@ -50,14 +51,9 @@ class ProductionConfig(Config):
     SESSION_COOKIE_SECURE = True
     PREFERRED_URL_SCHEME = "https"
 
-    # Resend — producción, utilizando SMPT como comunicación aunque predomine API ya esta configurado con flask-mail
-    MAIL_SERVER = "smtp.resend.com"
-    MAIL_PORT = 2525    
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = "resend"    
-    MAIL_PASSWORD = os.environ.get("RESEND_API_KEY")
-    MAIL_DEFAULT_SENDER = os.environ.get(
-        "MAIL_DEFAULT_SENDER", "noreply@verneris.es")
+    # Resend — producción via API HTTP (Railway bloquea SMTP)
+    USE_RESEND_API = True
+    RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
     
     # DATABASE_PUBLIC_URL para acceso externo (railway run local)
     # DATABASE_URL para acceso interno (dentro de Railway)

@@ -3,6 +3,7 @@ load_dotenv(find_dotenv())
 
 import logging
 import os
+import resend
 from flask import Flask
 from .utils.extensions import (
     db, migrate, login_manager,
@@ -43,6 +44,10 @@ def app_creation(config_class=None):
 
     app = Flask(__name__, template_folder="templates")
     app.config.from_object(config_class)
+
+    # Inicializar Resend una sola vez si estamos en producción
+    if app.config.get("USE_RESEND_API"):
+        resend.api_key = app.config["RESEND_API_KEY"]
 
     # Extensiones
     db.init_app(app)
@@ -88,7 +93,7 @@ def app_creation(config_class=None):
     if not app.debug:
         from werkzeug.middleware.proxy_fix import ProxyFix
         app.wsgi_app = ProxyFix(
-            app.wsgi_app, x_for=1, x_proto=1, x_host=1
+            app.wsgi_app, x_for=2, x_proto=2, x_host=2
         )
 
     @app.after_request
