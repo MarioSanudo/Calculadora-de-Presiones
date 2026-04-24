@@ -93,7 +93,7 @@ def app_creation(config_class=None):
     if not app.debug:
         from werkzeug.middleware.proxy_fix import ProxyFix
         app.wsgi_app = ProxyFix(
-            app.wsgi_app, x_for=2, x_proto=2, x_host=2
+            app.wsgi_app, x_for=1, x_proto=1, x_host=1
         )
 
     @app.after_request
