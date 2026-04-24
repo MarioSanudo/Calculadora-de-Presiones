@@ -11,32 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap"
           rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: {
-                    display: ['"Barlow Condensed"', 'sans-serif'],
-                    body: ['"DM Sans"', 'sans-serif'],
-                    mono: ['"DM Mono"', 'monospace'],
-                },
-                colors: {
-                    ink:    '#1A1A18',
-                    paper:  '#F8F8F7',
-                    line:   '#E5E3DF',
-                    mute:   '#6B6860',
-                    mute2:  '#A8A5A0',
-                    orange: {
-                        DEFAULT: '#F25C05',
-                        dark:    '#D94F04',
-                        wash:    '#FFF0E8',
-                    },
-                },
-            }
-        }
-    }
-    </script>
+    <link rel="stylesheet"
+          href="{{ url_for('static',
+                           filename='css/tailwind.css') }}">
     <script
         src="https://unpkg.com/htmx.org@2.0.4">
     </script>
