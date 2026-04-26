@@ -34,43 +34,46 @@ def _send_email(to, subject, body):
         _send_via_smtp(to, subject, body)
 
 
-def send_verification_email(user):
+def _build_action_link(user_id, purpose, expires_minutes, endpoint):
+    """Genera token JWT y construye la URL de acción."""
     token = generate_jwt(
-        user.id,
-        purpose="email_verification",
-        expires_minutes=1440
+        user_id,
+        purpose=purpose,
+        expires_minutes=expires_minutes
     )
-    link = url_for(
-        "auth.verify_email",
-        token=token,
-        _external=True
-    )
-    subject = "Verifica tu cuenta - Verneris"
-    body = (
-        f"Hola {user.username},\n\n"
-        f"Verifica tu cuenta haciendo click aqui:\n"
+    return url_for(endpoint, token=token, _external=True)
+
+
+def _build_body(username, action_text, link, expiry_text):
+    return (
+        f"Hola {username},\n\n"
+        f"{action_text}:\n"
         f"{link}\n\n"
-        f"El enlace expira en 24 horas."
+        f"El enlace expira en {expiry_text}."
     )
-    _send_email(user.email, subject, body)
+
+
+def send_verification_email(user):
+    link = _build_action_link(
+        user.id, "email_verification", 1440, "auth.verify_email"
+    )
+    body = _build_body(
+        user.username,
+        "Verifica tu cuenta haciendo click aqui",
+        link,
+        "24 horas"
+    )
+    _send_email(user.email, "Verifica tu cuenta - Verneris", body)
 
 
 def send_password_reset_email(user):
-    token = generate_jwt(
-        user.id,
-        purpose="password_reset",
-        expires_minutes=30
+    link = _build_action_link(
+        user.id, "password_reset", 30, "auth.reset_password"
     )
-    link = url_for(
-        "auth.reset_password",
-        token=token,
-        _external=True
+    body = _build_body(
+        user.username,
+        "Cambia tu contraseña aqui",
+        link,
+        "30 minutos"
     )
-    subject = "Recuperar contraseña - Verneris"
-    body = (
-        f"Hola {user.username},\n\n"
-        f"Cambia tu contraseña aqui:\n"
-        f"{link}\n\n"
-        f"El enlace expira en 30 minutos."
-    )
-    _send_email(user.email, subject, body)
+    _send_email(user.email, "Recuperar contraseña - Verneris", body)
