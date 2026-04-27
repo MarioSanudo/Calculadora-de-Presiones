@@ -1,4 +1,5 @@
 import logging
+import secrets
 from flask import (
     Blueprint, render_template, redirect,
     url_for, flash, request
@@ -434,7 +435,7 @@ def google_callback():
         email=email,
         google_id=google_id,
         is_verified=True,
-        password_hash="OAUTH_USER_NO_PASSWORD"  #Contraseña genérica no me hace falta encriptarla
+        password_hash=hash_password(secrets.token_hex(32))
     )
     try:
         db.session.add(user)
@@ -451,7 +452,7 @@ def google_callback():
             email=email,
             google_id=google_id,
             is_verified=True,
-            password_hash="OAUTH_USER_NO_PASSWORD"
+            password_hash=hash_password(secrets.token_hex(32))
         )
         try:
             db.session.add(user)

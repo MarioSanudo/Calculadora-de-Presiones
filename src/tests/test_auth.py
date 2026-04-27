@@ -703,7 +703,7 @@ def test_google_callback_new_user(client, app):
         assert user is not None
         assert user.is_verified is True
         assert user.google_id == "google-id-123"
-        assert user.password_hash == "OAUTH_USER_NO_PASSWORD"
+        assert user.password_hash.startswith("$2b$")
 
 
 def test_google_callback_existing_email_links(
