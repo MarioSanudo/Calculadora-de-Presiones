@@ -40,7 +40,7 @@
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('main.calcular_presion') }}"
                        class="bg-[#F25C05] hover:bg-[#D94F04]
-                              text-white font-semibold
+                              text-[#1A1A18] font-semibold
                               px-7 py-3.5 rounded-full
                               transition-colors transition-transform
                               duration-150 text-base
@@ -52,7 +52,7 @@
                 {% else %}
                     <a href="{{ url_for('auth.register') }}"
                        class="bg-[#F25C05] hover:bg-[#D94F04]
-                              text-white font-semibold
+                              text-[#1A1A18] font-semibold
                               px-7 py-3.5 rounded-full
                               transition-colors transition-transform
                               duration-150 text-base
@@ -604,6 +604,7 @@
 <section class="-mx-4 relative h-72 overflow-hidden">
     <img src="{{ url_for('static', filename='img/foto-banner-ciclistas.webp') }}"
          alt="Asfalto mojado desde la bicicleta"
+         loading="lazy"
          class="absolute inset-0 w-full h-full object-cover">
     <div class="absolute inset-0 bg-black/65
                 flex items-center justify-center">
@@ -650,6 +651,7 @@
         <div class="flex-shrink-0 w-full md:w-72">
             <img src="{{ url_for('static', filename='img/Foto-Mario-Ciclismo.webp') }}"
                  alt="Mario Sañudo"
+                 loading="lazy"
                  class="w-full h-80 object-cover rounded-2xl">
         </div>
 

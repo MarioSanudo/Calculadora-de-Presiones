@@ -31,6 +31,9 @@
     <link rel="preload"
           href="{{ url_for('static', filename='fonts/dm-mono-400-latin.woff2') }}"
           as="font" type="font/woff2" crossorigin>
+    <link rel="preload"
+          href="{{ url_for('static', filename='fonts/dm-mono-500-latin.woff2') }}"
+          as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet"
           href="{{ url_for('static',
                            filename='css/tailwind.css') }}">
@@ -88,7 +91,7 @@
                         Iniciar sesión
                     </a>
                     <a href="{{ url_for('auth.register') }}"
-                       class="text-sm bg-[#F25C05] text-white
+                       class="text-sm bg-[#F25C05] text-[#1A1A18]
                               px-4 py-1.5 rounded-full
                               hover:bg-[#D94F04]
                               font-medium transition-colors">
