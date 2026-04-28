@@ -1,31 +1,32 @@
 {% if errors %}
-    <div class="flex items-start gap-3 bg-[#FEF2F2]
-                border-l-4 border-[#DC2626] rounded-xl
-                px-4 py-3">
-        <!-- Icono X — Heroicons -->
-        <svg xmlns="http://www.w3.org/2000/svg"
-             class="w-4 h-4 text-[#DC2626]
-                    flex-shrink-0 mt-0.5"
-             viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0
-                     000 16zM8.707 7.293a1 1 0
-                     00-1.414 1.414L8.586 10l
-                     -1.293 1.293a1 1 0 101.414
-                     1.414L10 11.414l1.293 1.293a
-                     1 1 0 001.414-1.414L11.414
-                     10l1.293-1.293a1 1 0
-                     00-1.414-1.414L10 8.586
-                     8.707 7.293z"
-                  clip-rule="evenodd"/>
-        </svg>
+    <div class="bg-white border border-[#E5E3DF] rounded-xl
+                shadow-sm px-4 py-3.5 flex items-start gap-3">
+        <div class="w-7 h-7 rounded-full bg-[#FEF2F2]
+                    flex items-center justify-center
+                    flex-shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="w-3.5 h-3.5 text-[#DC2626]"
+                 viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0
+                         000 16zM8.707 7.293a1 1 0
+                         00-1.414 1.414L8.586 10l
+                         -1.293 1.293a1 1 0 101.414
+                         1.414L10 11.414l1.293 1.293a
+                         1 1 0 001.414-1.414L11.414
+                         10l1.293-1.293a1 1 0
+                         00-1.414-1.414L10 8.586
+                         8.707 7.293z"
+                      clip-rule="evenodd"/>
+            </svg>
+        </div>
         <div class="flex-1">
-            <p class="text-sm font-medium text-[#991B1B] mb-1">
+            <p class="text-sm font-medium text-[#1A1A18] mb-1">
                 Corrige los siguientes errores:
             </p>
             <ul class="space-y-0.5">
                 {% for error in errors %}
-                    <li class="text-sm text-[#991B1B]">
+                    <li class="text-sm text-[#6B6860]">
                         {{ error }}
                     </li>
                 {% endfor %}
@@ -84,8 +85,27 @@
         <!-- Avisos de presión fuera de rango -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% for category, message in messages %}
-                <div class="mt-4 bg-[#D97706]/10 border
-                            border-[#D97706]/20 rounded-xl p-3">
+                <div class="mt-4 flex items-start gap-2.5
+                            bg-white/5 border border-[#D97706]/30
+                            rounded-xl p-3">
+                    <div class="w-5 h-5 rounded-full bg-[#D97706]/20
+                                flex items-center justify-center
+                                flex-shrink-0 mt-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="w-3 h-3 text-[#D97706]"
+                             viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M8.257 3.099c.765-1.36 2.722
+                                     -1.36 3.486 0l5.58 9.92c.75
+                                     1.334-.213 2.98-1.742 2.98H4.42
+                                     c-1.53 0-2.493-1.646-1.743
+                                     -2.98l5.58-9.92zM11 13a1 1 0
+                                     11-2 0 1 1 0 012 0zm-1-8a1 1
+                                     0 00-1 1v3a1 1 0 002 0V6a1 1
+                                     0 00-1-1z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </div>
                     <p class="text-[#D97706] text-sm">
                         {{ message }}
                     </p>
@@ -95,13 +115,21 @@
 
         <!-- Feedback de guardado -->
         {% if saved is true %}
-            <p class="mt-3 text-[#16A34A] text-sm font-medium">
-                Análisis guardado correctamente.
-            </p>
+            <div class="mt-3 flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full
+                            bg-[#16A34A] flex-shrink-0"></div>
+                <p class="text-[#16A34A] text-sm font-medium">
+                    Análisis guardado correctamente.
+                </p>
+            </div>
         {% elif saved is false %}
-            <p class="mt-3 text-[#DC2626] text-sm font-medium">
-                Error al guardar el análisis.
-            </p>
+            <div class="mt-3 flex items-center gap-2">
+                <div class="w-1.5 h-1.5 rounded-full
+                            bg-[#DC2626] flex-shrink-0"></div>
+                <p class="text-[#DC2626] text-sm font-medium">
+                    Error al guardar el análisis.
+                </p>
+            </div>
         {% endif %}
 
     </div>

@@ -11,7 +11,8 @@
     </h1>
 
     <form method="POST"
-          action="{{ url_for('auth.resend_verification') }}">
+          action="{{ url_for('auth.resend_verification') }}"
+          novalidate>
         {{ form.hidden_tag() }}
 
         <div class="mb-4">
@@ -29,7 +30,10 @@
                 placeholder="tu@email.com") }}
 
             {% for error in form.email.errors %}
-                <p class="text-[#DC2626] text-xs mt-1">
+                <p class="text-[#DC2626] text-xs mt-1
+                          flex items-center gap-1">
+                    <span class="inline-block w-1 h-1 rounded-full
+                                 bg-[#DC2626] flex-shrink-0"></span>
                     {{ error }}
                 </p>
             {% endfor %}

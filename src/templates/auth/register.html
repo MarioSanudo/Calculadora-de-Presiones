@@ -16,7 +16,8 @@
             </h1>
 
             <form method="POST"
-                  action="{{ url_for('auth.register') }}">
+                  action="{{ url_for('auth.register') }}"
+                  novalidate>
                 {{ form.hidden_tag() }}
 
                 <!-- Username -->
@@ -34,7 +35,11 @@
                         placeholder="Tu nombre de usuario") }}
 
                     {% for error in form.username.errors %}
-                        <p class="text-[#DC2626] text-xs mt-1">
+                        <p class="text-[#DC2626] text-xs mt-1
+                                  flex items-center gap-1">
+                            <span class="inline-block w-1 h-1
+                                         rounded-full bg-[#DC2626]
+                                         flex-shrink-0"></span>
                             {{ error }}
                         </p>
                     {% endfor %}
@@ -56,7 +61,11 @@
                         placeholder="Tu apellido") }}
 
                     {% for error in form.surname.errors %}
-                        <p class="text-[#DC2626] text-xs mt-1">
+                        <p class="text-[#DC2626] text-xs mt-1
+                                  flex items-center gap-1">
+                            <span class="inline-block w-1 h-1
+                                         rounded-full bg-[#DC2626]
+                                         flex-shrink-0"></span>
                             {{ error }}
                         </p>
                     {% endfor %}
@@ -78,7 +87,11 @@
                         placeholder="tu@email.com") }}
 
                     {% for error in form.email.errors %}
-                        <p class="text-[#DC2626] text-xs mt-1">
+                        <p class="text-[#DC2626] text-xs mt-1
+                                  flex items-center gap-1">
+                            <span class="inline-block w-1 h-1
+                                         rounded-full bg-[#DC2626]
+                                         flex-shrink-0"></span>
                             {{ error }}
                         </p>
                     {% endfor %}
@@ -99,7 +112,11 @@
                                transition-colors",
                         placeholder="•••••••••••••••••••") }}
                     {% for error in form.password.errors %}
-                        <p class="text-[#DC2626] text-xs mt-1">
+                        <p class="text-[#DC2626] text-xs mt-1
+                                  flex items-center gap-1">
+                            <span class="inline-block w-1 h-1
+                                         rounded-full bg-[#DC2626]
+                                         flex-shrink-0"></span>
                             {{ error }}
                         </p>
                     {% endfor %}
@@ -120,7 +137,11 @@
                         placeholder="Repite la contraseña"
                     ) }}
                     {% for error in form.confirm_password.errors %}
-                        <p class="text-[#DC2626] text-xs mt-1">
+                        <p class="text-[#DC2626] text-xs mt-1
+                                  flex items-center gap-1">
+                            <span class="inline-block w-1 h-1
+                                         rounded-full bg-[#DC2626]
+                                         flex-shrink-0"></span>
                             {{ error }}
                         </p>
                     {% endfor %}
