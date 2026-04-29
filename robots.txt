@@ -1,32 +1,98 @@
-# Rastreadores SEO y LLMs con retorno de tráfico
+# ==============================================
+# VERNERIS — robots.txt
+# https://www.verneris.es
+# ==============================================
+
+# --- Motores de búsqueda ---
 User-agent: Googlebot
-User-agent: Bingbot
-User-agent: GPTBot
-User-agent: ChatGPT-User
-User-agent: OAI-SearchBot
-Disallow: /login
-Disallow: /register
+Allow: /
 Disallow: /historial
 Disallow: /auth/
 Disallow: /static/
 
-# Bots de entrenamiento sin contraprestación de tráfico
+User-agent: Bingbot
+Allow: /
+Disallow: /historial
+Disallow: /auth/
+Disallow: /static/
+
+# --- IAs con retorno de tráfico — permitir ---
+User-agent: GPTBot
+Allow: /
+Disallow: /historial
+Disallow: /auth/
+Disallow: /static/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /historial
+Disallow: /auth/
+Disallow: /static/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /historial
+Disallow: /auth/
+Disallow: /static/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /historial
+Disallow: /auth/
+Disallow: /static/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /historial
+Disallow: /auth/
+Disallow: /static/
+
+User-agent: Applebot
+Allow: /
+Disallow: /historial
+Disallow: /auth/
+Disallow: /static/
+
+# --- Bots de entrenamiento sin retorno — bloquear ---
 User-agent: CCBot
+Disallow: /
+
 User-agent: anthropic-ai
+Disallow: /
+
 User-agent: ClaudeBot
+Disallow: /
+
 User-agent: Claude-Web
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
 User-agent: Omgilibot
+Disallow: /
+
 User-agent: FacebookBot
+Disallow: /
+
 User-agent: ImagesiftBot
+Disallow: /
+
 User-agent: Diffbot
 Disallow: /
 
-# Todo lo demás — acceso completo
+User-agent: meta-externalagent
+Disallow: /
+
+# --- Resto de bots ---
 User-agent: *
-Disallow: /login
-Disallow: /register
+Allow: /
 Disallow: /historial
 Disallow: /auth/
 Disallow: /static/
 
+# --- Sitemap ---
 Sitemap: https://www.verneris.es/sitemap.xml
