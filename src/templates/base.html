@@ -269,13 +269,13 @@
     </div>
 
     <script>
-        // Auto-dismiss flash messages tras 4 segundos
+        // Auto-dismiss flash messages tras 9 segundos
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll(".flash-msg").forEach(el => {
                 setTimeout(() => {
                     el.classList.add("flash-out");
                     setTimeout(() => el.remove(), 300);
-                }, 4000);
+                }, 9000);
             });
         });
     </script>
