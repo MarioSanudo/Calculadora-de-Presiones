@@ -13,6 +13,28 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
+    {% block seo %}
+    <meta name="description"
+          content="{% block meta_description %}Calcula la presión óptima de tus neumáticos de bicicleta con física real: temperatura, altitud, ancho de aro y carcasa. Resultado en bar y psi en un clic.{% endblock %}">
+    <link rel="canonical"
+          href="https://www.verneris.es{{ request.path }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Verneris">
+    <meta property="og:url"
+          content="https://www.verneris.es{{ request.path }}">
+    <meta property="og:title"
+          content="{% block og_title %}Verneris — Presión óptima para tus ruedas{% endblock %}">
+    <meta property="og:description"
+          content="{% block og_description %}Calcula la presión óptima de tus neumáticos de bicicleta con física real: temperatura, altitud, ancho de aro y carcasa. Resultado en bar y psi en un clic.{% endblock %}">
+    <meta property="og:image"
+          content="https://www.verneris.es{{ url_for('static', filename='img/foto-banner-ciclistas.webp') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="es_ES">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@SanudoMario">
+    <meta name="twitter:creator" content="@SanudoMario">
+    {% endblock %}
     <title>
         {% block title %}Presión Ruedas{% endblock %}
     </title>

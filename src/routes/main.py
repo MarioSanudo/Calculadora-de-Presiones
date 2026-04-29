@@ -1,7 +1,9 @@
 from flask import (
     Blueprint, render_template, request,
-    current_app, flash, make_response, url_for
+    current_app, flash, make_response, url_for,
+    send_from_directory
 )
+import os
 from flask_login import login_required, current_user
 from src.services.pressure_service import (
     validate_inputs,
@@ -15,6 +17,12 @@ from src.utils.extensions import db, limiter
 from sqlalchemy.exc import SQLAlchemyError
 
 main_bp = Blueprint("main", __name__)
+
+
+@main_bp.route("/robots.txt")
+def robots():
+    root = os.path.join(current_app.root_path, "..")
+    return send_from_directory(root, "robots.txt")
 
 
 @main_bp.route("/")

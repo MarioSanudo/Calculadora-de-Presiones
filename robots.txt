@@ -1,0 +1,32 @@
+# Rastreadores SEO y LLMs con retorno de tráfico
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: OAI-SearchBot
+Disallow: /login
+Disallow: /register
+Disallow: /historial
+Disallow: /auth/
+Disallow: /static/
+
+# Bots de entrenamiento sin contraprestación de tráfico
+User-agent: CCBot
+User-agent: anthropic-ai
+User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: Omgilibot
+User-agent: FacebookBot
+User-agent: ImagesiftBot
+User-agent: Diffbot
+Disallow: /
+
+# Todo lo demás — acceso completo
+User-agent: *
+Disallow: /login
+Disallow: /register
+Disallow: /historial
+Disallow: /auth/
+Disallow: /static/
+
+Sitemap: https://www.verneris.es/sitemap.xml
