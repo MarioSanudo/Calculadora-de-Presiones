@@ -132,13 +132,22 @@
 
     {% else %}
         <div class="bg-white border border-[#E5E3DF]
-                    rounded-2xl p-8 text-center">
-            <p class="text-[#6B6860]">
-                No tienes analisis guardados.
+                    rounded-2xl p-10 text-center
+                    max-w-md mx-auto">
+            <h2 class="text-lg font-semibold
+                       text-[#1A1A18] font-display">
+                Aún no tienes análisis guardados
+            </h2>
+            <p class="text-sm text-[#6B6860] mt-2
+                      leading-relaxed">
+                Calcula la presión ideal para tu
+                primera salida y guárdala aquí.
             </p>
             <a href="{{ url_for('main.calcular_presion') }}"
-               class="text-[#F25C05] hover:text-[#D94F04]
-                      text-sm mt-2 inline-block">
+               class="bg-[#F25C05] text-white px-6 py-2.5
+                      rounded-full font-medium text-sm
+                      hover:bg-[#D94F04] transition-colors
+                      mt-6 inline-block">
                 Ir a la calculadora
             </a>
         </div>

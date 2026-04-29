@@ -63,7 +63,8 @@
                            filename='js/htmx.min.js') }}"
             defer></script>
 </head>
-<body class="bg-[#F8F8F7] min-h-screen font-body">
+<body class="bg-[#F8F8F7] min-h-screen font-body
+             flex flex-col">
 
     <!-- Google Tag Manager (noscript) -->
     <noscript>
@@ -85,14 +86,21 @@
             <div class="flex items-center gap-4">
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('main.historial') }}"
-                       class="text-sm text-[#6B6860]
-                              hover:text-[#1A1A18]
-                              transition-colors">
-                        Historial Cálculos
+                       class="text-right leading-tight
+                              hover:opacity-80
+                              transition-opacity"
+                       title="Revisa tus cálculos en
+                              tus diferentes bicicletas">
+                        <span class="block text-sm
+                                     text-[#1A1A18]
+                                     font-medium">
+                            Hola, {{ current_user.username }}
+                        </span>
+                        <span class="block text-xs
+                                     text-[#A8A5A0]">
+                            Revisa tus cálculos
+                        </span>
                     </a>
-                    <span class="text-[#6B6860] text-sm">
-                        {{ current_user.username }}
-                    </span>
                     <form action="{{ url_for('auth.logout') }}"
                           method="POST" class="inline">
                         <input type="hidden"
@@ -138,6 +146,10 @@
             opacity: 0;
             transform: translateX(12px);
         }
+        /* Bordes laterales por categoría — el icono ya usa el mismo color */
+        .flash-error   { border-left: 4px solid #DC2626; }
+        .flash-success { border-left: 4px solid #16A34A; }
+        .flash-warning { border-left: 4px solid #D97706; }
     </style>
 
     <div class="fixed top-4 right-4 z-50 flex flex-col gap-2
@@ -150,7 +162,8 @@
                 {% for category, message in messages %}
 
                     {% if category == 'error' %}
-                    <div class="flash-msg bg-white border border-[#E5E3DF]
+                    <div class="flash-msg flash-error bg-white
+                                border border-[#E5E3DF]
                                 rounded-xl shadow-md px-4 py-3.5
                                 flex items-start gap-3">
                         <div class="w-7 h-7 rounded-full bg-[#FEF2F2]
@@ -183,7 +196,8 @@
                     </div>
 
                     {% elif category == 'success' %}
-                    <div class="flash-msg bg-white border border-[#E5E3DF]
+                    <div class="flash-msg flash-success bg-white
+                                border border-[#E5E3DF]
                                 rounded-xl shadow-md px-4 py-3.5
                                 flex items-start gap-3">
                         <div class="w-7 h-7 rounded-full bg-[#F0FDF4]
@@ -214,7 +228,8 @@
                     </div>
 
                     {% else %}
-                    <div class="flash-msg bg-white border border-[#E5E3DF]
+                    <div class="flash-msg flash-warning bg-white
+                                border border-[#E5E3DF]
                                 rounded-xl shadow-md px-4 py-3.5
                                 flex items-start gap-3">
                         <div class="w-7 h-7 rounded-full bg-[#FFFBEB]
@@ -269,7 +284,8 @@
     {% block hero %}{% endblock %}
 
     <!-- Content -->
-    <main class="max-w-5xl mx-auto px-4 py-6">
+    <main class="max-w-5xl w-full mx-auto px-4 py-6
+                 flex-grow">
         {% block content %}{% endblock %}
     </main>
 
