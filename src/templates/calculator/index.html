@@ -26,10 +26,13 @@
 
     <!-- Formulario -->
     <form id="calc-form"
-          hx-post="{{ url_for('main.calcular_presion') }}"
+          hx-post="{{ form_action }}"   
           hx-target="#resultado"
           hx-swap="innerHTML"
           class="space-y-6">
+        
+        <!-- El form_action, evita hardcodear el endpoint para así evitar código DRY y poder evitar apuntar solo apuntar con petición POST a un único endpoint-->
+
 
         <!-- CSRF -->
         <input type="hidden"
@@ -831,25 +834,28 @@
             </div>
         </section>
 
-        <!-- Acciones finales -->
-        <div class="flex flex-wrap gap-3 items-center pt-2">
-            <label class="flex items-center gap-2 text-sm
-                          text-mute select-none cursor-pointer">
-                <input type="checkbox"
-                       name="save"
-                       id="save"
-                       value="1"
-                       class="w-4 h-4 accent-orange cursor-pointer">
-                Guardar en historial
-            </label>
-            <button type="submit"
+        <!-- Acciones finales, para distinguir la info que se puede hacer logueado frente a estado anónimo -->
+        {% if current_user.is_authenticated %}
+            <div class="flex flex-wrap gap-3 items-center pt-2">
+                <label class="flex items-center gap-2 text-sm
+                            text-mute select-none cursor-pointer">
+                    <input type="checkbox"
+                        name="save"
+                        id="save"
+                        value="1"
+                        class="w-4 h-4 accent-orange cursor-pointer">
+                    Guardar en historial
+                </label>
+        {% endif %}
+
+                <button type="submit"
                     class="ml-auto rounded-full bg-[#F25C05]
-                           hover:bg-orange-dark text-[#1A1A18]
-                           font-semibold px-6 py-3
-                           transition-colors cursor-pointer">
-                Calcular presión
-            </button>
-        </div>
+                    hover:bg-orange-dark text-[#1A1A18]
+                    font-semibold px-6 py-3
+                    transition-colors cursor-pointer">
+                    Calcular presión
+                </button>
+            </div>
 
     </form>
 

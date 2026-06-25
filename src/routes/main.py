@@ -30,7 +30,50 @@ def index():
     # En Fase 2 redirigirá a la calculadora si está autenticado
     return render_template("index.html")
 
+@main_bp.route("/calculo-logout", methods=["GET", "POST"])
+@limiter.limit("20 per minute")
+def calcular_anonimo():
+    all_defaults= RIDE_STYLE_DEFAULTS
+    if request.method=="POST":
+        data = {
+            "rider_weight":     to_float(request.form.get("rider_weight")),
+            "bike_weight":      to_float(request.form.get("bike_weight")),
+            "tire_width_front": to_float(request.form.get("tire_width_front")),
+            "tire_width_rear":  to_float(request.form.get("tire_width_rear")),
+            "inner_rim_width":  to_float(request.form.get("inner_rim_width")),
+            "wheel_diameter":  to_int(request.form.get("wheel_diameter")),
+            "tire_casing":     request.form.get("tire_casing"),
+            "ride_style":      request.form.get("ride_style"),
+            "rim_type":        request.form.get("rim_type"),
+            "surface":         request.form.get("surface"),
+            "tire_brand":      request.form.get("tire_brand"),
+            "altitude":        to_float(request.form.get("altitude")),
+            "temp_exterior":   to_float(request.form.get("temp_exterior"))
+            }
 
+        errors = validate_inputs(data)
+        if errors:
+            return render_template(
+                "calculator/_result.html",
+                errors=errors,
+                result=None)
+
+        try:
+            result = calculate_pressure(data)
+        except ValueError as e:
+            return render_template(
+                "calculator/_result.html",
+                errors=[str(e)],
+                result=None)
+        check_pressure_warnings(result, data["rim_type"], data["ride_style"])
+
+        return render_template(
+            "calculator/_result.html",
+        errors=[],
+        result=result)
+
+
+    return render_template("calculator/index.html", all_defaults=all_defaults, form_action=url_for("main.calcular_anonimo"))    
 
 @main_bp.route("/calcular", methods=["GET", "POST"])
 @login_required
@@ -112,7 +155,7 @@ def calcular_presion():
 
     return render_template(
         "calculator/index.html",
-        all_defaults=all_defaults)
+        all_defaults=all_defaults, form_action=url_for("main.calcular_presion"))
 
 @main_bp.route("/historial")
 @login_required

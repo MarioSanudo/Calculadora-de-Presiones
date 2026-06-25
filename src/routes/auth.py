@@ -105,6 +105,7 @@ def register():
 @auth_bp.route("/login", methods=["GET", "POST"])
 @limiter.limit("10 per minute")
 def login():
+
     if current_user.is_authenticated:
         return redirect("/")
 
@@ -140,10 +141,11 @@ def login():
             )
             flash("Sesión iniciada.", "success")
             return redirect(
-                next_page if next_page else "/"
+                next_page if next_page else url_for("main.calcular_presion")
             )
 
         flash("Email o contraseña incorrectos.", "error")
+
 
     return render_template(
         "auth/login.html", form=form
@@ -185,7 +187,7 @@ def verify_email(token):
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("auth.login"))
 
-    # Usuario logueado distinto al del token → posible reciclaje
+    # Usuario logueado distinto al del token -> posible reciclaje
     if current_user.is_authenticated and current_user.id != user.id:
         logger.warning(
             "verify_email: token de user_id=%s usado por user_id=%s logueado",
@@ -404,7 +406,7 @@ def google_callback():
     if user:
         login_user(user)
         flash("Sesión iniciada con Google.", "success")
-        return redirect("/")
+        return redirect(url_for("main.calcular_presion"))
 
     # Caso 2: email existe sin google_id → vincular
     user = User.query.filter_by(email=email).first()
@@ -426,7 +428,7 @@ def google_callback():
             return redirect(url_for("auth.login"))
         login_user(user)
         flash("Cuenta vinculada con Google.", "success")
-        return redirect("/")
+        return redirect(url_for("main.calcular_presion"))
 
     # Caso 3: usuario nuevo
     user = User(
@@ -442,7 +444,7 @@ def google_callback():
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
-        # Colision username+surname → sufijo numerico
+        # Colision username+surname
         count = User.query.filter_by(
             username=name
         ).count()

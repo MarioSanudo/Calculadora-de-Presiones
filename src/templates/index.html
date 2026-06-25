@@ -16,7 +16,7 @@
                         uppercase tracking-widest mb-6">
                 <span class="w-1.5 h-1.5 rounded-full
                              bg-[#F25C05] animate-pulse"></span>
-                Presión calculada, no inventada
+                Presión calculada, deja atrás especular a que bar/psi inflar, hazlo con criterio
             </div>
 
             <h1 class="font-display font-extrabold text-white
@@ -81,6 +81,17 @@
                     Inicia sesión
                 </a>
             </p>
+            <a href="{{ url_for('main.calcular_anonimo') }}"
+                class="bg-white/5 hover:bg-white/10 text-white
+                    border border-white/10
+                    px-13 py-3.5 rounded-full
+                    transition-colors transition-transform
+                    duration-150 text-base
+                    hover:scale-[1.02] active:scale-[0.98]
+                    inline-flex items-center gap-2">
+                Calcular sin inicio de sesión
+            </a>
+
             {% endif %}
 
             <!-- Strip stats -->
@@ -111,7 +122,7 @@
                 <div class="flex items-center justify-between
                             text-[11px] uppercase tracking-widest
                             text-[#A8A5A0]">
-                    <span>// muestra  carretera  70 kg</span>
+                    <span>muestra  carretera  70 kg</span>
                     <span class="flex items-center gap-1.5
                                  text-[#F25C05]">
                         <span class="w-1.5 h-1.5 rounded-full
@@ -251,7 +262,7 @@
                 <h2 class="font-display font-extrabold text-[#1A1A18]
                            leading-[0.98] tracking-tight
                            text-4xl sm:text-5xl lg:text-[56px]">
-                    Tres pasos.<br>Cero estimaciones.
+                    Tres pasos <br>Cero estimaciones.
                 </h2>
             </div>
             <p class="md:col-span-5 text-[#6B6860] max-w-md">
@@ -346,7 +357,7 @@
                 </div>
                 <h3 class="font-display font-bold text-[#1A1A18]
                            text-2xl mb-2 leading-tight">
-                    Física, no tabla.
+                    Física e ingeniería aplicada.
                 </h3>
                 <p class="text-sm text-[#6B6860] leading-relaxed
                           mb-4">
@@ -358,7 +369,7 @@
                             rounded-lg p-3 font-mono text-[11px]
                             text-[#1A1A18] leading-relaxed">
                     <span class="text-[#6B6860]">
-                        // Presión respecto a altitud
+                        Presión respecto a altitud
                     </span><br>
                     <br>
                     return P0*(1-L*h/T0)**(g*M/(R*L))
