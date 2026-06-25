@@ -16,7 +16,7 @@
                         uppercase tracking-widest mb-6">
                 <span class="w-1.5 h-1.5 rounded-full
                              bg-[#F25C05] animate-pulse"></span>
-                Presión calculada, deja atrás especular a que bar/psi inflar, hazlo con criterio
+                Conoce a que bar/psi tienes que hinchar tu bici
             </div>
 
             <h1 class="font-display font-extrabold text-white
@@ -81,17 +81,18 @@
                     Inicia sesión
                 </a>
             </p>
-            <a href="{{ url_for('main.calcular_anonimo') }}"
-                class="bg-white/5 hover:bg-white/10 text-white
-                    border border-white/10
-                    px-13 py-3.5 rounded-full
-                    transition-colors transition-transform
-                    duration-150 text-base
-                    hover:scale-[1.02] active:scale-[0.98]
-                    inline-flex items-center gap-2">
-                Calcular sin inicio de sesión
-            </a>
-
+            <div class="flex flex-wrap gap-3 mt-4">
+                <a href="{{ url_for('main.calcular_anonimo') }}"
+                    class="bg-white/5 hover:bg-white/10 text-white
+                        border border-white/10
+                        px-16 py-3.5 rounded-full
+                        transition-colors transition-transform
+                        duration-150 text-base
+                        hover:scale-[1.02] active:scale-[0.98]
+                        inline-flex items-center gap-3">
+                    Calcular sin inicio de sesión
+                </a>
+            </div>
             {% endif %}
 
             <!-- Strip stats -->
@@ -100,7 +101,7 @@
                         font-mono text-xs text-[#A8A5A0]">
                 <span>
                     <b class="text-white font-medium">Gratis</b>
-                     sin registro para probar
+                     sin registro necesario para su uso
                 </span>
                 <span>
                     <b class="text-white font-medium">±0.05 bar</b>
@@ -262,7 +263,7 @@
                 <h2 class="font-display font-extrabold text-[#1A1A18]
                            leading-[0.98] tracking-tight
                            text-4xl sm:text-5xl lg:text-[56px]">
-                    Tres pasos <br>Cero estimaciones.
+                    3 pasos 
                 </h2>
             </div>
             <p class="md:col-span-5 text-[#6B6860] max-w-md">
@@ -304,7 +305,7 @@
                           mb-4">
                     Peso, bici, ancho de cubierta, aro interior,
                     sistema, carcasa, superficie, altitud y
-                    temperatura. Sin cuenta.
+                    temperatura.
                 </p>
                 <div class="font-mono text-xs space-y-1.5 pt-4
                             border-t border-[#E5E3DF]">
@@ -452,8 +453,7 @@
         <h2 class="font-display font-extrabold text-[#1A1A18]
                    leading-[0.92] tracking-tight
                    text-[56px] sm:text-[64px] mb-12">
-            Las tablas no saben qué<br>
-            temperatura hace hoy.
+            Las tablas no se adaptan a las condiciones de hoy
         </h2>
 
         <!-- Grid comparativo: 1 col mobile, 2 col desktop -->
@@ -622,7 +622,7 @@
         <p class="text-white font-display font-bold
                   text-3xl lg:text-4xl text-center
                   max-w-2xl px-4 leading-tight">
-            La presión incorrecta no se nota hasta que ya es tarde.
+            Mejora tus métricas en las salidas de strava y comienza hacer los kms con una presión que se amolde al terreno
         </p>
     </div>
 </section>
