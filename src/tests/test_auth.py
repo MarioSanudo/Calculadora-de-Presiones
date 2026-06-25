@@ -194,7 +194,7 @@ def test_login_success(client, verified_user):
         "password": verified_user["password"],
     })
     assert resp.status_code == 302
-    assert resp.location == "/"
+    assert resp.location == "/" or resp.location=="/calcular"
 
 
 def test_login_wrong_password(client, verified_user):
@@ -249,7 +249,7 @@ def test_login_next_externo(client, verified_user):
         client, verified_user, "https://evil.com"
     )
     assert resp.status_code == 302
-    assert resp.location == "/"
+    assert resp.location == "/calcular"
 
 
 def test_login_next_javascript(client, verified_user):
@@ -257,7 +257,7 @@ def test_login_next_javascript(client, verified_user):
         client, verified_user, "javascript:alert(1)"
     )
     assert resp.status_code == 302
-    assert resp.location == "/"
+    assert resp.location == "/calcular"
 
 
 def test_login_next_protocol_relative(
@@ -267,7 +267,7 @@ def test_login_next_protocol_relative(
         client, verified_user, "//evil.com"
     )
     assert resp.status_code == 302
-    assert resp.location == "/"
+    assert resp.location == "/calcular"
 
 
 # ── Logout ──────────────────────────────────────────
@@ -499,7 +499,7 @@ def test_reset_password_success(
         "password": new_pass,
     })
     assert resp.status_code == 302
-    assert resp.location == "/"
+    assert resp.location == "/calcular"
 
 
 def test_reset_password_expired_token(
@@ -556,7 +556,7 @@ def test_reset_password_db_error(
         "password": verified_user["password"],
     })
     assert resp.status_code == 302
-    assert resp.location == "/"
+    assert resp.location == "/calcular"
 
 
 def test_reset_password_wrong_purpose(

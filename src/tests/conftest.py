@@ -6,6 +6,8 @@ from src.models.user import User
 from src.services.auth_service import hash_password
 
 
+
+
 @pytest.fixture()
 def app():
     app = app_creation(config_class=TestingConfig)
