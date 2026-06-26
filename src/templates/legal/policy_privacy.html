@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}Política de Privacidad · Verneris{% endblock %}
+{% block meta_description %}Política de privacidad de Verneris. Información sobre el tratamiento de datos personales, finalidades, derechos del usuario y proveedores externos.{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+
+    <div class="mb-8 border-b border-line pb-5">
+
+        <h1 class="font-display font-extrabold text-ink
+                   text-3xl tracking-tight mt-1">
+            Política de Privacidad
+        </h1>
+        <p class="text-xs font-mono text-mute mt-2">
+            Última actualización: junio 2026
+        </p>
+    </div>
+
+    <div class="space-y-10 text-sm text-[#4A4845] leading-relaxed">
+
+        <p>Verneris está comprometido con el cumplimiento del Reglamento (UE) 2016/679 (RGPD),
+        la Ley Orgánica 3/2018 (LOPD-GDD) y las directrices de la AEPD.</p>
+
+        <!-- 2.1 -->
+        <section>
+            <h2 class="font-display font-bold text-ink text-lg mb-3">
+                1. Responsable del tratamiento
+            </h2>
+            <ul class="font-mono text-xs bg-paper border border-line
+                       rounded-xl p-4 space-y-1">
+                <li><span class="text-mute">Titular:</span> Mario Sañudo</li>
+                <li><span class="text-mute">Condición:</span> Persona física</li>
+                <li><span class="text-mute">Email:</span> verneris.dev@gmail.com</li>
+            </ul>
+        </section>
+
+        <!-- 2.2 — Tabla -->
+        <section>
+            <h2 class="font-display font-bold text-ink text-lg mb-4">
+                2. Datos tratados, finalidades y base legal
+            </h2>
+            <div class="overflow-x-auto rounded-xl border border-line">
+                <table class="w-full text-xs">
+                    <thead>
+                        <tr class="bg-[#1A1A18] text-white">
+                            <th class="text-left px-4 py-3 font-display
+                                       font-bold rounded-tl-xl">
+                                Modalidad
+                            </th>
+                            <th class="text-left px-4 py-3 font-display
+                                       font-bold">
+                                Datos recogidos
+                            </th>
+                            <th class="text-left px-4 py-3 font-display
+                                       font-bold">
+                                Finalidad
+                            </th>
+                            <th class="text-left px-4 py-3 font-display
+                                       font-bold rounded-tr-xl">
+                                Base jurídica
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-line">
+                        <tr class="bg-white hover:bg-paper transition-colors">
+                            <td class="px-4 py-3 font-medium text-ink
+                                       align-top">
+                                Modo anónimo
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Ninguno. Solo cookies analíticas previo
+                                consentimiento.
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Proporcionar cálculos instantáneos de presión.
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                No aplica tratamiento de datos identificativos.
+                            </td>
+                        </tr>
+                        <tr class="bg-paper hover:bg-white transition-colors">
+                            <td class="px-4 py-3 font-medium text-ink
+                                       align-top">
+                                Registro manual
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Email, nombre de usuario y contraseña
+                                almacenada como hash bcrypt irreversible.
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Gestión de cuenta, autenticación y persistencia
+                                del historial de cálculos.
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Ejecución de contrato — Art. 6.1.b RGPD
+                            </td>
+                        </tr>
+                        <tr class="bg-white hover:bg-paper transition-colors">
+                            <td class="px-4 py-3 font-medium text-ink
+                                       align-top">
+                                Login con Google (OAuth2)
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Email y nombre de perfil público provistos
+                                por Google LLC.
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Alta rápida por federación de identidades,
+                                autenticación y persistencia de historial.
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Ejecución de contrato — Art. 6.1.b RGPD
+                            </td>
+                        </tr>
+                        <tr class="bg-paper hover:bg-white transition-colors">
+                            <td class="px-4 py-3 font-medium text-ink
+                                       align-top">
+                                Historial del usuario
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Parámetros del cálculo (peso, modalidad,
+                                sección, tipo de neumático) y fecha.
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Permitir al usuario consultar sus cálculos
+                                anteriores en cualquier momento.
+                            </td>
+                            <td class="px-4 py-3 text-[#4A4845] align-top">
+                                Ejecución de contrato — Art. 6.1.b RGPD
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 2.3 -->
+        <section>
+            <h2 class="font-display font-bold text-ink text-lg mb-3">
+                3. Plazo de conservación
+            </h2>
+            <p>Los datos se conservan mientras el usuario mantenga activa su cuenta. Cuando el
+            usuario solicite la baja, sus datos identificativos e historial de cálculos serán
+            eliminados de forma inmediata y definitiva de las bases de datos de producción.</p>
+        </section>
+
+        <!-- 2.4 -->
+        <section>
+            <h2 class="font-display font-bold text-ink text-lg mb-4">
+                4. Proveedores externos (encargados del tratamiento)
+            </h2>
+            <div class="space-y-3">
+
+                <div class="bg-white border border-line rounded-xl p-4">
+                    <div class="font-display font-bold text-ink text-sm mb-1">
+                        Railway Corp
+                    </div>
+                    <p class="text-xs text-[#4A4845]">Hosting y base de datos PostgreSQL.
+                    Almacenamiento configurado en la Unión Europea siempre que la
+                    disponibilidad de zonas lo permita, o bajo cláusulas contractuales
+                    tipo homologadas.</p>
+                </div>
+
+                <div class="bg-white border border-line rounded-xl p-4">
+                    <div class="font-display font-bold text-ink text-sm mb-1">
+                        Resend Inc
+                    </div>
+                    <p class="text-xs text-[#4A4845]">Envío de emails transaccionales
+                    (verificación de cuenta y restablecimiento de contraseña).</p>
+                </div>
+
+                <div class="bg-white border border-line rounded-xl p-4">
+                    <div class="font-display font-bold text-ink text-sm mb-1">
+                        Functional Software, Inc. (Sentry)
+                    </div>
+                    <p class="text-xs text-[#4A4845]">Monitorización técnica y captura de
+                    errores en tiempo de ejecución. Recoge trazas técnicas de depuración,
+                    sin inclusión de credenciales de usuario.</p>
+                </div>
+
+                <div class="bg-white border border-line rounded-xl p-4">
+                    <div class="font-display font-bold text-ink text-sm mb-1">
+                        Google LLC
+                    </div>
+                    <p class="text-xs text-[#4A4845]">Utilizado bajo dos vertientes:
+                    <strong class="text-ink">Google OAuth2</strong> para autenticación
+                    federada, y <strong class="text-ink">Google Analytics 4</strong>
+                    (vía GTM) para analítica web, únicamente si el usuario ha otorgado
+                    consentimiento explícito a través del banner de cookies.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 2.5 -->
+        <section>
+            <h2 class="font-display font-bold text-ink text-lg mb-3">
+                5. Derechos del usuario
+            </h2>
+            <p class="mb-4">Puedes ejercitar los siguientes derechos de forma gratuita
+            escribiendo a verneris.dev@gmail.com:</p>
+            <div class="grid sm:grid-cols-2 gap-3">
+                <div class="bg-paper border border-line rounded-xl p-4">
+                    <div class="font-display font-bold text-ink text-sm mb-1">
+                        Acceso
+                    </div>
+                    <p class="text-xs text-[#4A4845]">Confirmar si tratamos tus datos
+                    y obtener una copia.</p>
+                </div>
+                <div class="bg-paper border border-line rounded-xl p-4">
+                    <div class="font-display font-bold text-ink text-sm mb-1">
+                        Rectificación
+                    </div>
+                    <p class="text-xs text-[#4A4845]">Corregir datos inexactos
+                    o incompletos.</p>
+                </div>
+                <div class="bg-paper border border-line rounded-xl p-4">
+                    <div class="font-display font-bold text-ink text-sm mb-1">
+                        Supresión (derecho al olvido)
+                    </div>
+                    <p class="text-xs text-[#4A4845]">Eliminar tu cuenta e historial
+                    de forma definitiva.</p>
+                </div>
+                <div class="bg-paper border border-line rounded-xl p-4">
+                    <div class="font-display font-bold text-ink text-sm mb-1">
+                        Limitación y oposición
+                    </div>
+                    <p class="text-xs text-[#4A4845]">Restringir o cesar determinados
+                    usos de tus datos.</p>
+                </div>
+            </div>
+            <p class="mt-4 text-xs text-mute">Si consideras que tus derechos han sido
+            vulnerados, puedes interponer una reclamación ante la
+            <a href="https://www.aepd.es" target="_blank" rel="noopener"
+               class="underline hover:text-ink transition-colors">
+                Agencia Española de Protección de Datos (AEPD)
+            </a>.</p>
+        </section>
+
+    </div>
+</div>
+{% endblock %}

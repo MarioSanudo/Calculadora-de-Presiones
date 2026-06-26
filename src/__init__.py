@@ -90,7 +90,7 @@ def app_creation(config_class=None):
     app.register_blueprint(main_bp)
     app.register_blueprint(errors_bp)
     app.register_blueprint(legal_bp)
-
+    
     # Reverse proxy (Railway / nginx): IP real del cliente para rate limit
     if not app.debug:
         from werkzeug.middleware.proxy_fix import ProxyFix
