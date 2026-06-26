@@ -304,7 +304,7 @@
 
             <!-- Links -->
             <nav class="flex gap-6 text-sm text-[#6B6860]">
-                <a href="{{ url_for('main.calcular_presion') }}"
+                <a href="{{ url_for('main.calcular_anonimo') }}"
                    class="hover:text-white transition-colors">
                     Calculadora
                 </a>
@@ -313,7 +313,16 @@
                    class="hover:text-white transition-colors">
                     Historial
                 </a>
+                <a href="{{ url_for('main.calcular_presion') }}"
+                   class="hover:text-white transition-colors">
+                    Calculadora
+                </a>
                 {% endif %}
+
+                  <a href="{{ url_for('legal.avisoLegal') }}"
+                    class="text-[#6B6860] hover:text-white transition-colors">
+                    Aviso legal
+                </a>
             </nav>
 
             <!-- Redes sociales -->
@@ -359,6 +368,7 @@
                     text-xs text-[#6B6860]">
             © 2026 Verneris. Hecho con cariño y criterio.
         </div>
+
     </footer>
 
 </body>

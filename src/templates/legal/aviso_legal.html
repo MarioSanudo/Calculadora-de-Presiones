@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Aviso Legal · Verneris{% endblock %}
+{% block meta_description %}Aviso legal de Verneris. Información sobre el titular, condiciones de uso, propiedad intelectual y exclusión de responsabilidad.{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto prose prose-neutral">
+
+    <div class="mb-8 border-b border-line pb-5">
+        <h1 class="font-display font-extrabold text-ink
+                   text-3xl tracking-tight mt-1">
+            Aviso Legal
+        </h1>
+    </div>
+
+    <section class="space-y-8 text-sm text-[#4A4845] leading-relaxed">
+
+        <div>
+            <h2 class="font-display font-bold text-ink text-lg mb-3">
+                1. Datos identificativos del titular
+            </h2>
+            <p>En cumplimiento del artículo 10 de la Ley 34/2002 de Servicios de la Sociedad de la Información (LSSI-CE), se identifican los datos del responsable de este sitio web:</p>
+            <ul class="mt-3 space-y-1 font-mono text-xs bg-paper
+                       border border-line rounded-xl p-4">
+                <li><span class="text-mute">Titular:</span> Mario Sañudo</li>
+                <li><span class="text-mute">Condición:</span> Persona física</li>
+                <li><span class="text-mute">Residencia:</span> Cantabria, España</li>
+                <li><span class="text-mute">Email:</span> verneris.dev@gmail.com</li>
+                <li><span class="text-mute">Web:</span> verneris.es</li>
+            </ul>
+        </div>
+
+        <div>
+            <h2 class="font-display font-bold text-ink text-lg mb-3">
+                2. Objeto del sitio web
+            </h2>
+            <p>Verneris es una herramienta de cálculo de presión óptima de neumáticos para ciclistas, disponible en dos modalidades:</p>
+            <ul class="mt-2 space-y-1 list-disc list-inside">
+                <li><strong class="text-ink">Modo anónimo</strong> — cálculo puntual sin registro ni almacenamiento de datos personales.</li>
+                <li><strong class="text-ink">Modo registrado</strong> — historial de cálculos vinculado a una cuenta de usuario privada.</li>
+            </ul>
+            <p class="mt-3">El servicio es gratuito. El acceso implica la aceptación de las condiciones aquí descritas.</p>
+        </div>
+
+        <div>
+            <h2 class="font-display font-bold text-ink text-lg mb-3">
+                3. Propiedad intelectual
+            </h2>
+            <p>El titular es propietario exclusivo de todos los derechos sobre el sitio web, incluyendo el código fuente (Flask, HTMX, Tailwind CSS), los diseños de interfaz, las marcas, los textos y, de forma expresa, el <strong class="text-ink">algoritmo de cálculo de presión de neumáticos</strong>.</p>
+            <p class="mt-3">Queda prohibida la reproducción, distribución o transformación de cualquier elemento sin autorización escrita del titular. El uso de la herramienta se limita al ámbito personal del ciclista.</p>
+        </div>
+
+        <div>
+            <h2 class="font-display font-bold text-ink text-lg mb-3">
+                4. Exclusión de responsabilidad
+            </h2>
+            <p>Los resultados de Verneris son estimaciones técnicas basadas en las variables introducidas por el usuario. Sin embargo, el Titular no puede garantizar de forma absoluta que dichas presiones se adapten de forma
+                invariable a la totalidad de circunstancias reales de la marcha o al estado de conservación de los
+                componentes mecánicos de la bicicleta. <b>El titular no se hace responsable de:</b></p>
+            <ul class="mt-2 space-y-1 list-disc list-inside">
+                <li>Daños físicos o averías mecánicas derivados de una elección inadecuada de presión o de fallos estructurales en la rueda, cubierta o llanta del usuario.</li>
+                <li>Interrupciones del servicio por mantenimiento de la infraestructura o causas ajenas al sitio web.</li>
+            </ul>
+        </div>
+
+    </section>
+
+</div>
+{% endblock %}
