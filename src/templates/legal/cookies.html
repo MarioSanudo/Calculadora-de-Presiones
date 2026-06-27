@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Política de Cookies · Verneris{% endblock %}
+{% block meta_description %}Política de cookies de Verneris. Qué cookies usamos, para qué y cómo gestionarlas.{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+
+    <div class="mb-8 border-b border-line pb-5">
+        <h1 class="font-display font-extrabold text-ink
+                   text-3xl tracking-tight mt-1">
+            Política de Cookies
+        </h1>
+        <p class="text-xs font-mono text-mute mt-2">
+            Última actualización: junio 2026
+        </p>
+    </div>
+
+    <div class="space-y-6 text-sm text-[#4A4845] leading-relaxed">
+
+        <p>Verneris utiliza cookies para garantizar el funcionamiento técnico de la plataforma
+        y, con tu consentimiento, para medir el rendimiento de la web mediante analítica
+        agregada y anónima.</p>
+
+        <!-- Qué es una cookie -->
+        <section>
+            <h2 class="font-display font-bold text-ink text-lg mb-3">
+                1. ¿Qué es una cookie?
+            </h2>
+            <p>Una cookie es un pequeño identificador que un sitio web almacena en tu
+            navegador. Permite recordar estados de sesión, preferencias técnicas y, en el
+            caso de las analíticas, contabilizar visitas de forma estadística. No son
+            programas ejecutables ni pueden acceder a otros datos de tu dispositivo.</p>
+        </section>
+
+        <!-- Cookies técnicas -->
+        <section>
+            <h2 class="font-display font-bold text-ink text-lg mb-4">
+                2. Cookies técnicas (no requieren consentimiento)
+            </h2>
+            <p class="mb-4">Son imprescindibles para el funcionamiento de la plataforma.
+            Sin ellas el login, los formularios y la seguridad no funcionarían. Están
+            exentas de consentimiento bajo el artículo 22.2 de la LSSI-CE.</p>
+
+            <p class="mb-4">Cookie de sesión de Flask. Almacena un identificador cifrado que coordina las peticiones
+                del navegador con el servidor.</p>
+
+            <p class="mb-4">Cookie de Flask-Login. Mantiene la sesión activa entre visitas en el modo registrado, evitando
+                tener que volver a introducir credenciales.</p>
+
+            <p class="mb-4">Token criptográfico que protege los formularios frente a ataques de tipo Cross-Site Request Forgery
+                (CSRF), asegurando que las peticiones provienen genuinamente de esta interfaz.</p>
+          
+        </section>
+
+        <!-- Cookies analíticas -->
+        <section>
+            <h2 class="font-display font-bold text-ink text-lg mb-4">
+                3. Cookies analíticas (requieren consentimiento)
+            </h2>
+            <p class="mb-4">Su finalidad es entender cómo se usa la web en términos agregados: páginas visitadas, tiempo de sesión y origen geográfico aproximado. 
+                Google puede cruzar estos datos con otros sitios que también usen Analytics bajo su propia
+            <a href="https://policies.google.com/privacy"
+               target="_blank" rel="noopener"
+               class="underline hover:text-ink transition-colors">
+                política de privacidad</a>.</p>
+            <div class="space-y-3">
+
+                <p class="text-xs text-[#4A4845]">Asigna un identificador aleatorio anónimo para distinguir usuarios únicos y contabilizar
+                    visitas de forma estadística.</p>
+
+            </div>
+        </section>
+
+        <!-- Gestión -->
+        <section>
+            <h2 class="font-display font-bold text-ink text-lg mb-3">
+                4. Cómo gestionar o revocar el consentimiento
+            </h2>
+            <p class="mb-4">Tienes el control total sobre las cookies analíticas
+            en cualquier momento:</p>
+            <div class="space-y-3">
+                <div class="bg-paper border border-line rounded-xl p-4">
+                    <div class="font-display font-bold text-ink text-sm mb-1">
+                        Desde tu navegador
+                    </div>
+                    <p class="text-xs text-[#4A4845] space-y-1">
+                        Puedes bloquear o eliminar cookies directamente:
+                    </p>
+                    <ul class="mt-2 space-y-1 text-xs text-[#4A4845]
+                               font-mono">
+                        <li>
+                            <span class="text-ink">Chrome</span>
+                            — Configuración → Privacidad → Cookies
+                        </li>
+                        <li>
+                            <span class="text-ink">Firefox</span>
+                            — Ajustes → Privacidad → Cookies y datos
+                        </li>
+                        <li>
+                            <span class="text-ink">Safari</span>
+                            — Preferencias → Privacidad
+                        </li>
+                        <li>
+                            <span class="text-ink">Edge</span>
+                            — Configuración → Cookies y permisos
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <p class="text-xs text-mute pt-4 border-t border-line">
+            Para cualquier consulta sobre el uso de cookies puedes escribir a verneris.dev@gmail.com
+        </p>
+
+    </div>
+</div>
+{% endblock %}

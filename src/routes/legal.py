@@ -11,3 +11,7 @@ def avisoLegal():
 @legal_bp.route("/privacidad", methods=["GET"])
 def policyPrivacy():
     return render_template("legal/policy_privacy.html")
+
+@legal_bp.route("cookies", methods=["GET"])
+def cookies():
+    return render_template("legal/cookies.html")

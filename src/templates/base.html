@@ -304,10 +304,13 @@
 
             <!-- Links -->
             <nav class="flex gap-6 text-sm text-[#6B6860]">
+                {% if current_user.is_anonymous %}
                 <a href="{{ url_for('main.calcular_anonimo') }}"
                    class="hover:text-white transition-colors">
                     Calculadora
                 </a>
+                {% endif %}
+                
                 {% if current_user.is_authenticated %}
                 <a href="{{ url_for('main.historial') }}"
                    class="hover:text-white transition-colors">
@@ -327,6 +330,11 @@
                 <a href="{{ url_for('legal.policyPrivacy') }}"
                     class="text-[#6B6860] hover:text-white transition-colors">
                     Política de Privacidad
+                </a>
+
+                <a href="{{ url_for('legal.cookies') }}"
+                    class="text-[#6B6860] hover:text-white transition-colors">
+                    Cookies
                 </a>
             </nav>
 
