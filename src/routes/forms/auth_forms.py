@@ -10,8 +10,8 @@ _NAME_MSG = "Solo letras, sin espacios ni guiones."
 
 # Al menos una mayúscula y un carácter especial
 _PASSWORD_REGEX = (
-    r"^(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+\[\]{};':\"\\|,.<>/?¡¿]).*$"
-)
+    r"^(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+\[\]{};':\"\\|,.<>/?¡¿]).*$"    #Esta sentencia es un lookaheads positivo ?=, este además ?=.*[] Comprueba que existe lo que hay en los corchetes
+)   
 _PASSWORD_MSG = (
     "Debe contener al menos una mayúscula y un carácter especial "
     "(!@#$%^&*¡¿, etc.)."

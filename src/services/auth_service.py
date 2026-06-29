@@ -4,7 +4,8 @@ from flask import current_app
 from sqlalchemy.exc import SQLAlchemyError
 from src.utils.extensions import db, bcrypt
 from src.models.user import User
-
+from src.routes.forms.auth_forms import _PASSWORD_REGEX, _PASSWORD_MSG, _NAME_MSG, _NAME_REGEX
+import re
 
 def hash_password(plain):
     return bcrypt.generate_password_hash(plain).decode("utf-8")
@@ -12,6 +13,43 @@ def hash_password(plain):
 
 def check_password(hashed, plain):
     return bcrypt.check_password_hash(hashed, plain)
+
+def check_content_register(username, surname, email, password, confirmPassword):
+    try:
+
+        email, password = check_content_login(email, password)
+        if not ( 2 <len(username) < 80):
+            raise ValueError("La longitud del nombre no es la correcta")
+        
+        if not re.match(_NAME_REGEX, username) or re.match(_NAME_REGEX, surname):
+            raise ValueError(_NAME_MSG)
+
+    except TypeError:
+        return None
+
+    return username, surname, email, password, confirmPassword
+
+def check_content_login(email, password):
+
+    try:
+
+        email=str(email).strip().lower()
+        password=str(password)
+
+        if "@" not in email or len(email) > 254:
+            raise ValueError("El formato del email no es correcto")
+        
+        if not password or not (8 < len(password) < 128):
+            raise ValueError("No cumple la longitud adecuada mínimo 8 caracter y máximo de 128, porfavor ajustese")
+        
+        if not re.match(_PASSWORD_REGEX, password):
+            raise ValueError(_PASSWORD_MSG)
+        
+        
+    except TypeError:
+        return None #Directamente lo capturo y ni lo proceso, el otro error (ValueError) se captura en el endpoint, cuando haga la llamada a la función
+
+    return email, password
 
 
 def create_user(username, surname, email, password):

@@ -18,7 +18,7 @@ from src.routes.forms.auth_forms import (
 )
 from src.services.auth_service import (
     create_user, authenticate_user,
-    decode_jwt, hash_password
+    decode_jwt, hash_password, check_content_login
 )
 from src.services.email_service import (
     send_verification_email,
@@ -39,6 +39,7 @@ def register():
     if current_user.is_authenticated:
         return redirect("/")
     form = RegistrationForm()
+
     if form.validate_on_submit():
         existing_email = User.query.filter_by(
             email=form.email.data.strip().lower()
@@ -110,9 +111,20 @@ def login():
         return redirect("/")
 
     form = LoginForm()
-
     if form.validate_on_submit():
-        user = authenticate_user(
+        try:
+            email, password = check_content_login(form.email.data, form.password.data)  #WTF ya lo chequea pero puede falsificarse desde POSTMAN el token CSRF
+            if email is None or password is None:
+                logger.exception("El email o contraseña ni siquiera cumplen el formato string o formato correcto %s", form.email.data)
+                flash("No estas cumpliendo con el tipo de formato en los datos de entrada en email o contraseña", "error")
+                return render_template("auth/login.html", form=form)
+
+        except ValueError as e:
+            logger.warning("Ha llegado un formato incorrecto de email %s", form.email.data)
+            flash(str(e), "error")
+            return render_template("auth/login.html", form=form)
+
+        user = authenticate_user(   #Como ya esta saneda la comprabación puedo cogerlo directamente del form que no va a dar problemas
             email=form.email.data,
             password=form.password.data
         )

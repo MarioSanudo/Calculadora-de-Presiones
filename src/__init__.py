@@ -105,7 +105,7 @@ def app_creation(config_class=None):
         response.headers["Referrer-Policy"] = (
             "strict-origin-when-cross-origin"
         )
-        if not app.debug:
+        if not app.debug:   #Cuando no es desarrollo local utilizamos TLS para https
             response.headers["Strict-Transport-Security"] = (
                 "max-age=31536000; includeSubDomains"
             )
