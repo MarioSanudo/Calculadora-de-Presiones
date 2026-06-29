@@ -18,7 +18,7 @@ from src.routes.forms.auth_forms import (
 )
 from src.services.auth_service import (
     create_user, authenticate_user,
-    decode_jwt, hash_password, check_content_login
+    decode_jwt, hash_password, check_content_login, check_content_register
 )
 from src.services.email_service import (
     send_verification_email,
@@ -42,19 +42,29 @@ def register():
 
     if form.validate_on_submit():
         existing_email = User.query.filter_by(
-            email=form.email.data.strip().lower()
-        ).first()
+            email=form.email.data.strip().lower()).first()
+        
+        try:
+            username, surname, email, password, confirm_password = check_content_register(form.username.data, form.surname.data, form.email.data, form.password.data, form.confirm_password.data)
+            if username is None or surname is None or email is None or password is None:
+                logger.exception("El formato de los campos no es ni el correcto, parece que han podido saltarse la validación del cliente email", "warning")
+                flash("No cumples con el tipo de información que se presupone que ingreses", "info")
+                return render_template("auth/regiter.html", form=form)
+
+        except ValueError as e:
+            logger.warning("El formato de algún campo es erróneo username: %s, surname: %s, email: %s", form.username.data
+                           , form.surname.data, form.email.data)
+            flash(str(e), "error")
+            return render_template("auth/register.html", form=form)
+
+
         if existing_email:
             flash("Ese email ya esta registrado.", "error")
             return render_template(
-                "auth/register.html", form=form
-            )
+                "auth/register.html", form=form)
 
         username = form.username.data
-        if User.query.filter_by(
-            username=username,
-            surname=form.surname.data
-        ).first():
+        if User.query.filter_by(username=username, surname=form.surname.data).first():
             count = User.query.filter_by(username=username).count()
             username = f"{username}{count + 1}"
 
@@ -63,8 +73,8 @@ def register():
                 username=username,
                 surname=form.surname.data,
                 email=form.email.data,
-                password=form.password.data
-            )
+                password=form.password.data)
+            
         except ValueError as e:
             flash(str(e), "error")
             return render_template(
@@ -76,11 +86,10 @@ def register():
             )
             flash(
                 "Error al crear la cuenta. Intentalo de nuevo.",
-                "error"
-            )
+                "error")
+            
             return render_template(
-                "auth/register.html", form=form
-            )
+                "auth/register.html", form=form)
 
         try:
             send_verification_email(user)
@@ -92,13 +101,12 @@ def register():
 
         flash(
             "Cuenta creada. Revisa tu email para verificar tienes 24h.",
-            "success"
-        )
+            "success")
+        
         return redirect(url_for("auth.login"))
 
     return render_template(
-        "auth/register.html", form=form
-    )
+        "auth/register.html", form=form)
 
 
 # ── Login ───────────────────────────────────────────
@@ -115,7 +123,7 @@ def login():
         try:
             email, password = check_content_login(form.email.data, form.password.data)  #WTF ya lo chequea pero puede falsificarse desde POSTMAN el token CSRF
             if email is None or password is None:
-                logger.exception("El email o contraseña ni siquiera cumplen el formato string o formato correcto %s", form.email.data)
+                logger.exception("El email o contraseña ni siquiera cumplen el formato string o formato correcto, parece que se han saltado la validación del cliente %s", form.email.data)
                 flash("No estas cumpliendo con el tipo de formato en los datos de entrada en email o contraseña", "error")
                 return render_template("auth/login.html", form=form)
 
@@ -126,8 +134,8 @@ def login():
 
         user = authenticate_user(   #Como ya esta saneda la comprabación puedo cogerlo directamente del form que no va a dar problemas
             email=form.email.data,
-            password=form.password.data
-        )
+            password=form.password.data)
+        
         if user:
             if not user.is_verified:
                 try:
@@ -248,8 +256,7 @@ def resend_verification():
             if user.is_verified:
                 flash(
                     "Tu cuenta ya esta verificada. Por favor inicia sesión.",
-                    "info"
-                )
+                    "info")
             else:
                 try:
                     send_verification_email(user)

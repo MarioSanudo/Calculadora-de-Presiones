@@ -18,14 +18,21 @@ def check_content_register(username, surname, email, password, confirmPassword):
     try:
 
         email, password = check_content_login(email, password)
+
+        username=str(username)
+        surname=str(surname)
+
         if not ( 2 <len(username) < 80):
             raise ValueError("La longitud del nombre no es la correcta")
         
-        if not re.match(_NAME_REGEX, username) or re.match(_NAME_REGEX, surname):
+        if not re.match(_NAME_REGEX, username) or not re.match(_NAME_REGEX, surname):
             raise ValueError(_NAME_MSG)
+        
+        if password != confirmPassword:
+            raise ValueError("No coinciden las contraseñas")
 
     except TypeError:
-        return None
+        return None, None, None, None, None
 
     return username, surname, email, password, confirmPassword
 
@@ -47,7 +54,7 @@ def check_content_login(email, password):
         
         
     except TypeError:
-        return None #Directamente lo capturo y ni lo proceso, el otro error (ValueError) se captura en el endpoint, cuando haga la llamada a la función
+        return None, None #Directamente lo capturo y ni lo proceso, el otro error (ValueError) se captura en el endpoint, cuando haga la llamada a la función
 
     return email, password
 
