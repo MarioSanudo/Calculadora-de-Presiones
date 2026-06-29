@@ -864,6 +864,12 @@
 
     const DEFECTOS = {{ all_defaults | tojson }};
 
+
+    document.body.addEventListener('htmx:responseError', function(evt) {
+    const xhr = evt.detail.xhr;
+    document.querySelector('#resultado').innerHTML = xhr.responseText;});
+
+    
     function aplicarDefectos(modalidad) {
         const defaultParam = DEFECTOS[modalidad];
         if (!defaultParam) return;  // No delvuelve nada None si la modalidad no existe o es None
