@@ -128,7 +128,7 @@ def login():
                 return render_template("auth/login.html", form=form)
 
         except ValueError as e:
-            logger.warning("Ha llegado un formato incorrecto de email %s", form.email.data)
+            logger.warning("Ha llegado un formato incorrecto de email %s, o contraseña (no puedo mostrar la password), si cumple email es la otra causa", form.email.data)
             flash(str(e), "error")
             return render_template("auth/login.html", form=form)
 

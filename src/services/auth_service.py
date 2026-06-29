@@ -22,7 +22,7 @@ def check_content_register(username, surname, email, password, confirmPassword):
         username=str(username)
         surname=str(surname)
 
-        if not ( 2 <len(username) < 80):
+        if not ( 2 <=len(username) <= 80):
             raise ValueError("La longitud del nombre no es la correcta")
         
         if not re.match(_NAME_REGEX, username) or not re.match(_NAME_REGEX, surname):
@@ -43,11 +43,11 @@ def check_content_login(email, password):
         email=str(email).strip().lower()
         password=str(password)
 
-        if "@" not in email or len(email) > 254:
+        if "@" not in email or len(email) >= 254:
             raise ValueError("El formato del email no es correcto")
         
-        if not password or not (8 < len(password) < 128):
-            raise ValueError("No cumple la longitud adecuada mínimo 8 caracter y máximo de 128, porfavor ajustese")
+        if not password or not (8 <= len(password) <= 128):
+            raise ValueError("No cumple la longitud adecuada de contraseña mínimo 8 caracter y máximo de 128, porfavor ajustese")
         
         if not re.match(_PASSWORD_REGEX, password):
             raise ValueError(_PASSWORD_MSG)
