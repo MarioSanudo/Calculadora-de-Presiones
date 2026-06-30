@@ -1,11 +1,13 @@
 import jwt
 from datetime import datetime, timezone, timedelta
-from flask import current_app
+from flask import current_app, jsonify
 from sqlalchemy.exc import SQLAlchemyError
 from src.utils.extensions import db, bcrypt
 from src.models.user import User
 from src.routes.forms.auth_forms import _PASSWORD_REGEX, _PASSWORD_MSG, _NAME_MSG, _NAME_REGEX
-import re
+import re, logging
+
+logger= logging.getLogger(__name__)
 
 def hash_password(plain):
     return bcrypt.generate_password_hash(plain).decode("utf-8")
@@ -115,9 +117,14 @@ def decode_jwt(token, expected_purpose=None):
             current_app.config["SECRET_KEY"],
             algorithms=["HS256"]
         )
+
+    except jwt.InvalidAlgorithmError:
+        logger.warning("Estan intentando modificar el token %s", token) #Prefiero poder ver el token para intentar sacar algo de posible info del atacante
+        return None
+    
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None
-
+    
     if expected_purpose and payload.get("purpose") != expected_purpose:
         return None
 
