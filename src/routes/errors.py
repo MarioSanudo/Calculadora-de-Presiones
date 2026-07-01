@@ -34,4 +34,5 @@ def server_error(e):
 @errors_bp.app_errorhandler(CSRFError)
 def csrf_error(e):
     # Redirige al inicio; el token expirado ya invalida el form
+    logger.warning("Hay usuarios tratando de saltarse el formulario %s", e)
     return redirect("/"), 303
