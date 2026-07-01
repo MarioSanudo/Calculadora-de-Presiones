@@ -122,10 +122,14 @@ def decode_jwt(token, expected_purpose=None):
         logger.warning("Estan intentando modificar el token %s", token) #Prefiero poder ver el token para intentar sacar algo de posible info del atacante
         return None
     
+    except jwt.DecodeError:
+        logger.warning("Error en la decodificación del token %s\n, es probable que no este completo o este mal la codificación base 64")
+    
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None
     
     if expected_purpose and payload.get("purpose") != expected_purpose:
         return None
+    
 
     return payload

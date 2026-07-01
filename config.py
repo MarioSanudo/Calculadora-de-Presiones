@@ -15,7 +15,7 @@ class Config:
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)
-    WTF_CSRF_TIME_LIMIT = 3600
+    WTF_CSRF_TIME_LIMIT = 3600  #EL estandar 1h
 
     # Flask-Mail con Mailtrap si es desarrollo
     MAIL_SERVER = os.environ.get(
@@ -39,6 +39,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    WTF_CSRF_ENABLED=False
     SESSION_COOKIE_SECURE = False
     SQLALCHEMY_DATABASE_URI = (
         os.getenv("DATABASE_URL_DEVELOPMENT")
