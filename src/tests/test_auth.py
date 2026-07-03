@@ -29,7 +29,7 @@ def test_register_success(client, app):
             "email": "test@example.com",
             "password": _VALID_PASS,
             "confirm_password": _VALID_PASS,
-        }, follow_redirects=True)
+        }, follow_redirects=True)   #Para que busque en todas las peticiones hasta llegar a la que no es una redirección (302)
     assert resp.status_code == 200
 
     with app.app_context():
@@ -170,7 +170,7 @@ def test_register_password_rejects_no_special(client):
     })
     assert resp.status_code == 200
     html = resp.data.decode("utf-8")
-    assert "Debe contener al menos una" in html
+    assert "Debe contener al menos una" in html #No hace falta por temas de recursos poner el (b), dado que se ha decodificado de bits a formato utf-8 que es el html
 
 
 def test_register_password_rejects_both(client):
@@ -191,9 +191,9 @@ def test_register_password_rejects_both(client):
 def test_login_success(client, verified_user):
     resp = client.post("/auth/login", data={
         "email": verified_user["email"],
-        "password": verified_user["password"],
+        "password": verified_user["password"],  #Esta función, pertenece a un usuario correcto que ya se creo en conftest.py
     })
-    assert resp.status_code == 302
+    assert resp.status_code == 302  #Al no poner follow_redirects=True, lo manejamos de esta forma, pero la comprobación es igual de fiable
     assert resp.location == "/" or resp.location=="/calcular"
 
 
@@ -225,7 +225,7 @@ def test_login_unverified_blocked(client, app):
 
 # ── Next param ──────────────────────────────────────
 
-def _login_verified(client, verified_user, next_url=None):
+def _login_verified(client, verified_user, next_url=None):  #Con guión bajo, porque va a ser utilizada por otras funciones
     url = (
         f"/auth/login?next={next_url}"
         if next_url else "/auth/login"
@@ -246,7 +246,7 @@ def test_login_next_valido(client, verified_user):
 
 def test_login_next_externo(client, verified_user):
     resp = _login_verified(
-        client, verified_user, "https://evil.com"
+        client, verified_user, "https://evil.com"   #Lo rechaza devuelve next_url=None y coge la redirección de serie que es hacia el endpoint de calculo
     )
     assert resp.status_code == 302
     assert resp.location == "/calcular"

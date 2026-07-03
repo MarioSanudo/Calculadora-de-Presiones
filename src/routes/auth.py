@@ -39,7 +39,7 @@ def register():
     if current_user.is_authenticated:
         return redirect("/")
     form = RegistrationForm()
-
+    
     if form.validate_on_submit():
         existing_email = User.query.filter_by(
             email=form.email.data.strip().lower()).first()

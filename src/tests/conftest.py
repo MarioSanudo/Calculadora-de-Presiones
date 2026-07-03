@@ -12,9 +12,9 @@ from src.services.auth_service import hash_password
 def app():
     app = app_creation(config_class=TestingConfig)
 
-    with app.app_context():
+    with app.app_context(): #Necesita el contexto al no trabajar con blueprints ya registrados, el estandar es hacerlo asi
         _db.create_all()
-        yield app
+        yield app           #La forma en la que se ha creado esta func, es el estandar que dictamina flask en sus tests
         _db.session.remove()
         _db.drop_all()
 
@@ -34,7 +34,7 @@ def db_session(app):
 def verified_user(app, client):
     """Crea un usuario verificado listo para login."""
     _PASS = "Securepass1!"
-    with app.app_context():
+    with app.app_context(): #Se pasa el contexto porque estamis usando a la base de datos para guardar info para los tests
         user = User(
             username="Verified",
             surname="User",

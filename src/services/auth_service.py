@@ -124,6 +124,7 @@ def decode_jwt(token, expected_purpose=None):
     
     except jwt.DecodeError:
         logger.warning("Error en la decodificación del token %s\n, es probable que no este completo o este mal la codificación base 64")
+        return None
     
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None
