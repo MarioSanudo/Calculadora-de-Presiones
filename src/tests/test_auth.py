@@ -2,6 +2,7 @@ from unittest.mock import patch
 from sqlalchemy.exc import SQLAlchemyError
 from src.models.user import User
 from src.services.auth_service import generate_jwt
+import pytest, jwt
 
 # Contrasena valida: mayuscula + caracter especial + longitud
 _VALID_PASS = "Securepass1!"
@@ -90,7 +91,7 @@ def test_register_duplicate_name(client, app):
         "password": _VALID_PASS,
         "confirm_password": _VALID_PASS,
     }
-    with patch("src.routes.auth.send_verification_email"):
+    with patch("src.routes.auth.send_verification_email"):  #Solo hago patch, quiero anular el envió de email, pero no necesito de ello sustituirlo por otro valor para que funcione el endpoint y su respuesta
         client.post("/auth/register", data=data)
 
     with patch("src.routes.auth.send_verification_email"):
@@ -113,7 +114,7 @@ def test_register_duplicate_name(client, app):
 
 def test_register_name_rejects_numbers(client):
     resp = client.post("/auth/register", data={
-        "username": "Carlos123",
+        "username": "Carlos123",            #No hace falta patch, porque no se llega a la parte del servicio email externo, al no cumplir condiciones
         "surname": "Garcia",
         "email": "num@example.com",
         "password": _VALID_PASS,
@@ -763,3 +764,12 @@ def test_google_callback_already_linked(
             follow_redirects=True,
         )
     assert resp.status_code == 200
+
+
+def test_decode_token_alg_None(app, client, caplog):
+    with app.app_context():
+        invalid_token="eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VyX2lkIjo0LCJwdXJwb3NlIjpudWxsLCJleHBpcmVfbWludXRlcyI6NjB9." # contenido = {"user_id": 4, "purpose": None, "expire_minutes": 60}   con alg:None habiendolo generado
+        resp = client.get(f"/auth/verify/{invalid_token}", follow_redirects=True) 
+        
+        assert b"Enlace invalido o expirado" in resp.data
+        assert "Estan intentando modificar el token" in caplog.text #Capturo que se cumpla el contenido del log en petición y que la func individual devuelva lo que debe
