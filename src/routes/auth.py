@@ -213,7 +213,7 @@ def verify_email(token):
             "verify_email: token de user_id=%s usado por user_id=%s logueado",
             user.id, current_user.id
         )
-        flash("Acción no permitida estas intentando atacar.", "error")
+        flash("Accion no permitida estas intentando atacar", "error")
         return redirect(url_for("auth.login"))
 
     if user.is_verified:
@@ -322,7 +322,7 @@ def forgot_password():
 @limiter.limit("5 per minute")
 def reset_password(token):
     payload = decode_jwt(
-        token, expected_purpose="password_reset"
+        token, expected_purpose="password_reset"    #El purpose es vital para no inyectar un token modificado generado con un script de python externo a esta app
     )
     if not payload:
         flash(
@@ -336,13 +336,13 @@ def reset_password(token):
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("auth.forgot_password"))
 
-    # Usuario logueado distinto al del token → posible reciclaje
+    # Usuario logueado distinto al del token → posible reciclaje, evita ataque IDOR
     if current_user.is_authenticated and current_user.id != user.id:
         logger.warning(
             "reset_password: token de user_id=%s usado por user_id=%s logueado",
             user.id, current_user.id
         )
-        flash("Acción no permitida estas intentando atacar.", "error")
+        flash("Acción no permitida", "error")
         return redirect(url_for("auth.login"))
 
     form = ResetPasswordForm()

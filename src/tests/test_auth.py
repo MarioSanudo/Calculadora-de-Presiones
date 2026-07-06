@@ -418,7 +418,7 @@ def test_resend_verification_existing(client, app):
         })
 
     with patch(
-        "src.services.email_service.mail.send"
+        "src.services.email_service.mail.send"  #La acción de envio del email usando SMTP
     ) as mock_send:
         resp = client.post(
             "/auth/resend-verification",
@@ -610,8 +610,7 @@ def test_verify_email_token_recycling_blocked(
         f"/auth/verify/{token_b}",
         follow_redirects=True,
     )
-    assert "Acci" in resp.data.decode("utf-8")
-    assert "no permitida" in resp.data.decode("utf-8")
+    assert "Accion no permitida estas intentando atacar" in resp.data.decode("utf-8")
 
     # B sigue sin verificar
     with app.app_context():
@@ -768,8 +767,18 @@ def test_google_callback_already_linked(
 
 def test_decode_token_alg_None(app, client, caplog):
     with app.app_context():
-        invalid_token="eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VyX2lkIjo0LCJwdXJwb3NlIjpudWxsLCJleHBpcmVfbWludXRlcyI6NjB9." # contenido = {"user_id": 4, "purpose": None, "expire_minutes": 60}   con alg:None habiendolo generado
-        resp = client.get(f"/auth/verify/{invalid_token}", follow_redirects=True) 
+        token_alg_none="eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VyX2lkIjo0LCJwdXJwb3NlIjpudWxsLCJleHBpcmVfbWludXRlcyI6NjB9." # contenido = {"user_id": 4, "purpose": None, "expire_minutes": 60}   con alg:None habiendolo generado
+        resp = client.get(f"/auth/verify/{token_alg_none}", follow_redirects=True) 
         
         assert b"Enlace invalido o expirado" in resp.data
         assert "Estan intentando modificar el token" in caplog.text #Capturo que se cumpla el contenido del log en petición y que la func individual devuelva lo que debe
+
+
+#Revisar las nuevas funciones si un usuario se salta checkeo de WTF form
+def test_check_login_data_no_wtf(app, client, verified_user):
+    resp= client.post("auth/login", data={
+        "email": verified_user["email"],
+        "password":"A1!" + "a" * 200 #Contraseña larga, no hay comprobación de wtf
+    })
+    assert b"No cumple la longitud adecuada" in resp.data and b"8 caracter" in resp.data
+    assert resp.status_code == 200
