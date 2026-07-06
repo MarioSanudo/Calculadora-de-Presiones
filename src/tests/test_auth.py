@@ -775,10 +775,29 @@ def test_decode_token_alg_None(app, client, caplog):
 
 
 #Revisar las nuevas funciones si un usuario se salta checkeo de WTF form
-def test_check_login_data_no_wtf(app, client, verified_user):
+def test_check_login_data_no_wtf_bad_password_length(app, client, verified_user):
     resp= client.post("auth/login", data={
         "email": verified_user["email"],
-        "password":"A1!" + "a" * 200 #Contraseña larga, no hay comprobación de wtf
+        "password":"A1!" + "a"*200 #Contraseña larga, no hay comprobación de wtf
     })
     assert b"No cumple la longitud adecuada" in resp.data and b"8 caracter" in resp.data
+    assert resp.status_code == 200
+
+def test_check_login_no_wtf_bad_password_format(app, client, verified_user, caplog):
+    resp= client.post("auth/login", data={
+        "email": verified_user["email"],
+        "password":"mario_admin12!"
+    })
+    assert "Debe contener al menos una mayúscula" in resp.data.decode("utf-8")
+    assert "(no puedo mostrar la password), si cumple email es la otra causa" in caplog.text
+    assert resp.status_code == 200 
+
+def test_check_login_no_wtf_bad_password_key(app, client, verified_user, caplog):
+    with patch("src.routes.forms.auth_forms.LoginForm.validate_on_submit", lambda self: True):
+        resp= client.post("auth/login", data ={
+            "email":verified_user["email"],
+            "contra":verified_user["password"]  #La clave es password, contra no existe imagino que ese campo reciba un None
+        })
+
+    assert "No cumple la longitud adecuada de contraseña mínimo 8 caracter y máximo de 128, porfavor ajustese" in resp.data.decode("utf-8")
     assert resp.status_code == 200
