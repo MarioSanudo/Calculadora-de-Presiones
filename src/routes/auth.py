@@ -27,7 +27,6 @@ from src.services.email_service import (
 from src.models.user import User
 
 logger = logging.getLogger(__name__)
-
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
@@ -317,8 +316,7 @@ def forgot_password():
 
 
 @auth_bp.route(
-    "/reset-password/<token>", methods=["GET", "POST"]
-)
+    "/reset-password/<token>", methods=["GET", "POST"])
 @limiter.limit("5 per minute")
 def reset_password(token):
     payload = decode_jwt(

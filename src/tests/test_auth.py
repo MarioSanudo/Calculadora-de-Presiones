@@ -1,5 +1,4 @@
-from unittest.mock import patch
-from unittest import mock
+from unittest.mock import patch, Mock
 from sqlalchemy.exc import SQLAlchemyError
 from src.models.user import User
 from src.services.auth_service import generate_jwt
@@ -670,8 +669,15 @@ def test_reset_password_token_recycling_blocked(
 # ── Google OAuth ────────────────────────────────────
 
 def test_google_login_redirects(client):
-    resp = client.get("/auth/login/google")
+    with patch("authlib.integrations.flask_client.apps.FlaskOAuth2App.load_server_metadata") as mock_google_metadata:
+        mock_google_metadata.return_value={
+            "authorization_endpoint": "https://accounts.google.com/o/oauth2/v2/auth",
+            "token_endpoint": "https://oauth2.googleapis.com/token"}
+        
+        resp = client.get("/auth/login/google")
+
     assert resp.status_code == 302
+    assert "accounts.google.com" in resp.location
 
 
 def test_google_callback_new_user(client, app):
