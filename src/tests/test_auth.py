@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from unittest import mock
 from sqlalchemy.exc import SQLAlchemyError
 from src.models.user import User
 from src.services.auth_service import generate_jwt
@@ -800,4 +801,37 @@ def test_check_login_no_wtf_bad_password_key(app, client, verified_user, caplog)
         })
 
     assert "No cumple la longitud adecuada de contraseña mínimo 8 caracter y máximo de 128, porfavor ajustese" in resp.data.decode("utf-8")
+    assert resp.status_code == 200
+
+def test_login_wtf_no_pass(app, client, verified_user):
+    resp= client.post("auth/login", data={
+        "email":verified_user["email"],
+        "contra": verified_user["password"]
+    })
+
+    assert "This field is required." in resp.data.decode("utf-8")   #En cambio en este test se activa la protección de WTF
+    assert resp.status_code == 200
+
+def test_check_login_no_wtf_bad_email_key(app, client, verified_user):
+    with patch("src.routes.forms.auth_forms.LoginForm.validate_on_submit",
+               autospec=True, return_value= True):  #El spec para que detecte el mock necesario en el id del validate_on_submit, la otra forma más entendible a lambda self:True
+
+        resp=client.post("auth/login", data={
+            "email":None,
+            "password": verified_user["password"]
+        })
+    
+    assert "El formato del email no es correcto" in resp.data.decode("utf-8")
+    assert resp.status_code == 200
+
+
+def test_check_login_no_wtf_no_email_key(app, client, verified_user):
+    with patch("src.routes.forms.auth_forms.LoginForm.validate_on_submit",
+               autospec=True, return_value= True):
+
+        resp=client.post("auth/login", data={
+            "password": verified_user["password"]
+        })
+    
+    assert "El formato del email no es correcto" in resp.data.decode("utf-8")
     assert resp.status_code == 200
