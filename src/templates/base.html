@@ -4,11 +4,29 @@
 
     <!-- Google Tag Manager -->
     <script>
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})
-        (window,document,'script','dataLayer','GTM-W2QVFKHK');
+        function cargarGTM(){
+            if (window.gtmCargado) return; // Evita cargarlo dos veces
+            window.gtmCargado = true;
+
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})
+            (window,document,'script','dataLayer','GTM-W2QVFKHK');
+
+            // Limpieza de eventos para no sobrecargar el hilo del navegador
+            window.removeEventListener('scroll', cargarGTM);
+            window.removeEventListener('mousemove', cargarGTM);
+            window.removeEventListener('touchstart', cargarGTM);
+        }
+        // 1. Si el usuario se mueve o hace scroll, cargamos GTM al instante
+        window.addEventListener('scroll', cargarGTM, { passive: true });
+        window.addEventListener('mousemove', cargarGTM, { passive: true });
+        window.addEventListener('touchstart', cargarGTM, { passive: true })
+
+        // 2. Si el usuario no hace nada, se carga automáticamente a los 3 segundos
+        setTimeout(cargarGTM, 3000);
     </script>
     <!-- End Google Tag Manager -->
+
 
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -324,7 +342,7 @@
 
                 <a href="{{ url_for('legal.avisoLegal') }}"
                     class="text-[#6B6860] hover:text-white transition-colors">
-                    Aviso legal
+                    Aviso Legal
                 </a>
 
                 <a href="{{ url_for('legal.policyPrivacy') }}"
