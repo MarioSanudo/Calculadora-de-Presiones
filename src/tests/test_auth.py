@@ -3,6 +3,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from src.models.user import User
 from src.services.auth_service import generate_jwt
 import pytest, jwt
+from urllib.parse import urlsplit, parse_qs
+from flask import redirect, url_for
 
 # Contrasena valida: mayuscula + caracter especial + longitud
 _VALID_PASS = "Securepass1!"
@@ -668,20 +670,37 @@ def test_reset_password_token_recycling_blocked(
 
 # ── Google OAuth ────────────────────────────────────
 
-def test_google_login_redirects(client):
+def test_google_login_redirects(app, client):
     with patch("authlib.integrations.flask_client.apps.FlaskOAuth2App.load_server_metadata") as mock_google_metadata:
         mock_google_metadata.return_value={
-            "authorization_endpoint": "https://accounts.google.com/o/oauth2/v2/auth",
+            "authorization_endpoint": "https://accounts.google.com/o/oauth2/v2/auth",   #El authorization_endpoint es lo mínimo necesario para que pueda hacerse la redirección
             "token_endpoint": "https://oauth2.googleapis.com/token"}
         
         resp = client.get("/auth/login/google")
 
+        
     assert resp.status_code == 302
+    assert "accounts.google.com" in resp.location
+
+    redirect_uri = parse_qs(urlsplit(resp.location).query)["redirect_uri"][0]
+    #query=str(urlsplit(resp.location).query).split("&")[2].split("=")[1] Esta versión de aquí es demasiado hardcodeada, a la que se añadan campos se rompe el test
+    with app.test_request_context():
+        expected_callback = url_for('auth.google_callback', _external=True) #_external me aporta el scheme de la url necesario para que coincida
+
+    assert redirect_uri == expected_callback
+
+
+def test_google_login_redirects_mock_object(app, client):   #Ahora mockeo antes y tengo que devolver un tipo de info diferente el objeto de respuesta, no el contenido que se hace redirección
+    with patch("src.routes.auth.oauth.google.authorize_redirect") as mock_authorize:
+        mock_authorize.return_value = redirect("https://accounts.google.com/o/oauth2/v2/auth")  #Si devuelvo el json esa va a ser la respuesta, no se hace redirect por debajo porque estoy mockeando una acción anterior
+        resp = client.get("/auth/login/google") #Daria un 200 != 302 porque tengo que ser explicito con el redirect en este mock
+
+    assert resp.status_code == 302  #Es equivalente al anterior
     assert "accounts.google.com" in resp.location
 
 
 def test_google_callback_new_user(client, app):
-    mock_token = {
+    mock_token = {      #Preconfigurado por eso lo hago de esta manera y lo paso al patch
         "userinfo": {
             "sub": "google-id-123",
             "email": "googleuser@gmail.com",
@@ -714,8 +733,7 @@ def test_google_callback_new_user(client, app):
 
 
 def test_google_callback_existing_email_links(
-    client, app, verified_user
-):
+    client, app, verified_user):
     mock_token = {
         "userinfo": {
             "sub": "google-id-456",
