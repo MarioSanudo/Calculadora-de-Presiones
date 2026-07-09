@@ -208,7 +208,7 @@ def calculate_pressure(data: dict) -> dict:
     temp_exterior   = data["temp_exterior"]
 
     # Paso 2: factor de peso normalizado respecto al valor de referencia 180
-    total = 2.2 * (bike_weight + rider_weight)
+    total = 2.3 * (bike_weight + rider_weight)
     weight_factor = 1 + (total - 180) * 0.0025
 
     # Paso 3: factores correctores comunes a ambas ruedas
@@ -228,7 +228,7 @@ def calculate_pressure(data: dict) -> dict:
                 f"Ancho de cubierta {tw} mm ({key}) fuera del rango "
                 "de la tabla de compatibilidad aro/cubierta."
             )
-        effective_width = tw + 0.4 * (inner_rim_width - ref_rim)
+        effective_width = tw + 0.38 * (inner_rim_width - ref_rim)
 
         # Se modela la cubierta como sección circular → toro perfecto
         R = wheel_diameter / 2 + effective_width / 2
@@ -237,7 +237,7 @@ def calculate_pressure(data: dict) -> dict:
 
         wheel_factor = WHEEL_POSITION_FACTORS[position]
         pressure_psi = (
-            10 ** 8.684670773
+            10 ** 8.694670773
             * torus_area ** -1.304556655
             * weight_factor
             * wheel_factor
@@ -246,7 +246,7 @@ def calculate_pressure(data: dict) -> dict:
             * surf_factor
             * cas_factor
         )
-        bar = pressure_psi / 14.5038
+        bar = pressure_psi / 14.5238
 
         # Corrección por temperatura: ley del gas ideal (hinchado a 20°C)
         bar = correccion_temperatura(bar, temp_exterior)

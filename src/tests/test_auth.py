@@ -681,6 +681,7 @@ def test_google_login_redirects(app, client):
         
     assert resp.status_code == 302
     assert "accounts.google.com" in resp.location
+    print(urlsplit(resp.location).query)
 
     redirect_uri = parse_qs(urlsplit(resp.location).query)["redirect_uri"][0]
     #query=str(urlsplit(resp.location).query).split("&")[2].split("=")[1] Esta versión de aquí es demasiado hardcodeada, a la que se añadan campos se rompe el test

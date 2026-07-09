@@ -68,5 +68,5 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     WTF_CSRF_ENABLED = False
     MAIL_SUPPRESS_SEND = True
-    GOOGLE_CLIENT_ID = "test-client-id"
+    GOOGLE_CLIENT_ID = "test-client-id" #Valores que se cargan en el config de la app antes de registrar oauth, luego lo reconocerá en el registro dinamicamente, sino error daria faltarian estos campos
     GOOGLE_CLIENT_SECRET = "test-client-secret"
