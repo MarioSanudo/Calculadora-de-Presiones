@@ -24,6 +24,11 @@ def robots():
     root = os.path.join(current_app.root_path, "..")
     return send_from_directory(root, "robots.txt")
 
+@main_bp.route("/sitemap.xml")
+def sitemap():
+    root = os.path.join(current_app.root_path, "..")
+    return send_from_directory(root, "sitemap.xml", mimetype="application/xml")
+
 
 @main_bp.route("/")
 def index():
