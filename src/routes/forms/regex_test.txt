@@ -1,0 +1,4 @@
+# regex_a_testear.txt, las tildes con ASCII para no tener errores
+
+^[a-zA-Z\u00C0-\u00FF]+$
+^(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+\[\]{};':"\\|,.<>/?\u00A1\u00BF]).*$

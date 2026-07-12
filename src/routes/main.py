@@ -33,7 +33,7 @@ def sitemap():
 def favicon():
     return send_from_directory(
         os.path.join(current_app.root_path, 'static', 'img'),
-        'favicon-48x48.png',  # o convierte a .ico real
+        'favicon-48x48.png',
         mimetype='image/png'
     )
 
