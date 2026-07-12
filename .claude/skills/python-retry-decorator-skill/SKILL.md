@@ -41,7 +41,7 @@ def retry(max_tries=3, exceptions=(Exception,), delay=0.5, backoff=2):
     """
     def decorador(func):
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs):   #Argumentos de la función func(la que se decora)
             espera = delay
             ultimo_error = None
 

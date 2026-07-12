@@ -29,6 +29,14 @@ def sitemap():
     root = os.path.join(current_app.root_path, "..")
     return send_from_directory(root, "sitemap.xml", mimetype="application/xml")
 
+@main_bp.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(current_app.root_path, 'static', 'img'),
+        'favicon-48x48.png',  # o convierte a .ico real
+        mimetype='image/png'
+    )
+
 
 @main_bp.route("/")
 def index():
