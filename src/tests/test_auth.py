@@ -204,8 +204,10 @@ def test_login_wrong_password(client, verified_user):
     resp = client.post("/auth/login", data={
         "email": verified_user["email"],
         "password": "badpassword99!A",
-    })
+    }, follow_redirects=True)
     assert b"incorrectos" in resp.data
+    assert resp.location == None
+    assert resp.status_code == 200 and resp.request.path == "/auth/login"
 
 
 def test_login_unverified_blocked(client, app):

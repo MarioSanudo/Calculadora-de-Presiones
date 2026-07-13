@@ -95,8 +95,11 @@ def register():
         except Exception:
             logger.exception(
                 "Error al enviar email de verificación "
-                "a %s", user.email
-            )
+                "a %s", user.email)
+            
+            flash(f"Error al enviar el email de verificación a {user.email}, porfavor intentelo de nuevo",
+                  "error")
+            return render_template("auth/register.html",form=form)
 
         flash(
             "Cuenta creada. Revisa tu email para verificar tienes 24h.",
@@ -151,7 +154,6 @@ def login():
                 return render_template(
                     "auth/login.html", form=form
                 )
-
             login_user(user)
             next_raw = request.args.get("next")
             next_page = (

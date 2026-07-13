@@ -24,7 +24,7 @@ def check_content_register(username, surname, email, password, confirmPassword):
         username=str(username)
         surname=str(surname)
 
-        if not ( 2 <=len(username) <= 80):
+        if not ( 2 <= len(username) <= 80):
             raise ValueError("La longitud del nombre no es la correcta")
         
         if not re.match(_NAME_REGEX, username) or not re.match(_NAME_REGEX, surname):
