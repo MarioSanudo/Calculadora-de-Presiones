@@ -352,6 +352,7 @@ def reset_password(token):
             user.password_hash = hash_password(
                 form.password.data
             )
+            user.session_version+=1
             db.session.commit()
         except SQLAlchemyError:
             db.session.rollback()
