@@ -2,7 +2,7 @@ import logging
 import secrets
 from flask import (
     Blueprint, render_template, redirect,
-    url_for, flash, request
+    url_for, flash, request, session
 )
 from flask_login import (
     login_user, logout_user,
@@ -155,6 +155,7 @@ def login():
                     "auth/login.html", form=form
                 )
             login_user(user)
+            session["session_version"] = user.session_version
             next_raw = request.args.get("next")
             next_page = (
                 validar_next(next_raw)
@@ -425,6 +426,7 @@ def google_callback():
     ).first()
     if user:
         login_user(user)
+        session["session_version"] = user.session_version
         flash("Sesión iniciada con Google.", "success")
         return redirect(url_for("main.calcular_presion"))
 
@@ -447,6 +449,7 @@ def google_callback():
             )
             return redirect(url_for("auth.login"))
         login_user(user)
+        session["session_version"] = user.session_version
         flash("Cuenta vinculada con Google.", "success")
         return redirect(url_for("main.calcular_presion"))
 
@@ -492,6 +495,7 @@ def google_callback():
             return redirect(url_for("auth.login"))
 
     login_user(user)
+    session["session_version"] = user.session_version
     flash("Cuenta creada con Google.", "success")
     return redirect("/")
 

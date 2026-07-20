@@ -9,6 +9,7 @@ from .utils.extensions import (
     db, migrate, login_manager,
     bcrypt, csrf, limiter, mail, oauth
 )
+from .services.security_service import register_security_hooks
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -58,6 +59,8 @@ def app_creation(config_class=None):
     limiter.init_app(app)
     mail.init_app(app)
     oauth.init_app(app)
+
+    register_security_hooks(app)
 
     # Google OAuth provider
     oauth.register(
