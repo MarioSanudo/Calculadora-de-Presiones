@@ -21,7 +21,7 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     is_active_user = db.Column(db.Boolean, default=True)    #Puede ser útil para banear cuentas
     alternative_id=db.Column(db.String(128), nullable=False, unique=True, default=lambda:str(uuid4()))  #Id más seguro para las cookies
-    session_version=db.Column(db.Integer(), nullable=True, default=0)
+    session_version=db.Column(db.Integer(), nullable=True, default=0, server_default="0")  #Es string en server_default porque es como una consulta SQL parametrizada
 
 
     # Historial de análisis del usuario (1:N)

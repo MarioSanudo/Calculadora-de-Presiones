@@ -60,6 +60,7 @@ def app_creation(config_class=None):
     mail.init_app(app)
     oauth.init_app(app)
 
+    #Cookie semi stateful, para resetear el estado cuando se cambia la contraseña
     register_security_hooks(app)
 
     # Google OAuth provider

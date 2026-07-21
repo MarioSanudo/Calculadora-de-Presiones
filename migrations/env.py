@@ -100,7 +100,8 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=get_metadata(),
-            **conf_args
+            **conf_args,
+            compare_server_default=True
         )
 
         with context.begin_transaction():
