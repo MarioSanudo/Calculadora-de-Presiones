@@ -5,7 +5,7 @@ from src.models.user import User
 from src.services.auth_service import generate_jwt
 import pytest, jwt
 from urllib.parse import urlsplit, parse_qs
-from flask import redirect, url_for
+from flask import redirect, url_for, session
 
 # Contrasena valida: mayuscula + caracter especial + longitud
 _VALID_PASS = "Securepass1!"
@@ -893,7 +893,7 @@ def test_user_password_session_version_None(app, client, caplog):
         db.session.add(user)
         db.session.commit()
         user_id=user.id
-        # Forzamos NULL a nivel de BD, evitando que el default de columna lo pise, en la creación no hay forma de conseguirlo
+        # Forzamos NULL a nivel de BD, evitando que el default de columna lo pise, en la creación no hay forma de conseguirlo ni aun pasando None
         db.session.execute(
             update(User).where(User.id == user_id).values(session_version=None)
         )
@@ -910,4 +910,48 @@ def test_user_password_session_version_None(app, client, caplog):
     with app.app_context():
         updated_user=db.session.query(User).filter_by(id=user_id).first()   #Usuario una vez ha pasado ya por el endpoint, es decir actualizado
         assert updated_user.session_version == 0
+
+
+def test_user_authenticate_with_session_version(app, verified_user, client):
+    resp= client.post("auth/login", data={
+        "email": verified_user["email"],
+        "password": verified_user["password"]
+    }, follow_redirects=True)
+    assert "Sesión iniciada" in resp.data.decode("utf-8")
+
+    resp2=client.post("calcular/", data={"rider_weight":     60.0, "bike_weight":      8.0, "tire_width_front": 28.0,
+                                         "tire_width_rear":  28.0, "inner_rim_width":  23.0, "wheel_diameter":   622,
+                                         "tire_casing": "TIRE_CASING_STANDARD", "ride_style": "RIDE_STYLE_ROAD", "rim_type": "RIM_TYPE_TUBES",
+                                         "surface": "SURFACE_DRY", "tire_brand": "TIRE_BRAND_GENERAL", "altitude":0, "temp_exterior": 20.0, "save": 0})
     
+    assert b"psi" in resp2.data and b"bar" in resp2.data
+    with client.session_transaction() as sess:
+        assert sess["session_version"] == 0 #Miramos directamente de la cookie que es el valor que ha recibido de la base de datos del usuario
+        
+
+def test_user_authenticate_with_None_session_version(app, client, verified_user):
+    """ La idea de este test es comprobar el 2º edge case que un usuario navegue con el None dado que no se le han actualizado sus valores, ni se ha deslogueado
+    para que se le ponga el valor a 0 como se comprobó antes, vamos a ver que devuelve el test debería funcionar la cookie con valor Nulo"""
+    with app.app_context():
+        from src.utils.extensions import db
+        user=db.session.query(User).filter_by(email=verified_user["email"]).first()
+
+        db.session.execute(
+        update(User).where(User.id==user.id).values(session_version=None))   #Vuelve a simular el usuario 
+        db.session.commit()
+    
+        resp=client.post("auth/login", data={
+            "email": user.email,
+            "password": verified_user["password"]
+        }, follow_redirects=True)
+
+    assert "Sesión iniciada" in resp.data.decode("utf-8")
+
+    resp2=client.post("calcular/", data={"rider_weight":     60.0, "bike_weight":      8.0, "tire_width_front": 28.0,
+                                         "tire_width_rear":  28.0, "inner_rim_width":  23.0, "wheel_diameter":   622,
+                                         "tire_casing": "TIRE_CASING_STANDARD", "ride_style": "RIDE_STYLE_ROAD", "rim_type": "RIM_TYPE_TUBES",
+                                         "surface": "SURFACE_DRY", "tire_brand": "TIRE_BRAND_GENERAL", "altitude":0, "temp_exterior": 20.0, "save": 0})
+    
+    assert b"psi" in resp2.data and b"bar" in resp2.data
+    with client.session_transaction() as sess:
+        assert sess["session_version"] == None
