@@ -46,7 +46,7 @@ def register():
         try:
             username, surname, email, password, confirm_password = check_content_register(form.username.data, form.surname.data, form.email.data, form.password.data, form.confirm_password.data)
             if username is None or surname is None or email is None or password is None:
-                logger.exception("El formato de los campos no es ni el correcto, parece que han podido saltarse la validación del cliente email", "warning")
+                logger.warning("El formato de los campos no es correcto")
                 flash("No cumples con el tipo de información que se presupone que ingreses", "info")
                 return render_template("auth/regiter.html", form=form)
 
@@ -125,7 +125,7 @@ def login():
         try:
             email, password = check_content_login(form.email.data, form.password.data)  #WTF ya lo chequea pero puede falsificarse desde POSTMAN el token CSRF
             if email is None or password is None:
-                logger.exception("El email o contraseña ni siquiera cumplen el formato string o formato correcto, parece que se han saltado la validación del cliente %s", form.email.data)
+                logger.warning("El email o contraseña no cumplen el formato, email=%s", form.email.data)
                 flash("No estas cumpliendo con el tipo de formato en los datos de entrada en email o contraseña", "error")
                 return render_template("auth/login.html", form=form)
 
@@ -370,6 +370,11 @@ def reset_password(token):
                 form=form,
                 token=token
             )
+        except TypeError:
+            user.password_hash = hash_password(form.password.data)
+            user.session_version = 0    #Se inicializa si venía de ser None
+            db.session.commit()
+            logger.warning("session_version era None para user_id=%s, se corrigió a 0, revisar origen y mirar que ahora si tiene asignado el valor 0 en la columna.", user.id)
         flash(
             "Contraseña cambiada. Inicia sesión.",
             "success"
