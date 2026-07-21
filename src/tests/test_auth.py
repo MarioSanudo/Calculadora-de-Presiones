@@ -1,5 +1,6 @@
 from unittest.mock import patch, Mock
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import update
 from src.models.user import User
 from src.services.auth_service import generate_jwt
 import pytest, jwt
@@ -658,8 +659,7 @@ def test_reset_password_token_recycling_blocked(
         },
         follow_redirects=True,
     )
-    assert "Acci" in resp.data.decode("utf-8")
-    assert "no permitida" in resp.data.decode("utf-8")
+    assert "Acción no permitida" in resp.data.decode("utf-8")
 
     # La contraseña de B no cambió
     from src.services.auth_service import check_password
@@ -862,3 +862,52 @@ def test_check_login_no_wtf_no_email_key(app, client, verified_user):
     
     assert "El formato del email no es correcto" in resp.data.decode("utf-8")
     assert resp.status_code == 200
+
+
+def test_user_password_change_session_version(app, client, verified_user, caplog):
+    with app.app_context():
+        from src.utils.extensions import db
+        user=db.session.query(User).filter_by(email=verified_user["email"]).first()
+
+    resp= client.post(f"auth/reset-password/{generate_jwt(user.id ,purpose='password_reset')}",
+                      data={"password":"Hector2005!",
+                            "confirm_password":"Hector2005!"}, follow_redirects=True)
+    
+    assert "Contraseña cambiada" in resp.data.decode("utf-8")
+    with app.app_context():
+        updated_user = db.session.query(User).filter_by(id=user.id).first() #Para que no quede congelado el valor de arriba del id y se actualice después de la ruta
+        assert updated_user.session_version == 1 and caplog.text == ""  #No hay caplog está vacío 
+
+
+def test_user_password_session_version_None(app, client, caplog):
+    with app.app_context():
+        from src.services.auth_service import hash_password
+        from src.utils.extensions import db
+        user=User(
+            username="Mario",
+            surname="Sañudo",
+            email="victim2@example.com",
+            password_hash=hash_password("Original1!"),
+            is_verified=True
+        )
+        db.session.add(user)
+        db.session.commit()
+        user_id=user.id
+        # Forzamos NULL a nivel de BD, evitando que el default de columna lo pise, en la creación no hay forma de conseguirlo
+        db.session.execute(
+            update(User).where(User.id == user_id).values(session_version=None)
+        )
+        db.session.commit()
+
+
+    resp=client.post(f"auth/reset-password/{generate_jwt(user_id, purpose="password_reset")}",
+                data={"password":"Hector2005!",
+                      "confirm_password":"Hector2005!"}, follow_redirects=True) #Info igual de válida
+    
+    assert resp.history[0].status_code == 302 and resp.status_code == 200
+    assert "Contraseña cambiada. Inicia sesión." in resp.data.decode("utf-8")
+    assert "session_version era None para user_id" in caplog.text
+    with app.app_context():
+        updated_user=db.session.query(User).filter_by(id=user_id).first()   #Usuario una vez ha pasado ya por el endpoint, es decir actualizado
+        assert updated_user.session_version == 0
+    
