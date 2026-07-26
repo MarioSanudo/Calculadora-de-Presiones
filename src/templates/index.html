@@ -726,7 +726,7 @@
 </section>
 
 {# ── 5. FAQ ── #}
-<section class="-mx-4 bg-[#F8F8F7] px-4 py-20" id="faq">
+<section class="-mx-4 bg-white px-4 py-20" id="faq">
     <div class="max-w-5xl mx-auto">
         <div class="mb-12">
             <div class="font-mono text-xs text-[#6B6860]
@@ -740,21 +740,23 @@
             </h2>
         </div>
 
-        <div class="divide-y divide-[#E5E3DF]">
+        <div class="flex flex-col gap-3">
 
-            <div class="faq-item py-5 cursor-pointer">
+            <div class="faq-item bg-[#F8F8F7] border border-[#E5E3DF]
+                        rounded-2xl overflow-hidden">
                 <button class="w-full flex items-center justify-between
-                               text-left gap-4"
+                               text-left gap-4 px-6 py-6"
                         aria-expanded="false">
-                    <h3 class="font-display font-bold text-[#1A1A18] text-lg">
+                    <h3 class="font-display font-bold text-[#1A1A18] text-xl">
                         ¿Cómo puedo saber la presión correcta de mi bicicleta?
                     </h3>
-                    <span class="faq-icon text-[#F25C05] text-2xl
-                                 flex-shrink-0 transition-transform duration-200">
+                    <span class="faq-icon text-[#F25C05] text-2xl font-light
+                                 flex-shrink-0 transition-transform duration-200
+                                 leading-none">
                         +
                     </span>
                 </button>
-                <div class="faq-answer hidden mt-3 pr-8">
+                <div class="faq-answer hidden px-6 pb-6">
                     <p class="text-[#6B6860] leading-relaxed">
                         La presión correcta depende de tu peso, el ancho de la
                         cubierta, el tipo de aro y las condiciones del día.
@@ -765,19 +767,21 @@
                 </div>
             </div>
 
-            <div class="faq-item py-5 cursor-pointer">
+            <div class="faq-item bg-[#F8F8F7] border border-[#E5E3DF]
+                        rounded-2xl overflow-hidden">
                 <button class="w-full flex items-center justify-between
-                               text-left gap-4"
+                               text-left gap-4 px-6 py-6"
                         aria-expanded="false">
-                    <h3 class="font-display font-bold text-[#1A1A18] text-lg">
+                    <h3 class="font-display font-bold text-[#1A1A18] text-xl">
                         ¿Cuál es la diferencia entre tubeless y cámara en la presión?
                     </h3>
-                    <span class="faq-icon text-[#F25C05] text-2xl
-                                 flex-shrink-0 transition-transform duration-200">
+                    <span class="faq-icon text-[#F25C05] text-2xl font-light
+                                 flex-shrink-0 transition-transform duration-200
+                                 leading-none">
                         +
                     </span>
                 </button>
-                <div class="faq-answer hidden mt-3 pr-8">
+                <div class="faq-answer hidden px-6 pb-6">
                     <p class="text-[#6B6860] leading-relaxed">
                         El tubeless permite rodar con presiones más bajas porque
                         elimina el riesgo de pellizco. Para el mismo peso y cubierta,
@@ -787,19 +791,21 @@
                 </div>
             </div>
 
-            <div class="faq-item py-5 cursor-pointer">
+            <div class="faq-item bg-[#F8F8F7] border border-[#E5E3DF]
+                        rounded-2xl overflow-hidden">
                 <button class="w-full flex items-center justify-between
-                               text-left gap-4"
+                               text-left gap-4 px-6 py-6"
                         aria-expanded="false">
-                    <h3 class="font-display font-bold text-[#1A1A18] text-lg">
+                    <h3 class="font-display font-bold text-[#1A1A18] text-xl">
                         ¿Cómo afecta la temperatura a la presión de los neumáticos?
                     </h3>
-                    <span class="faq-icon text-[#F25C05] text-2xl
-                                 flex-shrink-0 transition-transform duration-200">
+                    <span class="faq-icon text-[#F25C05] text-2xl font-light
+                                 flex-shrink-0 transition-transform duration-200
+                                 leading-none">
                         +
                     </span>
                 </button>
-                <div class="faq-answer hidden mt-3 pr-8">
+                <div class="faq-answer hidden px-6 pb-6">
                     <p class="text-[#6B6860] leading-relaxed">
                         Según la ley del gas ideal, por cada 10 °C de diferencia
                         la presión varía aproximadamente 0.07 bar. Si inflaste las
@@ -809,19 +815,21 @@
                 </div>
             </div>
 
-            <div class="faq-item py-5 cursor-pointer">
+            <div class="faq-item bg-[#F8F8F7] border border-[#E5E3DF]
+                        rounded-2xl overflow-hidden">
                 <button class="w-full flex items-center justify-between
-                               text-left gap-4"
+                               text-left gap-4 px-6 py-6"
                         aria-expanded="false">
-                    <h3 class="font-display font-bold text-[#1A1A18] text-lg">
+                    <h3 class="font-display font-bold text-[#1A1A18] text-xl">
                         ¿Por qué es importante conocer la presión adecuada en ciclismo?
                     </h3>
-                    <span class="faq-icon text-[#F25C05] text-2xl
-                                 flex-shrink-0 transition-transform duration-200">
+                    <span class="faq-icon text-[#F25C05] text-2xl font-light
+                                 flex-shrink-0 transition-transform duration-200
+                                 leading-none">
                         +
                     </span>
                 </button>
-                <div class="faq-answer hidden mt-3 pr-8">
+                <div class="faq-answer hidden px-6 pb-6">
                     <p class="text-[#6B6860] leading-relaxed">
                         Una presión incorrecta aumenta la resistencia a la rodadura,
                         reduce la tracción en curva y eleva el riesgo de pinchazo.
@@ -895,23 +903,13 @@
         animateValue('hero-rear-val',  4.35, 800);
     });
 
-    // Acordeón FAQ
+// Acordeón FAQ — múltiples abiertos
 document.querySelectorAll('.faq-item button').forEach(btn => {
     btn.addEventListener('click', () => {
         const answer = btn.nextElementSibling;
         const icon = btn.querySelector('.faq-icon');
         const isOpen = btn.getAttribute('aria-expanded') === 'true';
 
-        // Cierra todos los demás
-        document.querySelectorAll('.faq-item button').forEach(other => {
-            if (other !== btn) {
-                other.setAttribute('aria-expanded', 'false');
-                other.nextElementSibling.classList.add('hidden');
-                other.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
-            }
-        });
-
-        // Abre o cierra el actual
         if (isOpen) {
             btn.setAttribute('aria-expanded', 'false');
             answer.classList.add('hidden');
