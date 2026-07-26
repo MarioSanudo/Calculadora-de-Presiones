@@ -80,6 +80,8 @@
     <script src="{{ url_for('static',
                            filename='js/htmx.min.js') }}"
             defer></script>
+
+    {% block schema %}{% endblock %}
 </head>
 <body class="bg-[#F8F8F7] min-h-screen font-body
              flex flex-col">

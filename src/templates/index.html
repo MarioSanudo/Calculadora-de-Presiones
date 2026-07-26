@@ -2,6 +2,62 @@
 
 {% block title %}Calcula la presión de tus ruedas{% endblock %}
 
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Verneris",
+  "description": "Calculadora de presión óptima para neumáticos de bicicleta con corrección de temperatura, altitud y carcasa",
+  "url": "https://www.verneris.es",
+  "applicationCategory": "SportsApplication",
+  "inLanguage": "es",
+  "isAccessibleForFree": true,
+  "operatingSystem": "Web"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cómo puedo saber la presión correcta de mi bicicleta?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La presión correcta depende de tu peso, el ancho de la cubierta, el tipo de aro y las condiciones del día. Verneris aplica fórmulas físicas reales para darte la presión exacta delantera y trasera en bar y psi, sin tablas genéricas."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuál es la diferencia entre tubeless y cámara en la presión?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El tubeless permite rodar con presiones más bajas porque elimina el riesgo de pellizco. Para el mismo peso y cubierta, el tubeless suele recomendar entre 0.2 y 0.4 bar menos, mejorando el confort y la tracción sin perder eficiencia."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo afecta la temperatura a la presión de los neumáticos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Según la ley del gas ideal, por cada 10 °C de diferencia la presión varía aproximadamente 0.07 bar. Si inflaste las ruedas a 20 °C y sales con 5 °C, habrás perdido alrededor de 0.10 bar sin ninguna fuga."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué es importante conocer la presión adecuada en ciclismo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Una presión incorrecta aumenta la resistencia a la rodadura, reduce la tracción en curva y eleva el riesgo de pinchazo. Con demasiada presión la rueda rebota; con poca presión el aro puede producir un pinchazo de pellizco."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}
+
 {% block hero %}
 {# ── 1. HERO ── fondo oscuro, 2 columnas: texto + panel live #}
 <section class="bg-[#1A1A18] overflow-hidden">
@@ -22,9 +78,9 @@
             <h1 class="font-display font-extrabold text-white
                        leading-[0.92] tracking-tight
                        text-[52px] sm:text-[72px] lg:text-[88px]">
-                Presión óptima<br>
-                para tus
-                <span class="text-[#F25C05]">ruedas.</span>
+                Calculadora de presión<br>
+                para neumaticos de
+                <span class="text-[#F25C05]">bicicleta</span>
             </h1>
 
             <p class="text-[#A8A5A0] text-base sm:text-lg mt-6
@@ -669,7 +725,118 @@
     </div>
 </section>
 
-{# ── 5. CTA FINAL ── franja naranja ancho completo #}
+{# ── 5. FAQ ── #}
+<section class="-mx-4 bg-[#F8F8F7] px-4 py-20" id="faq">
+    <div class="max-w-5xl mx-auto">
+        <div class="mb-12">
+            <div class="font-mono text-xs text-[#6B6860]
+                        uppercase tracking-widest mb-3">
+                FAQ
+            </div>
+            <h2 class="font-display font-extrabold text-[#1A1A18]
+                       leading-[0.98] tracking-tight
+                       text-4xl sm:text-5xl">
+                Preguntas frecuentes
+            </h2>
+        </div>
+
+        <div class="divide-y divide-[#E5E3DF]">
+
+            <div class="faq-item py-5 cursor-pointer">
+                <button class="w-full flex items-center justify-between
+                               text-left gap-4"
+                        aria-expanded="false">
+                    <h3 class="font-display font-bold text-[#1A1A18] text-lg">
+                        ¿Cómo puedo saber la presión correcta de mi bicicleta?
+                    </h3>
+                    <span class="faq-icon text-[#F25C05] text-2xl
+                                 flex-shrink-0 transition-transform duration-200">
+                        +
+                    </span>
+                </button>
+                <div class="faq-answer hidden mt-3 pr-8">
+                    <p class="text-[#6B6860] leading-relaxed">
+                        La presión correcta depende de tu peso, el ancho de la
+                        cubierta, el tipo de aro y las condiciones del día.
+                        Verneris aplica fórmulas físicas reales para darte la
+                        presión exacta delantera y trasera en bar y psi, sin
+                        tablas genéricas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item py-5 cursor-pointer">
+                <button class="w-full flex items-center justify-between
+                               text-left gap-4"
+                        aria-expanded="false">
+                    <h3 class="font-display font-bold text-[#1A1A18] text-lg">
+                        ¿Cuál es la diferencia entre tubeless y cámara en la presión?
+                    </h3>
+                    <span class="faq-icon text-[#F25C05] text-2xl
+                                 flex-shrink-0 transition-transform duration-200">
+                        +
+                    </span>
+                </button>
+                <div class="faq-answer hidden mt-3 pr-8">
+                    <p class="text-[#6B6860] leading-relaxed">
+                        El tubeless permite rodar con presiones más bajas porque
+                        elimina el riesgo de pellizco. Para el mismo peso y cubierta,
+                        el tubeless suele recomendar entre 0.2 y 0.4 bar menos,
+                        mejorando el confort y la tracción sin perder eficiencia.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item py-5 cursor-pointer">
+                <button class="w-full flex items-center justify-between
+                               text-left gap-4"
+                        aria-expanded="false">
+                    <h3 class="font-display font-bold text-[#1A1A18] text-lg">
+                        ¿Cómo afecta la temperatura a la presión de los neumáticos?
+                    </h3>
+                    <span class="faq-icon text-[#F25C05] text-2xl
+                                 flex-shrink-0 transition-transform duration-200">
+                        +
+                    </span>
+                </button>
+                <div class="faq-answer hidden mt-3 pr-8">
+                    <p class="text-[#6B6860] leading-relaxed">
+                        Según la ley del gas ideal, por cada 10 °C de diferencia
+                        la presión varía aproximadamente 0.07 bar. Si inflaste las
+                        ruedas a 20 °C y sales con 5 °C, habrás perdido alrededor
+                        de 0.10 bar sin ninguna fuga.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq-item py-5 cursor-pointer">
+                <button class="w-full flex items-center justify-between
+                               text-left gap-4"
+                        aria-expanded="false">
+                    <h3 class="font-display font-bold text-[#1A1A18] text-lg">
+                        ¿Por qué es importante conocer la presión adecuada en ciclismo?
+                    </h3>
+                    <span class="faq-icon text-[#F25C05] text-2xl
+                                 flex-shrink-0 transition-transform duration-200">
+                        +
+                    </span>
+                </button>
+                <div class="faq-answer hidden mt-3 pr-8">
+                    <p class="text-[#6B6860] leading-relaxed">
+                        Una presión incorrecta aumenta la resistencia a la rodadura,
+                        reduce la tracción en curva y eleva el riesgo de pinchazo.
+                        Con demasiada presión la rueda rebota y pierde contacto con
+                        el asfalto; con poca presión el aro puede producir un
+                        pinchazo de pellizco.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{# ── 6. CTA FINAL ── franja naranja ancho completo #}
 <section class="-mx-4 bg-[#F25C05] px-4 py-14 text-center">
     <h2 class="text-4xl font-bold font-display text-white
                mb-4 tracking-tight">
@@ -727,6 +894,35 @@
         animateValue('hero-front-val', 4.09, 800);
         animateValue('hero-rear-val',  4.35, 800);
     });
+
+    // Acordeón FAQ
+document.querySelectorAll('.faq-item button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const answer = btn.nextElementSibling;
+        const icon = btn.querySelector('.faq-icon');
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+        // Cierra todos los demás
+        document.querySelectorAll('.faq-item button').forEach(other => {
+            if (other !== btn) {
+                other.setAttribute('aria-expanded', 'false');
+                other.nextElementSibling.classList.add('hidden');
+                other.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Abre o cierra el actual
+        if (isOpen) {
+            btn.setAttribute('aria-expanded', 'false');
+            answer.classList.add('hidden');
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            btn.setAttribute('aria-expanded', 'true');
+            answer.classList.remove('hidden');
+            icon.style.transform = 'rotate(45deg)';
+        }
+    });
+});
 </script>
 
 {% endblock %}
